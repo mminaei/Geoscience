@@ -1,0 +1,1420 @@
+unit Main_Form;
+
+interface
+
+uses
+  TeeEdit, Dialogs, XpMan,  Menus, Controls, Forms, Graphics, ExtActns,
+  StrUtils, Math, TeEngine, ExtCtrls, Classes, StdCtrls, SysUtils, TeeStore,
+  TeeProcs, Chart, TeeTools, Series,TeeEditCha, TeeThemeEditor,
+  TeeShape, TeeTree, TreeEd, ComCtrls, ImgList;
+type
+  TMainForm = class(TForm)
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    OpenDialog1: TOpenDialog;
+    Open1: TMenuItem;
+    Close1: TMenuItem;
+    N1: TMenuItem;
+    Exit1: TMenuItem;
+    PrintDialog1: TPrintDialog;
+    Calculations1: TMenuItem;
+    VsEstimation1: TMenuItem;
+    MudLine1: TMenuItem;
+    Castagna2: TMenuItem;
+    Han1: TMenuItem;
+    Krief1: TMenuItem;
+    Poisson1: TMenuItem;
+    Castagna1: TMenuItem;
+    N2: TMenuItem;
+    CorrelationCoefficient1: TMenuItem;
+    Velocity1: TMenuItem;
+    Tools1: TMenuItem;
+    CrossPLOT1: TMenuItem;
+    CompositeLog1: TMenuItem;
+    ChartEditor1: TChartEditor;
+    Litholog1: TMenuItem;
+    LithosphericEstimation1: TMenuItem;
+    Tree1: TTree;
+    ChartPreviewer1: TChartPreviewer;
+    About1: TMenuItem;
+    About2: TMenuItem;
+    StatusBar1: TStatusBar;
+    ImageList1: TImageList;
+    WaterResistivity1: TMenuItem;
+    ArpWorthington1: TMenuItem;
+    N3: TMenuItem;
+    RQI1: TMenuItem;
+    FZI1: TMenuItem;
+    TiabFactor1: TMenuItem;
+    FreeFluidIndex1: TMenuItem;
+    Svgr1: TMenuItem;
+    FormationResistivityFactor1: TMenuItem;
+    ortuosityTau1: TMenuItem;
+    ReservoirParameters1: TMenuItem;
+    Poirosity1: TMenuItem;
+    HorizontalPermeability1: TMenuItem;
+    Anisotropy1: TMenuItem;
+    Heterogeneity1: TMenuItem;
+    VerticalPermeability1: TMenuItem;
+    Averaging1: TMenuItem;
+    RwfromConcentration1: TMenuItem;
+    WaterSaturation1: TMenuItem;
+    ResistivityIndex1: TMenuItem;
+    GammaRayIndex1: TMenuItem;
+    ShaleVolume1: TMenuItem;
+    RwfromSPLog1: TMenuItem;
+    CECMethod1: TMenuItem;
+    ConventionalMethods1: TMenuItem;
+    CationExchangeCapacityCEC1: TMenuItem;
+    LAS1: TMenuItem;
+    Text1: TMenuItem;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Close1Click(Sender: TObject);
+    procedure Exit1Click(Sender: TObject);
+    procedure CreateChart(Chart_Title: String; Chart_Index: Smallint);
+    procedure CreateChild(Root_Caption: String; Child_Caption: String);
+    procedure CreateRoot(Root_Caption: String);
+    procedure CreateSeries(Sender: TChart; Chart_Index: Smallint);
+    procedure CreatePopupMenu(Sender: TChart);
+    procedure Charts_Resize(Sender: TObject; var NewWidth, NewHeight: Integer;
+                                             var Resize: Boolean);
+    procedure PopupClicked(Sender: TObject);
+    procedure PopLogarithmic(Sender: TObject);
+    procedure PopPrintPages(Sender: TObject);
+    procedure Zooming(Sender: TObject);
+    procedure Preparation(Root_Caption: string; Title_Caption: string; DepthUnit_String: string;
+                          Step_Value:Single; Null_Value:Single);
+    procedure CrossPLOT1Click(Sender: TObject);
+    procedure CompositeLog1Click(Sender: TObject);
+{    procedure ChartsDragOver(Sender, Source: TObject; X, Y: Integer;
+      State: TDragState; var Accept: Boolean);
+    procedure ChartsDragDrop(Sender, Source: TObject; X, Y: Integer);  }
+    procedure Litholog1Click(Sender: TObject);
+    procedure TreeRootClicked(Sender: TTreeNodeShape; Button:TMouseButton; Shift: TShiftState; X: Integer; Y: Integer);
+    procedure TreeChildClicked(Sender: TTreeNodeShape; Button:TMouseButton; Shift: TShiftState; X: Integer; Y: Integer);
+    procedure About2Click(Sender: TObject);
+    procedure ReadLAS(File_Name: string);
+    procedure ReadTEXT(File_Name: string);
+    procedure EnableMenu;
+    procedure DisableMenu;
+    procedure RemoveChart(Chart_Title: String; Chart_Index: Smallint);
+    procedure RemoveChild(Root_Caption: String; Child_Caption: String);
+    procedure UndoPreparation(Root_Caption: string; Title_Caption: string);
+    procedure ChartClick(Sender: TObject; Button: TMouseButton;
+              Shift: TShiftState; X, Y: Integer);
+    procedure SelectLine(Sender: TObject);
+    procedure DeleteLine(Sender: TObject);
+    procedure DragLine(Sender: TObject);
+    procedure LAS1Click(Sender: TObject);
+    procedure Text1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    Charts                     :array of TChart;
+    Null_Values                :array of Single;
+    Value_Is_Constant          :array [1..10] of Boolean;
+    Constant_Value             :array [1..10] of Single;
+    Log_Values                 :THorizLineSeries;
+    No_Lines_Skip:string;
+    No_Columns:string;
+    Depth_Column:string;
+    DepthUnitString:string;
+    NullValueString:string;
+    StepValueString:string;
+    DLMChar: Char;
+
+    Vp_Track_Number,
+    DTS_Track_Number,
+    DTP_Track_Number,
+    VS_Track_Number,
+    RHO_Track_Number,
+    PHI_Track_Number,
+    Poisson_Track_Number,
+    DTP_Mineral_Track_Number,
+    DTP_Saturated_Track_Number,
+    DTP_Fluid_Track_Number,
+    DTS_Mineral_Track_Number,
+    LithoLog_Track_Number,
+    JF_Track_Number,
+    Sw_Track_Number,
+    Svgr_Track_Number,
+    Kh_Track_Number,
+    Kv_Track_Number,
+    RQI_Track_Number,
+    FZI_Track_Number,
+    ANMR_Track_Number,
+    RHO_Matrix_Track_Number,
+    T2ML_Track_Number,
+    For_PHI_Track_Number,
+    For_Kh_Track_Number,
+    Shale_Volume_Track_Number,
+    Rw_Track_Number,
+    Rt_Track_Number,
+    Ro_Track_Number,
+    FR_Track_Number,
+    PHI_T_Track_Number,
+    PHI_D_Track_Number,
+    Neutron_Track_Number,
+    Gamma_Track_Number,
+    GRI_Track_Number,
+    Swir_Track_Number,
+    XAxis_Track_Number,
+    YAxis_Track_Number,
+    Temp_Zoom_File_No,
+    ZAxis_Track_Number,
+    SP_Track_Number,
+    T_Track_Number,
+    CEC_Track_Number,
+    n_Track_Number,
+    Tau_Track_Number,
+    Kaolinites_Track_Number,
+    Illites_Track_Number,
+    Smectites_Track_Number,
+    Chlorites_Track_Number,
+    Vermiculites_Track_Number,
+    Polygorskites_Track_Number         :Smallint;
+
+    Shale_Volume_Value,
+    Matrix_Value,
+    Fluid_Value,
+    Mean_Grain_Diameter,
+    Shaly_Beds_Resistivity,
+    Gamma_Sand,
+    Gamma_Shale,
+    SP_Sand,
+    SP_Shale,
+    BHT_Value,
+    SAT_Value,
+    TD_Value,
+    FD_Value,
+    Rmf_Value,
+    Saturation_Exponent,
+    Grain_Radius,
+    Svp_Value,
+    Svgr_Value,
+    Rw_Value,
+    Pore_Shape_Factor,
+    J1_Value,
+    Swir_Value,
+    a_Value,
+    Cementation_Factor,
+    Sst_Percentage,
+    Lst_Percentage,
+    Dolomite_Percentage,
+    Shale_Percentage,
+    Kaolinites_CEC_Value,
+    Illites_CEC_Value,
+    Smectites_CEC_Value,
+    Chlorites_CEC_Value,
+    Vermiculites_CEC_Value,
+    Polygorskites_CEC_Value         :Single;
+
+    Paging_Shown,
+    Is_CrossPlot_3D,
+    Operation_Canceled,
+    DTS_Selected,
+    LithoLog_Open,
+    Line_Drawing                    :Boolean;
+
+    Vp_Unit,
+    DTS_Unit,
+    DTP_Unit,
+    VS_Unit,
+    RHO_Unit,
+    PHI_Unit,
+    K_Unit,
+    DTP_Mineral_Unit,
+    DTP_Saturated_Unit,
+    DTP_Fluid_Unit,
+    DTS_Mineral_Unit,
+    Temp_Zoom_File             :String;
+
+    Han_Method,
+    Han_Volume,
+    Koenzy_Method_No,
+    K_Calculation_Method,
+    PHI_Calculation_Method,
+    Kv_Sst_Content,
+    Kv_Illite_Content,
+    Kv_Shaly_Method_No,
+    Kv_Calcultion_Method_No,
+    Shale_Volume_Method,
+    Shale_Calculation_Method,
+    FR_Calculation_Method,
+    Sw_Calculation_Method,
+    ID_Number                  :Shortint;
+
+    { Public declarations }
+  end;
+
+const
+  Precision_Value = -6;
+  Elastic_Modules :array [0..10] of string = ('Poisson Ratio','Bulk Modulus.GPa','Young Modulus.GPa',
+                                              'Mu.GPa','Lambda.GPa','P-Impedance.g/sm2','S-Impedanceg/sm2',
+                                              'Lambda/Mu','Vp/Vs','Lambda.Rho.GPaKg/m3','Mu.Rho.GPaKg/m3');
+
+  About_String='Petro-Eval' + #13 +
+               'Special Version for Dr. Javid Hassan Zade'+#13+#13+
+               'By:' + #13 +
+               '       Mohsen Minaei                 minaeim@ifp-school.com';
+
+var
+  MainForm                :TMainForm;
+  Lines                   :TStringList;
+  Error_Code              :integer;
+  Number_of_Charts        :Smallint;
+  Null_Value_String       :string[12];
+  Depth_Value             :Single;
+  Log_Value               :Single;
+  ForFree1                :TLabel;
+  TempFile                :TextFile;
+  Is_ForFree1_Created     :Boolean;
+  Chart_Number            :Smallint;
+  Log_Scale               :Single;
+  DepthUnit               :array of string[5];
+  Step_Values             :array of Single;
+  Charts_Scaled           :Boolean;
+  Execute_File            :TFileRun;
+  Max_Points_Per_Page     :array of Smallint;
+  Conversion_Unit         :array of Single;
+  TopAxes                 :array of TChartAxis;
+  Number_of_Composites    :Smallint;
+  Composite_Tracks_Number :array of Byte;
+  LithoLog_Created        :Boolean;
+  MarkTool                :TMarksTipTool;
+  LineTools               :array of TDrawLineTool;
+
+implementation
+
+uses CrossPlotTracks, CompositeLog, ZoomedChart, LithoLog, TextFileForm;
+
+{$R *.dfm}
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  DisableMenu;
+  Chart_Number:=0;
+  Is_ForFree1_Created:=False;
+  Charts_Scaled:=False;
+  Paging_Shown:=False;
+  Execute_File:=TFileRun.Create(Application);
+  Number_of_Composites:=0;
+  LithoLog_Created:=False;
+end;
+
+procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Visible:=False;
+  Finalize(Null_Values);
+  Finalize(DepthUnit);
+  Finalize(Step_Values);
+  Finalize(Max_Points_Per_Page);
+  Finalize(Conversion_Unit);
+  Finalize(TopAxes);
+  Finalize(Charts);
+  Finalize(Composite_Tracks_Number);
+end;
+
+procedure TMainForm.ReadLAS(File_Name: string);
+var
+i,j,k,m,n: integer;
+p1,p2,p3:Smallint;
+s1,s2,s3,s4:string;
+DepthUnit_String: string[5];
+Step_Value_String: string[8];
+Root_Name: string;
+Child_Name: string;
+File_Opened: Boolean;
+begin
+  File_Opened:=False;
+try
+(********* Get file name without its complete path *)
+  s1:=ReverseString(File_Name);
+  p1:=Pos('\',s1);
+  s1:=ReverseString(s1);
+  p2:=Length(s1)-p1+2;
+  s2:=Copy(s1,p2,p1);
+  Root_Name:=s2;
+(**********Create a root with the file name*********)
+  CreateRoot(Root_Name);
+  Lines:=TStringList.Create;
+  Lines.LoadFromFile(File_Name);
+(********* To find depth units *********************)
+  for i:=0 to Lines.Count-1 do
+    begin
+      s1:=Lines[i];
+      p1:=Pos('STOP',s1);
+      if p1<>0 then Break;
+    end;
+  j:=i;
+  s1:=Lines[j];
+  s1:=Trim(s1);
+  m:=Pos('.',s1);
+  n:=PosEx(' ', s1, m);
+  s2:=Copy(s1,m+1,n-m);
+  s2:=Trim(s2);
+  DepthUnit_String:=UpperCase(s2);
+(***************************************************)
+(********* To find step values *********************)
+  repeat
+    j:=j+1;
+    s1:=Lines[j];
+  until (s1<>' ')and(s1<>'');
+  s1:=Trim(s1);
+  m:=Pos('.',s1);
+  n:=PosEx(':',s1,m);
+  s2:=Copy(s1,m+5,n-m-5);
+  s2:=Trim(s2);
+  Step_Value_String:=s2;
+(***************************************************)
+(********* To find null values *********************)
+  repeat
+    j:=j+1;
+    s1:=Lines[j];
+  until (s1<>' ')and(s1<>'');
+  s1:=Lines[j];
+  m:=Pos('-',s1);
+  n:=PosEx(':',s1,m);
+  s2:=Copy (s1,m,n-m);
+  s2:=Trim(s2);
+  Null_Value_String:=s2;
+(***************************************************)
+(********* To add curves information ***************)
+  For i:=j+1 to Lines.Count-1 do
+    begin
+      s1:=Lines[i];
+      p1:=Pos('~C',s1);
+      if p1<>0 then Break;
+    end;
+  j:=i+1;
+  m:=0;
+  repeat
+    s1:=Lines[j];
+    while (s1=' ')or(s1='') do
+      begin
+        j:=j+1;
+        s1:=Lines[j];
+      end;
+    s1:=TrimLeft(s1);
+    s2:='';
+    s3:= Copy( s1, 1, 1);
+    p1:=Pos('.', s1)+5;
+    s2:= Copy( s1, 1, p1);
+    s2:=Trim(S2);
+    Child_Name:=s2;
+    s4:=Copy(s1,1,4);
+    if m<>0 then
+      begin
+        n:=Pos(':',s1);
+        s1:=Copy (s1,1,n);
+      end;
+    p2:=Pos('DEPT', s1);
+    p3:=Pos('TIME', s1);
+    if ((p1<>0)and(p2=0)and(p3=0)and(not(s2=''))and(not(s3='~'))and(not(s3='#'))and(not(s4='DEPT'))) then
+      begin
+        Preparation(Root_Name, Child_Name, DepthUnit_String,StrToFloat(Step_Value_String),StrToFloat(Null_Value_String));
+        m:=m+1;
+      end;
+    j:=j+1;
+  until s3='~';
+(**************** Reading file data ************************)
+  AssignFile(TempFile,File_Name);
+  Reset(TempFile);
+  File_Opened:=True;
+  for k:=j-1 to Lines.Count-1 do
+    begin
+      s1:=Lines[k];
+      p1:=Pos('~A',s1);
+      if p1<>0 then Break;
+    end;
+  for n:=0 to k do
+    Readln(TempFile);
+  while not(EoF(TempFile)) do
+    begin
+      try
+        Read(TempFile,Depth_Value);
+        for j:=Number_of_Charts to Chart_Number-1 do
+          begin
+            Read(TempFile,Log_Value);
+            if  not(Null_Values[j]=Log_Value) then
+              Charts[j].Series[0].AddXY(Log_Value,Depth_Value)
+            else
+              Charts[j].Series[0].AddNullXY(Log_Value,Depth_Value);
+          end;
+        Readln(TempFile);
+      except
+        Messagedlg('Corrupted data!', mtError, [mbOk], 0);
+        Charts[Length(Charts)-1].Series[0].AddNull('');
+        Readln(TempFile);
+      end;
+    end;
+(***********************************************************)
+//  for i:=0 to Chart_Number-1 do
+//    Charts[i].Parent:=MainForm;
+
+  Number_of_Charts:=Chart_Number;
+  CloseFile(TempFile);
+  Lines.Free;
+except
+  UndoPreparation(Root_Name, Child_Name);
+  if File_Opened then
+    CloseFile(TempFile);
+  Lines.Free;
+  Tree1.BeginUpdate;
+  Tree1.DeleteShape(Tree1.Roots.Last);
+  Tree1.EndUpdate;
+end;
+end;
+
+procedure TMainForm.ReadTEXT(File_Name: string);
+var
+i,j,k,m,n: integer;
+p1,p2,p3:Smallint;
+s1,s2,s3,s4:string;
+DepthUnit_String: string[5];
+DLM_String: string[5];
+Step_Value_String: string[8];
+Root_Name: string;
+Child_Name: string;
+File_Opened: Boolean;
+OneChar: Char;
+begin
+  File_Opened:=False;
+try
+(********* Get file name without its complete path *)
+  s1:=ReverseString(File_Name);
+  p1:=Pos('\',s1);
+  s1:=ReverseString(s1);
+  p2:=Length(s1)-p1+2;
+  s2:=Copy(s1,p2,p1);
+  Root_Name:=s2;
+(**********Create a root with the file name*********)
+  CreateRoot(Root_Name);
+  Lines:=TStringList.Create;
+  Lines.LoadFromFile(File_Name);
+(********* To find depth units *********************)
+{  for i:=0 to Lines.Count-1 do
+    begin
+      s1:=Lines[i];
+      p1:=Pos('STOP',s1);
+      if p1<>0 then Break;
+    end;
+  j:=i;
+  s1:=Lines[j];
+  s1:=Trim(s1);
+  m:=Pos('.',s1);
+  n:=PosEx(' ', s1, m);
+  s2:=Copy(s1,m+1,n-m);
+  s2:=Trim(s2);                      }
+  DepthUnit_String:=DepthUnitString;
+(***************************************************)
+(********* To find step values *********************)
+{  repeat
+    j:=j+1;
+    s1:=Lines[j];
+  until (s1<>' ')and(s1<>'');
+  s1:=Trim(s1);
+  m:=Pos('.',s1);
+  n:=PosEx(':',s1,m);
+  s2:=Copy(s1,m+5,n-m-5);
+  s2:=Trim(s2);  }
+  Step_Value_String:=StepValueString;
+(***************************************************)
+(********* To find null values *********************)
+{  repeat
+    j:=j+1;
+    s1:=Lines[j];
+  until (s1<>' ')and(s1<>'');
+  s1:=Lines[j];
+  m:=Pos('-',s1);
+  n:=PosEx(':',s1,m);
+  s2:=Copy (s1,m,n-m);
+  s2:=Trim(s2);           }
+  Null_Value_String:=NullValueString;
+(***************************************************)
+(********* To add curves information ***************)
+  j:=StrToInt(No_Lines_Skip)-1;
+  s1:=(Lines[j]);
+  p3:=1;
+  p2:=0;
+  p1:=1;
+  m:=0;
+  s3:='';
+  repeat
+    for k := p3 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if OneChar<>DLMChar then   //['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+          begin
+            p2:=k;
+            Break;
+          end;
+      end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if OneChar=DLMChar then //['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+    if p2>p3 then
+      begin
+        p3:=Length(s1)+1;
+        s3:='FINISHED';
+      end;
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    Child_Name:=s2;
+    p2:=Pos('DEPT', UpperCase(s2));
+    if ((p2=0)and(s2<>'')) then
+      begin
+        Preparation(Root_Name, Child_Name, DepthUnit_String,StrToFloat(Step_Value_String),StrToFloat(Null_Value_String));
+        m:=m+1;
+      end;
+  until s3='FINISHED';
+(**************** Reading file data ************************)
+  AssignFile(TempFile,File_Name);
+  Reset(TempFile);
+  File_Opened:=True;
+  for n:=0 to StrToInt(No_Lines_Skip)-1 do
+    Readln(TempFile);
+  while not(EoF(TempFile)) do
+    begin
+      try
+        Read(TempFile,Depth_Value);
+        for j:=Number_of_Charts to Chart_Number-1 do
+          begin
+            Read(TempFile,Log_Value);
+            if  not(Null_Values[j]=Log_Value) then
+              Charts[j].Series[0].AddXY(Log_Value,Depth_Value)
+            else
+              Charts[j].Series[0].AddNullXY(Log_Value,Depth_Value);
+          end;
+        Readln(TempFile);
+      except
+        Messagedlg('Corrupted data!', mtError, [mbOk], 0);
+        Charts[Length(Charts)-1].Series[0].AddNull('');
+        Readln(TempFile);
+      end;
+    end;
+(***********************************************************)
+  Number_of_Charts:=Chart_Number;
+  CloseFile(TempFile);
+  Lines.Free;
+except
+  UndoPreparation(Root_Name, Child_Name);
+  if File_Opened then
+    CloseFile(TempFile);
+  Lines.Free;
+  Tree1.BeginUpdate;
+  Tree1.DeleteShape(Tree1.Roots.Last);
+  Tree1.EndUpdate;
+end;
+end;
+
+procedure TMainForm.CreateChart(Chart_Title: String; Chart_Index: Smallint);
+begin
+  SetLength(Charts, Length(Charts)+1);
+  Charts[Chart_Index]:=TChart.Create(ForFree1);
+  Charts[Chart_Index].Top:=0;
+  Charts[Chart_Index].Width:=200;
+  Charts[Chart_Index].Left:=Tree1.Left+Tree1.Width+200*(Chart_Index)+10;
+  Charts[Chart_Index].Align:=alLeft;
+  Charts[Chart_Index].View3D:=False;
+  Charts[Chart_Index].Color:=clWhite;
+  Charts[Chart_Index].Legend.Visible:=False;
+  Charts[Chart_Index].MarginUnits:=muPixels;
+  Charts[Chart_Index].MarginTop:=0;
+  Charts[Chart_Index].MarginLeft:=10;
+  Charts[Chart_Index].MarginRight:=10;
+  Charts[Chart_Index].MarginBottom:=10;
+  Charts[Chart_Index].Title.Text.Text:=Tree1.Roots[Tree1.Roots.Count-1].Text.Text;
+  Charts[Chart_Index].Title.Visible:=True;
+  Charts[Chart_Index].Title.Font.Color:=clMaroon;
+  Charts[Chart_Index].Title.Font.Size:=10;
+  Charts[Chart_Index].Title.Font.Name:='Tahoma';
+  Charts[Chart_Index].Axes.Top.Title.Font.Color:=clBlue;
+  Charts[Chart_Index].Axes.Top.Title.Font.Size:=8;
+  Charts[Chart_Index].Axes.Top.Title.Font.Style:=[fsBold];
+  Charts[Chart_Index].Axes.Top.Title.Font.Name:='Tahoma';
+  Charts[Chart_Index].Axes.Top.Title.Caption:=Chart_Title;
+  Charts[Chart_Index].Axes.Right.Visible:=False;
+  Charts[Chart_Index].Axes.Bottom.Visible:=False;
+  Charts[Chart_Index].Axes.Left.Title.Visible:=False;
+  Charts[Chart_Index].Axes.Left.Title.Caption:='Depth('+DepthUnit[Chart_Index]+')';
+  Charts[Chart_Index].Axes.Left.Title.Font.Color:=$00FF8000;
+  Charts[Chart_Index].Axes.Left.Title.Font.Size:=8;
+  Charts[Chart_Index].Axes.Left.Title.Font.Style:=[fsBold];
+  Charts[Chart_Index].Axes.Left.Title.Font.Name:='Tahoma';
+  Charts[Chart_Index].Axes.Left.Title.Font.InterCharSize:=10;
+  Charts[Chart_Index].Axes.Left.Inverted:=True;
+  Charts[Chart_Index].Axes.Left.Visible:=True;
+  Charts[Chart_Index].Axes.Left.LabelsFont.Color:=clGray;
+  Charts[Chart_Index].Title.Font.Style:=[fsBold];
+  Charts[Chart_Index].Axes.Top.LabelsFont.Color:=clGray;
+  Charts[Chart_Index].BevelInner:=bvNone;
+  Charts[Chart_Index].BevelOuter:=bvNone;
+  Charts[Chart_Index].Zoom.Brush.Color:=clYellow;
+  Charts[Chart_Index].Zoom.Brush.Style:=bsSolid;
+  Charts[Chart_Index].Zoom.Pen.Color:=clRed;
+  Charts[Chart_Index].AllowPanning:=pmNone;
+  Charts[Chart_Index].Zoom.Direction:=tzdVertical;
+  Charts[Chart_Index].Tag:=Chart_Number;
+  Charts[Chart_Index].Axes.Top.LabelStyle:=talValue;
+  Charts[Chart_Index].Axes.Top.TickLength:=6;
+  Charts[Chart_Index].Axes.Left.TickLength:=6;
+  Charts[Chart_Index].Axes.Top.Ticks.Width:=2;
+  Charts[Chart_Index].Axes.Left.Ticks.Width:=2;
+  Charts[Chart_Index].Axes.Top.MinorTickLength:=4;
+  Charts[Chart_Index].Axes.Left.MinorTickLength:=4;
+  Charts[Chart_Index].Axes.Top.MinorTickCount:=4;
+  Charts[Chart_Index].Axes.Left.MinorTickCount:=4;
+  Charts[Chart_Index].Axes.Top.MinorGrid.Color:=clGray;
+  Charts[Chart_Index].Axes.Top.MinorGrid.Style:=psDot;
+  Charts[Chart_Index].Axes.Top.LabelsOnAxis:=True;
+  Charts[Chart_Index].Axes.Left.LabelsOnAxis:=True;
+  Charts[Chart_Index].Axes.Top.RoundFirstLabel:=True;
+  Charts[Chart_Index].Axes.Left.RoundFirstLabel:=True;
+  Charts[Chart_Index].Axes.Top.MaximumOffset:=10;
+  Charts[Chart_Index].Axes.Top.MinimumOffset:=10;
+  Charts[Chart_Index].Axes.Top.LabelsSeparation:=20;
+  Charts[Chart_Index].Axes.Top.AxisValuesFormat:='#0.####';
+  Charts[Chart_Index].Axes.Left.AxisValuesFormat:='#0.####';
+
+  Charts[Chart_Index].Axes.Left.Grid.Visible:=False;
+  Charts[Chart_Index].Axes.Top.Grid.Visible:=False;
+  Charts[Chart_Index].OnMouseDown:=ChartClick;
+  if Chart_Index<>0 then
+    Charts[Chart_Index].Axes.Left.Labels:=False;
+
+  SetLength(LineTools, Chart_Index+1);
+  LineTools[Chart_Index]:=TDrawLineTool.Create(Charts[Chart_Index]);
+  LineTools[Chart_Index].Pen.Style:=psDashDot;
+  LineTools[Chart_Index].Pen.Width:=2;
+  LineTools[Chart_Index].Pen.Color:=clMaroon;
+  LineTools[Chart_Index].ParentChart:=Charts[Chart_Index];
+  LineTools[Chart_Index].OnSelect:=SelectLine;
+  LineTools[Chart_Index].OnDraggedLine:=DragLine;
+  LineTools[Chart_Index].ClickTolerance:=5;
+  LineTools[Chart_Index].SelectNewLines:=True;
+  LineTools[Chart_Index].Tag:=Chart_Index;
+  LineTools[Chart_Index].EnableDraw:=False;
+
+//  Charts[Chart_Index].Axes.Top.MaximumRound := True;
+//  Charts[Chart_Index].Axes.Top.MinimumRound := True;
+  Charts[Chart_Index].Walls.Back.Pen.Width:=2;
+  Charts[Chart_Index].OnZoom:=Zooming;
+  Charts[Chart_Index].OnCanResize:=Charts_Resize;
+//  Charts[Chart_Index].OnDragDrop:=ChartsDragDrop;
+//  Charts[Chart_Index].OnDragOver:=ChartsDragOver;
+//  Charts[Chart_Index].Zoom.MouseButton:=mbMiddle;
+//  Charts[Chart_Index].DragMode:=dmAutomatic;
+  CreatePopupMenu(Charts[Chart_Index]);
+end;
+
+procedure TMainForm.RemoveChart(Chart_Title: String; Chart_Index: Smallint);
+begin
+  if Length(Charts)>0 then
+    begin
+      Charts[Chart_Index-1].Free;
+      SetLength(Charts, Length(Charts)-1);
+    end;
+end;
+
+procedure TMainForm.CreateSeries(Sender: TChart; Chart_Index: Smallint);
+begin
+  Log_Values:=THorizLineSeries.Create(Charts[Chart_Index]);
+  Log_Values.Name:='Track_'+IntToStr(Chart_Index+1);
+  Log_Values.Title:=Charts[Chart_Index].Title.Text.Text;
+  Log_Values.Stairs:=True;
+  Log_Values.Pen.Width:=1;
+  Log_Values.HorizAxis:=aTopAxis;
+  Log_Values.Color:=clGreen;
+  Log_Values.TreatNulls:=tnDontPaint;
+  Log_Values.ParentChart:=Sender;
+  MarkTool:=TMarksTipTool.Create(Charts[Chart_Index]);
+  MarkTool.ParentChart:=Charts[Chart_Index];
+  MarkTool.Style:=smsXY;
+  MarkTool.MouseAction:=mtmClick;
+  MarkTool.Series:=Log_Values;
+end;
+
+procedure TMainForm.CreateChild(Root_Caption: String; Child_Caption: String);
+var
+  i:Smallint;
+begin
+// Check if a root with the same Root_Caption exists ...
+  for i:=0 to Tree1.Roots.Count-1 do
+    begin
+      if Root_Caption=Tree1.Roots[i].SimpleText then
+        begin
+          Tree1.Roots[i].AddChild(Child_Caption).Font.Color:=clNavy;
+          Tree1.Roots[i].Childs[Tree1.Roots[i].Childs.Count-1].OnClick:=TreeChildClicked;
+          Tree1.Roots[i].Childs[Tree1.Roots[i].Childs.Count-1].Tag:=Chart_Number;
+          Tree1.Roots[i].Childs[Tree1.Roots[i].Childs.Count-1].Font.Style:=[];
+          Exit;
+        end;
+    end;
+// Else ...
+  Tree1.Roots[Tree1.Roots.Count-1].AddChild(Child_Caption).Font.Color:=clNavy;
+  Tree1.Roots[Tree1.Roots.Count-1].Childs[Tree1.Roots[Tree1.Roots.Count-1].Childs.Count-1].OnClick:=TreeChildClicked;
+  Tree1.Roots[Tree1.Roots.Count-1].Childs[Tree1.Roots[Tree1.Roots.Count-1].Childs.Count-1].Tag:=Chart_Number;
+  Tree1.Roots[Tree1.Roots.Count-1].Childs[Tree1.Roots[Tree1.Roots.Count-1].Childs.Count-1].Font.Style:=[];
+end;
+
+procedure TMainForm.RemoveChild(Root_Caption: String; Child_Caption: String);
+var
+  i,j:Smallint;
+begin
+  Tree1.BeginUpdate;
+  for i:=0 to Tree1.Roots.Count-1 do
+    if Root_Caption=Tree1.Roots[i].SimpleText then
+      for j:=0 to Tree1.Roots[i].Children.Count-1 do
+        if Child_Caption=Tree1.Roots[i].Childs[j].SimpleText then
+          Tree1.Roots[i].Childs[j].Destroy;
+  Tree1.EndUpdate;
+end;
+
+procedure TMainForm.CreateRoot(Root_Caption: String);
+var
+  i:Smallint;
+begin
+  for i:=0 to Tree1.Roots.Count-1 do
+    begin
+      if Root_Caption=Tree1.Roots[i].SimpleText then Exit;
+    end;
+  with Tree1.GlobalFormat do
+    begin
+      Border.Visible:=False;
+      Transparent:=True;
+      ImageIndex:=tiChecked;
+      Connection.ArrowTo.Style:=casCircle;
+      Font.Name:='Tahoma';
+      Font.Color:=clGreen;
+      Font.Style:=[fsBold];
+    end;
+  Tree1.BeginUpdate;
+  Tree1.AddRoot(Root_Caption).OnClick:=TreeRootClicked;
+  Tree1.EndUpdate;
+end;
+
+procedure TMainForm.TreeRootClicked(Sender: TTreeNodeShape; Button:TMouseButton; Shift: TShiftState; X: Integer; Y: Integer);
+var
+i: Smallint;
+begin
+  with Sender as TTreeNodeShape do
+    begin
+      if Button=mbLeft then
+        begin
+          if ImageIndex=tiChecked then
+            begin
+              ImageIndex:=tiUnChecked;
+              for i:=Childs.Count-1 downto 0 do
+                TreeChildClicked(Childs[i], mbLeft, [ssLeft], 0, 0);
+            end
+          else
+            begin
+              ImageIndex:=tiChecked;
+              for i:=0 to Childs.Count-1 do
+                TreeChildClicked(Childs[i], mbLeft, [ssLeft], 0, 0);
+            end;
+        end;
+    end;
+end;
+
+procedure TMainForm.TreeChildClicked(Sender: TTreeNodeShape; Button:TMouseButton; Shift: TShiftState; X: Integer; Y: Integer);
+begin
+  with Sender as TTreeNodeShape do
+    begin
+      if Button=mbLeft then
+        begin
+          if ImageIndex=tiChecked then
+            begin
+              ImageIndex:=tiUnChecked;
+              Charts[Tag].Visible:=False;
+              HorzScrollBar.Position:=HorzScrollBar.Position - 200;
+            end
+          else
+            begin
+              ImageIndex:=tiChecked;
+              Charts[Tag].Visible:=True;
+              HorzScrollBar.Position:=HorzScrollBar.Position + 200;
+            end;
+        end;
+    end;
+end;
+
+procedure TMainForm.Charts_Resize(Sender: TObject;
+                                  var NewWidth, NewHeight: Integer;
+                                  var Resize: Boolean);
+var
+i: Smallint;
+begin
+  with Sender as TChart do
+    begin
+      if Charts_Scaled then
+        begin
+          for i:=0 to Number_of_Charts-1 do
+            begin
+              if i<>LithoLog_Track_Number then
+                begin
+                  Max_Points_Per_Page[i]:=Round(Log_Scale/ABS(Step_Values[i])*(NewHeight-47-MarginBottom)/Conversion_Unit[i]);
+(**************** 47 is difference between chart.height and the height of its chart.rect ***********************)
+                  MaxPointsPerPage:=Max_Points_Per_Page[i];
+                end;
+            end;
+        end;
+    end;
+end;
+
+procedure TMainForm.CreatePopupMenu(Sender: TChart);
+var
+NewItem: TMenuItem;
+Popup:TPopupMenu;
+begin
+  with Sender do
+    begin
+      Popup:=TPopupMenu.Create(Charts[Length(Charts)-1]);
+      Popup.AutoPopup:=True;
+      Popup.Tag:=Tag;
+      NewItem:=TMenuItem.Create(PopupMenu);
+      NewItem.Tag:=Tag;
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='Print';
+      NewItem.OnClick:=PopupClicked;
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Enabled:=False;
+      NewItem.Caption:='Print Pages';
+      NewItem.OnClick:=PopPrintPages;
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='Export';
+      NewItem.OnClick:=PopupClicked;
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='-';
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='Axes Ranges';
+      NewItem.OnClick:=PopupClicked;
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='Make Logarithmic';
+      NewItem.OnClick:=PopLogarithmic;
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='Values';
+      NewItem.OnClick:=PopupClicked;
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='-';
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='Edit';
+      NewItem.OnClick:=PopupClicked;
+
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='-';
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='Draw Line';
+      NewItem.OnClick:=PopupClicked;
+      NewItem.Checked:=False;
+
+      NewItem:=TMenuItem.Create(PopupMenu);
+      Popup.Items.Add(NewItem);
+      NewItem.Caption:='Delete Line';
+      NewItem.OnClick:=PopupClicked;
+
+      PopupMenu:=Popup;
+    end;
+end;
+
+procedure TMainForm.PopupClicked(Sender: TObject);
+var
+i:integer;
+begin
+  with Sender as TMenuItem do
+    begin
+      Case MenuIndex of
+        0:begin
+            ChartPreviewer1.Chart:=Charts[GetParentMenu.Tag];
+            ChartPreviewer1.Execute;
+          end;
+        1:;
+        2:begin
+            ChartEditor1.Chart:=Charts[GetParentMenu.Tag];
+            ChartEditor1.DefaultTab:=cetExport;
+            ChartEditor1.Execute;
+          end;
+        3:;
+        4:begin
+            ChartEditor1.Chart:=Charts[GetParentMenu.Tag];
+            ChartEditor1.DefaultTab:=cetAxis;
+            ChartEditor1.Execute;
+          end;
+        5:;
+        6:begin
+            ChartEditor1.Chart:=Charts[GetParentMenu.Tag];
+            ChartEditor1.DefaultTab:=cetSeriesData;
+            ChartEditor1.Execute;
+          end;
+        7:;
+        8:begin
+            ChartEditor1.Chart:=Charts[GetParentMenu.Tag];
+            ChartEditor1.DefaultTab:=cetPanel;
+            ChartEditor1.Execute;
+          end;
+        9:;
+        10:begin
+            if Checked then
+              begin
+                for i:=0 to Number_of_Charts-1 do
+                  Charts[i].PopupMenu.Items[10].Checked:=False;
+                Line_Drawing:=False;
+              end
+            else
+              begin
+                for i:=0 to Number_of_Charts-1 do
+                  Charts[i].PopupMenu.Items[10].Checked:=True;
+                Line_Drawing:=True;
+              end;
+           end;
+        11:begin
+             DeleteLine(LineTools[GetParentMenu.Tag]);
+           end;
+
+      end;
+    end;
+end;
+
+procedure TMainForm.PopLogarithmic(Sender: TObject);
+var
+Is_Logarithmic:Boolean;
+XMIN: Single;
+begin
+  with Sender as TMenuItem do
+    begin
+      XMIN:=Charts[GetParentMenu.Tag].Axes.Top.Minimum;
+      if XMIN>=0 then
+        begin
+          Is_Logarithmic:=Charts[GetParentMenu.Tag].Axes.Top.Logarithmic;
+          if Is_Logarithmic then
+            begin
+              Charts[GetParentMenu.Tag].Axes.Top.Logarithmic:=False;
+              Charts[GetParentMenu.Tag].Axes.Top.MinorTickCount:=4;
+              Caption:='Make Logarithmic';
+            end
+          else
+            begin
+              Charts[GetParentMenu.Tag].Axes.Top.Logarithmic:=True;
+              Charts[GetParentMenu.Tag].Axes.Top.MinorTickCount:=8;
+              Caption:='Make Ordinal';
+            end;
+        end
+      else
+        MessageDlg('Minimum has to be greater than or equal to zero (Change range minimum value).', mtWarning, [mbOk],0);
+    end;
+end;
+
+procedure TMainForm.PopPrintPages(Sender: TObject);
+begin
+  with Sender as TMenuItem do
+    begin
+      With PrintDialog1 do
+        begin
+          FromPage:=1;
+          ToPage:=Charts[Tag].NumPages;
+          MinPage:=FromPage;
+          MaxPage:=ToPage;
+          if Execute then
+            Charts[Tag].PrintPages(FromPage,ToPage);
+        end;
+    end;
+end;
+
+procedure TMainForm.Close1Click(Sender: TObject);
+begin
+  if Is_ForFree1_Created then
+    begin
+      DisableMenu;
+      StatusBar1.Panels[0].Text:='Closing all tracks. Please wait ...';
+      Repaint;
+      Chart_Number:=0;
+      Number_of_Charts:=0;
+      Is_ForFree1_Created:=False;
+      Charts_Scaled:=False;
+      Paging_Shown:=False;
+      Number_of_Composites:=0;
+      LithoLog_Created:=False;
+      Finalize(Null_Values);
+      Finalize(DepthUnit);
+      Finalize(Step_Values);
+      Finalize(Max_Points_Per_Page);
+      Finalize(Conversion_Unit);
+      Finalize(TopAxes);
+      Finalize(Charts);
+      Finalize(Composite_Tracks_Number);
+      Tree1.Clear;
+      ForFree1.Free;
+      StatusBar1.Panels[0].Text:='Ready';
+    end;
+end;
+
+procedure TMainForm.Exit1Click(Sender: TObject);
+begin
+  If Is_ForFree1_Created then
+    ForFree1.Free;
+  Close;
+end;
+
+procedure TMainForm.Zooming( Sender: TObject);
+begin
+  with Sender as TChart do
+    begin
+//      Axes.Top.MinimumRound:=False;
+//      Axes.Top.MaximumRound:=False;
+//      Axes.Top.SetMinMax(Series[0].MinXValue, Series[0].MaxXValue);
+      Temp_Zoom_File_No:=Temp_Zoom_File_No+1;
+      Temp_Zoom_File:='petroeval_temp'+IntToStr(Tag)+IntToStr(Temp_Zoom_File_No);
+      SaveChartToFile(TCustomChart(Sender),Temp_Zoom_File,True);
+      ZoomChart:=TZoomChart.Create(Application);
+      UndoZoom;
+//      Axes.Top.MinimumRound:=True;
+//      Axes.Top.MaximumRound:=True;
+      ZoomChart.Show;
+    end;
+end;
+
+procedure TMainForm.UndoPreparation(Root_Caption: string; Title_Caption: string);
+begin
+  if Length(DepthUnit)>0 then
+    SetLength(DepthUnit, Length(DepthUnit)-1);
+  if Length(Step_Values)>0 then
+    SetLength(Step_Values, Length(Step_Values)-1);
+  if Length(Null_Values)>0 then
+    SetLength(Null_Values, Length(Null_Values)-1);
+  RemoveChild(Root_Caption, Title_Caption);
+  RemoveChart(Title_Caption, Chart_Number);
+  Chart_Number:=Chart_Number-1;
+end;
+
+procedure TMainForm.Preparation(Root_Caption: string; Title_Caption: string;
+                                DepthUnit_String: string; Step_Value:Single;
+                                Null_Value:Single);
+
+begin
+  SetLength(DepthUnit, Length(DepthUnit)+1);
+  DepthUnit[Chart_Number]:=DepthUnit_String;
+  SetLength(Step_Values, Length(Step_Values)+1);
+  Step_Values[Chart_Number]:=Step_Value;
+  SetLength(Null_Values, Length(Null_Values)+1);
+  Null_Values[Chart_Number]:=Null_Value;
+  CreateChild(Root_Caption, Title_Caption);
+  CreateChart(Title_Caption, Chart_Number);
+  CreateSeries(Charts[Chart_Number], Chart_Number);
+  Charts[Chart_Number].Parent:=MainForm;
+  Charts[Chart_Number].Show;
+  Chart_Number:=Chart_Number+1;
+end;
+
+procedure TMainForm.CrossPLOT1Click(Sender: TObject);
+begin
+  if Tree1.Roots.Count=0 then Exit;
+  Operation_Canceled:=False;
+  Is_CrossPlot_3D:=False;
+  XAxis_Track_Number:=-1;
+  YAxis_Track_Number:=-1;
+  ZAxis_Track_Number:=-1;
+  Cross_Plot_Tracks:=TCross_Plot_Tracks.Create(Self);
+  Cross_Plot_Tracks.ShowModal;
+  Cross_Plot_Tracks.Free;
+end;
+
+procedure TMainForm.CompositeLog1Click(Sender: TObject);
+var
+i: Smallint;
+DepthUnit_String: string[5];
+Step_Value:Single;
+Null_Value:Single;
+begin
+  if Tree1.Roots.Count=0 then Exit;
+  Operation_Canceled:=False;
+  Composite_Log:=TComposite_Log.Create(Self);
+  Composite_Log.ShowModal;
+  If Operation_Canceled then Exit;
+  for i:=0 to Length(Composite_Log.Tracks_Number)-1 do
+    begin
+      SetLength(Composite_Tracks_Number, Length(Composite_Tracks_Number)+1);
+      Composite_Tracks_Number[i]:=Composite_Log.Tracks_Number[i];
+    end;
+  CreateRoot('Composite Log');
+  DepthUnit_String:=DepthUnit[Composite_Tracks_Number[0]];
+  Step_Value:=Step_Values[Composite_Tracks_Number[0]];
+  Null_Value:=Null_Values[Composite_Tracks_Number[0]];
+  SetLength(DepthUnit, Length(DepthUnit)+1);
+  DepthUnit[Chart_Number]:=DepthUnit_String;
+  SetLength(Step_Values, Length(Step_Values)+1);
+  Step_Values[Chart_Number]:=Step_Value;
+  SetLength(Null_Values, Length(Null_Values)+1);
+  Null_Values[Chart_Number]:=Null_Value;
+  CreateChild('Composite Log', 'Composite Log '+IntToStr(Number_of_Composites+1));
+  CreateChart('Composite Log '+IntToStr(Number_of_Composites+1), Chart_Number);
+  for i:=0 to Length(Composite_Tracks_Number)-1 do
+    begin
+      Log_Values:=THorizLineSeries.Create(ForFree1);
+      Log_Values.ParentChart:=Charts[Chart_Number];
+      Charts[Chart_Number].CustomAxes.Add;
+      SetLength(TopAxes, Length(Topaxes)+1);
+      TopAxes[i]:=Charts[Chart_Number].CustomAxes[i];
+      TopAxes[i].Horizontal:=True;
+      TopAxes[i].Axis.Color:=Charts[Chart_Number].Series[i].Color;
+      TopAxes[i].Title.Font.Color:=Charts[Chart_Number].Series[i].Color;
+      TopAxes[i].Title.Font.Size:=8;
+      TopAxes[i].Title.Font.Name:='Tahoma';
+      TopAxes[i].Title.Caption:=Charts[Composite_Tracks_Number[i]].Title.Caption;
+      TopAxes[i].LabelsFont.Color:=Charts[Chart_Number].Series[i].Color;
+//      TopAxes[i].MaximumRound:=True;
+//      TopAxes[i].MinimumRound:=True;
+      TopAxes[i].Horizontal:=True;
+      TopAxes[i].OtherSide:=True;
+      TopAxes[i].PositionUnits:=muPixels;
+      TopAxes[i].PositionPercent:=(i)*(-40);
+      Charts[Chart_Number].MarginTop:=(i+2)*40-20;
+      Charts[Chart_Number].Title.Top:=0;
+      Charts[Chart_Number].Title.Left:=50;
+      Log_Values.CustomHorizAxis:=TopAxes[i];
+      Log_Values.XValues.Count := Charts[Composite_Tracks_Number[i]].Series[0].XValues.Count;
+      Log_Values.XValues.Value := Charts[Composite_Tracks_Number[i]].Series[0].XValues.Value;
+      Log_Values.XValues.Modified:=True;
+      Log_Values.YValues.Count := Charts[Composite_Tracks_Number[i]].Series[0].YValues.Count;
+      Log_Values.YValues.Value := Charts[Composite_Tracks_Number[i]].Series[0].YValues.Value;
+      Log_Values.YValues.Modified:=True;
+      Log_Values.Stairs:=True;
+      Log_Values.Pen.Width:=1;
+    end;
+  Charts[Chart_Number].Parent:=MainForm;
+  Charts[Chart_Number].Show;
+  Chart_Number:=Chart_Number+1;
+  Number_of_Charts:=Chart_Number;
+  Number_of_Composites:=Number_of_Composites+1;
+  Finalize(Composite_Tracks_Number);
+  Finalize(Composite_Log.Tracks_Number);
+  Composite_Log.Free;
+end;
+
+procedure TMainForm.Litholog1Click(Sender: TObject);
+var
+DepthUnit_String: string;
+Step_Value:Single;
+Null_Value:Single;
+begin
+  if Tree1.Roots.Count=0 then Exit;
+  if not(LithoLog_Created) then
+    begin
+      CreateRoot('Lithology Log');
+      DepthUnit_String:=DepthUnit[Length(DepthUnit)-1];
+      Step_Value:=Step_Values[Length(Step_Values)-1];
+      Null_Value:=-999.25;
+      SetLength(DepthUnit, Length(DepthUnit)+1);
+      DepthUnit[Chart_Number]:=DepthUnit_String;
+      SetLength(Step_Values, Length(Step_Values)+1);
+      Step_Values[Chart_Number]:=Step_Value;
+      SetLength(Null_Values, Length(Null_Values)+1);
+      Null_Values[Chart_Number]:=Null_Value;
+      CreateChild('Lithology Log', 'LITHOLOG');
+      CreateChart('LITHOLOG', Chart_Number);
+      Charts[Chart_Number].TopAxis.Labels:=False;
+      LithoLog_Track_Number:=Chart_Number;
+      Log_Values:=THorizLineSeries.Create(ForFree1);
+      Log_Values.Name:='Track_'+IntToStr(Chart_Number+1);
+      Log_Values.Stairs:=True;
+      Log_Values.Pen.Width:=1;
+      Log_Values.HorizAxis:=aTopAxis;
+      Log_Values.ParentChart:=nil;
+      Charts[Chart_Number].Parent:=MainForm;
+      Charts[Chart_Number].Show;
+      Litho_Log:=TLitho_Log.Create(Charts[Chart_Number]);
+      Litho_Log.Show;
+      LithoLog_Open:=True;
+      Chart_Number:=Chart_Number+1;
+      Number_of_Charts:=Chart_Number;
+      LithoLog_Created:=True;
+    end
+  else
+    begin
+      if not(LithoLog_Open) then
+        begin
+          Litho_Log:=TLitho_Log.Create(Charts[LithoLog_Track_Number]);
+          Litho_Log.Show;
+          LithoLog_Open:=True;
+        end;
+    end;
+end;
+
+procedure TMainForm.About2Click(Sender: TObject);
+begin
+MessageDlg(About_String, mtInformation, [mbOk], 0);
+end;
+
+procedure TMainForm.EnableMenu;
+begin
+//  Calculations1.Visible:=True;
+  Tools1.Visible:=True;
+  Close1.Visible:=True;
+end;
+
+procedure TMainForm.DisableMenu;
+begin
+//  Calculations1.Visible:=False;
+  Tools1.Visible:=False;
+  Close1.Visible:=False;
+end;
+
+procedure TMainForm.ChartClick(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+i:integer;
+YValue, XValue1, XValue2: Single;
+begin
+if (Line_Drawing)and(Button=mbLeft) then
+  begin
+    for i:=0 to Number_of_Charts-1 do
+      begin
+        YValue:=Charts[i].Series[0].YScreenToValue(Y);
+        XValue1:=Charts[i].Axes.Top.Minimum;
+        XValue2:=Charts[i].Axes.Top.Maximum;
+        LineTools[i].Lines.AddLine(XValue1, YValue , XValue2, YValue);
+        LineTools[i].Repaint;
+      end;
+  end;
+end;
+
+procedure TMainForm.SelectLine(Sender: TObject);
+var
+i:integer;
+begin
+  with Sender as TDrawLineTool do
+    begin
+      ID_Number:=Selected.Index;
+    end;
+  for i:=0 to Number_of_Charts-1 do
+    LineTools[i].Selected:=LineTools[i].Lines[ID_Number];
+end;
+
+procedure TMainForm.DeleteLine(Sender: TObject);
+var
+i:integer;
+begin
+  for i:=0 to Number_of_Charts-1 do
+    begin
+      if LineTools[i].Lines.Count>0 then
+        begin
+          LineTools[i].Selected:=LineTools[i].Lines[ID_Number];
+          LineTools[i].DeleteSelected;
+        end;
+    end;
+end;
+
+procedure TMainForm.DragLine(Sender: TObject);
+var
+i:integer;
+begin
+with Sender as TDrawLineTool do
+  begin
+    for i:=0 to Number_of_Charts-1 do
+      begin
+        if LineTools[i].Lines.Count>0 then
+          begin
+            LineTools[i].Lines[ID_Number].Y0:=Selected.Y0;
+            LineTools[i].Lines[ID_Number].Y1:=Selected.Y1;
+            LineTools[i].Lines[ID_Number].X0:=Charts[i].Axes.Top.Minimum;
+            LineTools[i].Lines[ID_Number].X1:=Charts[i].Axes.Top.Maximum;
+          end;
+      end;
+  end;
+end;
+
+procedure TMainForm.LAS1Click(Sender: TObject);
+var
+i: Smallint;
+begin
+try
+  with OpenDialog1 do
+    begin
+      DefaultExt:='LAS';
+      Filter:='LAS files|*.LAS';
+      Title:='Open LAS files';
+    end;
+  if OpenDialog1.Execute then
+    begin
+      for i:=0 to OpenDialog1.Files.Count-1 do
+        begin
+          StatusBar1.Panels[0].Text:='Reading file(s) data. Please wait ...';
+          Repaint;
+          if not(Is_ForFree1_Created) then
+            begin
+              ForFree1:=TLabel.Create(Self);
+              Is_ForFree1_Created:=True;
+            end;
+          try
+            ReadLAS(OpenDialog1.Files[i]);
+          except
+            Continue;
+          end;
+        end;
+      EnableMenu;
+      StatusBar1.Panels[0].Text:='Ready';
+    end;
+finally
+  StatusBar1.Panels[0].Text:='Ready.';
+end;
+end;
+
+procedure TMainForm.Text1Click(Sender: TObject);
+var
+i: Smallint;
+begin
+try
+  with OpenDialog1 do
+    begin
+      DefaultExt:='TXT';
+      Filter:='TEXT files|*.TXT';
+      Title:='Open TEXT files';
+    end;
+  if OpenDialog1.Execute then
+    begin
+      for i:=0 to OpenDialog1.Files.Count-1 do
+        begin
+          StatusBar1.Panels[0].Text:='Reading file(s) data. Please wait ...';
+          Repaint;
+          if not(Is_ForFree1_Created) then
+            begin
+              ForFree1:=TLabel.Create(Self);
+              Is_ForFree1_Created:=True;
+            end;
+          TextFile_Form:=TTextFile_Form.Create(Self);
+          TextFile_Form.ShowModal;
+          TextFile_Form.Free;
+          if Operation_Canceled then Exit;
+          try
+            ReadTEXT(OpenDialog1.Files[i]);
+          except
+            Continue;
+          end;
+        end;
+      EnableMenu;
+      StatusBar1.Panels[0].Text:='Ready';
+    end;
+finally
+  StatusBar1.Panels[0].Text:='Ready.';
+end;
+end;
+
+end.

@@ -1,0 +1,18 @@
+program SeisPlot;
+
+uses
+  Forms,
+  MainForm in 'MainForm.pas' {FirstForm},
+  TLapsePage in 'TLapsePage.pas' {TLapse},
+  LapseChartPrint in 'LapseChartPrint.pas' {LapsePrint},
+  Gain_Form in 'Gain_Form.pas' {GainForm};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.Title := 'SeisPlot';
+  Application.CreateForm(TFirstForm, FirstForm);
+  Application.CreateForm(TGainForm, GainForm);
+  Application.Run;
+end.

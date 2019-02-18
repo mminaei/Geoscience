@@ -1,0 +1,196 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{6fff19c5-8784-48e1-8327-99a86998c7ad}</ProjectGuid>
+    <MainSource>PetroEval.dpr</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>PetroEval.exe</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_FullBooleanEvaluations>True</DCC_FullBooleanEvaluations>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
+    <DCC_RangeChecking>True</DCC_RangeChecking>
+    <DCC_PentiumSafeDivide>True</DCC_PentiumSafeDivide>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+    <DCC_UNSAFE_TYPE>True</DCC_UNSAFE_TYPE>
+    <DCC_UNSAFE_CODE>True</DCC_UNSAFE_CODE>
+    <DCC_UNSAFE_CAST>True</DCC_UNSAFE_CAST>
+    <DCC_Description>Petrophysical Evaluation Software by P.U.T</DCC_Description>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_FullBooleanEvaluations>True</DCC_FullBooleanEvaluations>
+    <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
+    <DCC_RangeChecking>True</DCC_RangeChecking>
+    <DCC_PentiumSafeDivide>True</DCC_PentiumSafeDivide>
+    <DCC_Define>DEBUG</DCC_Define>
+    <DCC_UNSAFE_TYPE>True</DCC_UNSAFE_TYPE>
+    <DCC_UNSAFE_CODE>True</DCC_UNSAFE_CODE>
+    <DCC_UNSAFE_CAST>True</DCC_UNSAFE_CAST>
+    <DCC_Description>Petrophysical Evaluation Software by P.U.T</DCC_Description>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject xmlns=""> <Delphi.Personality>   <Parameters>
+      <Parameters Name="DebugSourceDirs">D:\Rock Programs\RockLog\Components\TIWD7\</Parameters>
+      <Parameters Name="UseLauncher">False</Parameters>
+      <Parameters Name="LoadAllSymbols">True</Parameters>
+      <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+    </Parameters>
+    <VersionInfo>
+      <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+      <VersionInfo Name="AutoIncBuild">True</VersionInfo>
+      <VersionInfo Name="MajorVer">1</VersionInfo>
+      <VersionInfo Name="MinorVer">2</VersionInfo>
+      <VersionInfo Name="Release">5</VersionInfo>
+      <VersionInfo Name="Build">68</VersionInfo>
+      <VersionInfo Name="Debug">False</VersionInfo>
+      <VersionInfo Name="PreRelease">True</VersionInfo>
+      <VersionInfo Name="Special">False</VersionInfo>
+      <VersionInfo Name="Private">False</VersionInfo>
+      <VersionInfo Name="DLL">False</VersionInfo>
+      <VersionInfo Name="Locale">1033</VersionInfo>
+      <VersionInfo Name="CodePage">1252</VersionInfo>
+    </VersionInfo>
+    <VersionInfoKeys>
+      <VersionInfoKeys Name="CompanyName">Petroleum University of Technology</VersionInfoKeys>
+      <VersionInfoKeys Name="FileDescription">Petro-Eval Software</VersionInfoKeys>
+      <VersionInfoKeys Name="FileVersion">1.2.5.68</VersionInfoKeys>
+      <VersionInfoKeys Name="InternalName">PetroEval</VersionInfoKeys>
+      <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+      <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+      <VersionInfoKeys Name="OriginalFilename">PetroEval</VersionInfoKeys>
+      <VersionInfoKeys Name="ProductName">P.U.T Petro-Eval</VersionInfoKeys>
+      <VersionInfoKeys Name="ProductVersion">1</VersionInfoKeys>
+    </VersionInfoKeys>
+    <Source>
+      <Source Name="MainSource">PetroEval.dpr</Source>
+    </Source>
+  </Delphi.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <ItemGroup />
+  <ItemGroup>
+    <DelphiCompile Include="PetroEval.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="AnisotropyForm.pas">
+      <Form>Anisotropy_Form</Form>
+    </DCCReference>
+    <DCCReference Include="ArpWorthington.pas">
+      <Form>Arp_Worthington</Form>
+    </DCCReference>
+    <DCCReference Include="AveragingForm.pas">
+      <Form>Averaging_Form</Form>
+    </DCCReference>
+    <DCCReference Include="CECForm.pas">
+      <Form>CEC_Form</Form>
+    </DCCReference>
+    <DCCReference Include="CECMethodForm.pas">
+      <Form>CECMethod_Form</Form>
+    </DCCReference>
+    <DCCReference Include="CompositeLog.pas">
+      <Form>Composite_Log</Form>
+    </DCCReference>
+    <DCCReference Include="CorrelationCoefficient.pas">
+      <Form>Correlation_Coefficient</Form>
+    </DCCReference>
+    <DCCReference Include="CrossPlot.pas">
+      <Form>Cross_Plot</Form>
+    </DCCReference>
+    <DCCReference Include="CrossPlotTracks.pas">
+      <Form>Cross_Plot_Tracks</Form>
+    </DCCReference>
+    <DCCReference Include="DTPSelection.pas">
+      <Form>Vp_Selection</Form>
+    </DCCReference>
+    <DCCReference Include="DTSelection.pas">
+      <Form>DT_Selection</Form>
+    </DCCReference>
+    <DCCReference Include="FFIForm.pas">
+      <Form>FFI_Form</Form>
+    </DCCReference>
+    <DCCReference Include="FRForm.pas">
+      <Form>FR_Form</Form>
+    </DCCReference>
+    <DCCReference Include="FZIForm.pas">
+      <Form>FZI_Form</Form>
+    </DCCReference>
+    <DCCReference Include="GreenbergCastagnaForm.pas">
+      <Form>Greenberg_Castagna_Form</Form>
+    </DCCReference>
+    <DCCReference Include="GRIndexForm.pas">
+      <Form>GRIndex_Form</Form>
+    </DCCReference>
+    <DCCReference Include="HanModel.pas">
+      <Form>Han_Model</Form>
+    </DCCReference>
+    <DCCReference Include="HeterogeneityForm.pas">
+      <Form>Heterogeneity_Form</Form>
+    </DCCReference>
+    <DCCReference Include="HTForm.pas">
+      <Form>HT_Form</Form>
+    </DCCReference>
+    <DCCReference Include="KhForm.pas">
+      <Form>Kh_Form</Form>
+    </DCCReference>
+    <DCCReference Include="KriefPage.pas">
+      <Form>Krief_Page</Form>
+    </DCCReference>
+    <DCCReference Include="KvForm.pas">
+      <Form>Kv_Form</Form>
+    </DCCReference>
+    <DCCReference Include="LithoLog.pas">
+      <Form>Litho_Log</Form>
+    </DCCReference>
+    <DCCReference Include="Main_Form.pas">
+      <Form>MainForm</Form>
+    </DCCReference>
+    <DCCReference Include="PagingPage.pas">
+      <Form>paging</Form>
+    </DCCReference>
+    <DCCReference Include="PoissonPage.pas">
+      <Form>Poisson_Page</Form>
+    </DCCReference>
+    <DCCReference Include="PorosityForm.pas">
+      <Form>Porosity_Form</Form>
+    </DCCReference>
+    <DCCReference Include="ResistivityIndexForm.pas">
+      <Form>ResistivityIndex_Form</Form>
+    </DCCReference>
+    <DCCReference Include="RQIForm.pas">
+      <Form>RQI_Form</Form>
+    </DCCReference>
+    <DCCReference Include="RwConcentration.pas">
+      <Form>Rw_Concentration</Form>
+    </DCCReference>
+    <DCCReference Include="RwSPForm.pas">
+      <Form>Rw_SP_Form</Form>
+    </DCCReference>
+    <DCCReference Include="SelectLog.pas">
+      <Form>Select_Log</Form>
+    </DCCReference>
+    <DCCReference Include="ShaleVolumeForm.pas">
+      <Form>ShaleVolume_Form</Form>
+    </DCCReference>
+    <DCCReference Include="SvgrForm.pas">
+      <Form>Svgr_Form</Form>
+    </DCCReference>
+    <DCCReference Include="SwForm.pas">
+      <Form>Sw_Form</Form>
+    </DCCReference>
+    <DCCReference Include="TauForm.pas">
+      <Form>Tau_Form</Form>
+    </DCCReference>
+    <DCCReference Include="ZoomedChart.pas">
+      <Form>ZoomChart</Form>
+    </DCCReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+</Project>

@@ -1,0 +1,3156 @@
+unit CalculationPage;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ImgList, DB, DBTables, TeEngine, Series, ExtCtrls,
+  TeeProcs, Chart, DBChart, sButtonControl, sCustomButton, StdCtrls,
+  DBGrids, VrControls, VrLabel, ComCtrls,Math, TeeEdit, TeExport,
+  ESBPCSEdit, ESBPCSNumEdit, CheckLst, TeeStore, jpeg, DBCtrls, TeeTools,
+  XPMan, ToolWin, Grids;
+
+type
+  TCalculationForm = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Label1: TLabel;
+    VrLabelSource: TVrLabel;
+    VrLabelCalc: TVrLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label2: TLabel;
+    CCVrLabel: TVrLabel;
+    DBGrid2: TDBGrid;
+    Edit1: TEdit;
+    Memo1: TMemo;
+    DBGrid1: TDBGrid;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit2: TEdit;
+    TabSheet2: TTabSheet;
+    VrLabel3: TVrLabel;
+    DBGrid3: TDBGrid;
+    Button3: TsButton;
+    Button1: TsButton;
+    Button2: TsButton;
+    Button4: TsButton;
+    OpenDialog1: TOpenDialog;
+    SaveDialog2: TSaveDialog;
+    PrintDialog1: TPrintDialog;
+    OpenDialog3: TOpenDialog;
+    OpenDialog2: TOpenDialog;
+    SaveDialog3: TSaveDialog;
+    Litholog: TTable;
+    LithologLithology: TStringField;
+    DataSource2: TDataSource;
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    Search1: TMenuItem;
+    Calculation1: TMenuItem;
+    About1: TMenuItem;
+    OpenTable1: TMenuItem;
+    Emptytable1: TMenuItem;
+    Savetable1: TMenuItem;
+    N1: TMenuItem;
+    Printtable1: TMenuItem;
+    N2: TMenuItem;
+    Exit1: TMenuItem;
+    Find1: TMenuItem;
+    Elasticparameters1: TMenuItem;
+    Correlationcoefficients1: TMenuItem;
+    About2: TMenuItem;
+    Lasfilez1: TMenuItem;
+    ASCIIfile1: TMenuItem;
+    StatusBar1: TStatusBar;
+    DataSource3: TDataSource;
+    SaveDialog1: TSaveDialog;
+    SaveDialog4: TSaveDialog;
+    Edit5: TEdit;
+    Label5: TLabel;
+    VrLabel10: TVrLabel;
+    VrLabelSourceCC: TVrLabel;
+    Filter1: TMenuItem;
+    UndoFilter1: TMenuItem;
+    Edit6: TESBFloatEdit;
+    Edit7: TESBFloatEdit;
+    sButton1: TsButton;
+    sButton2: TsButton;
+    VrLabel111: TVrLabel;
+    sButton3: TsButton;
+    ElasticTable: TTable;
+    LithologTopDepth: TFloatField;
+    LithologBottomDepth: TFloatField;
+    Printtracks1: TMenuItem;
+    ImageList1: TImageList;
+    ElasticCorrelations1: TMenuItem;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    Image1: TImage;
+    Shape1: TShape;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    Image2: TImage;
+    DBNavigator1: TDBNavigator;
+    Image3: TImage;
+    DataSource1: TDataSource;
+    N3: TMenuItem;
+    Lapse1: TMenuItem;
+    XPManifest1: TXPManifest;
+    View1: TMenuItem;
+    ElasticTableRec: TFloatField;
+    ElasticTableDepth: TFloatField;
+    ElasticTablePoissonRatio: TFloatField;
+    ElasticTableLameConstant: TFloatField;
+    ElasticTableBulkModulus: TFloatField;
+    ElasticTableShearModulus: TFloatField;
+    ElasticTableYoungModulus: TFloatField;
+    ElasticTableLandaRho: TFloatField;
+    ElasticTableMiuRho: TFloatField;
+    ElasticTableLandaMiu: TFloatField;
+    ElasticTableVp: TFloatField;
+    ElasticTableVs: TFloatField;
+    ElasticTableVpVs: TFloatField;
+    ElasticTablePImpedance: TFloatField;
+    ElasticTableSImpedance: TFloatField;
+    ElasticTableRho: TFloatField;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton18: TToolButton;
+    Image4: TImage;
+    Table1: TTable;
+    Table1Log_Name: TStringField;
+    Table1File_Number: TIntegerField;
+    Table1Log_Number: TIntegerField;
+    N4: TMenuItem;
+    Scale1: TMenuItem;
+    NoScale1: TMenuItem;
+    DBChart8: TDBChart;
+    Series1: TLineSeries;
+    procedure Lasfilez1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ASCIIfile1Click(Sender: TObject);
+    procedure Emptytable1Click(Sender: TObject);
+    procedure Exit1Click(Sender: TObject);
+    procedure Printtable1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure LithologLithologyChange(Sender: TField);
+    procedure LithologLithologyValidate(Sender: TField);
+    procedure PopPrint(Sender: TObject);
+    procedure PopPrintPages(Sender: TObject);
+    procedure PopExport(Sender: TObject);
+    procedure PopMinMax(Sender: TObject);
+    procedure PopColor(Sender: TObject);
+    procedure PopLogarithmic(Sender: TObject);
+    procedure Elasticparameters1Click(Sender: TObject);
+    procedure Find1Click(Sender: TObject);
+    procedure About2Click(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure Correlationcoefficients1Click(Sender: TObject);
+    procedure TableScroll(Sender: TDataset);
+    procedure Savetable1Click(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure Filter1Click(Sender: TObject);
+    procedure UndoFilter1Click(Sender: TObject);
+    procedure sButton1Click(Sender: TObject);
+    procedure sButton2Click(Sender: TObject);
+    procedure sButton3Click(Sender: TObject);
+    procedure Printtracks1Click(Sender: TObject);
+    procedure ElasticCorrelations1Click(Sender: TObject);
+    procedure Zooming(Sender: TObject);
+    procedure LithologBottomDepthChange(Sender: TField);
+    procedure LithologTopDepthChange(Sender: TField);
+    procedure DBGrid3ColEnter(Sender: TObject);
+    procedure LithologAfterInsert(DataSet: TDataSet);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure Lapse1Click(Sender: TObject);
+    procedure TopAxisDrawLabel(Sender:TChartAxis; var X,Y,Z:Integer;
+                                  var Text:String; var DrawLabel:Boolean);
+    procedure N3Click(Sender: TObject);
+    procedure Scale1Click(Sender: TObject);
+    procedure NoScale1Click(Sender: TObject);
+    procedure ChartPreviewAfterDraw(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    Table:TTable;
+    SourceLogF:String;
+    GRFields,RhoFields,VpFields,VsFields: array [1..7] of String;
+    GRField,RhoField,VpField,VsField: String;
+    Rhow,GRw,Vpw,Vsw,Tags:integer;
+    CCanceled:Boolean;
+    Charts:array[1..150] of TDBChart;
+    ChartMin,ChartMax:Real;
+    VsEquationNumber:ShortInt;
+    Vs_First_Par,Vs_Sec_Par,V0,K1,K2,Vc:Real;
+    PhiValue, ShaleValue:String;
+    GR_Max,GR_Min:Real;
+    File_Names:array of string;
+    Number_of_Logs:array [0..15] of Integer;
+    Round_Points:integer;
+    { Public declarations }
+  end;
+
+var
+  CalculationForm: TCalculationForm;
+  MySeries:THorizLineSeries;
+  Lines:TStringList;
+  GRAdded,RhoAdded, VSAdded,VpAdded:Boolean;
+  TopDepth,BottomDepth:Real;
+  IsLas:Boolean;
+  SourceParameter,OpenedFile:string;
+  RhoSystem,DepthSystem,VSystem:string;
+  MainColors:array[0..8] of TColor=($0000B95C,$00FF8000,$00C08000,clRed,clGreen,$00404080,$00FF0080,$00808040,clOlive);
+  Colors:array[0..8] of TColor=($00DEFFD9,$00FFE6CC,$00FFEFCE,$00D5D5FF,$00D5FFD5,$00DDDDEE,$00FFDFEF,$00EEEEDD,$00DDFFFF);
+  ChartColors:array[0..8] of TColor=($0000B95C,$00FF8000,$00C08000,clRed,clGreen,$00404080,$00FF0080,$00808040,clOlive);
+  VrLabel1:TVrLabel;
+  Fields:array[1..150] of string[30];
+  ToTalFields:array[1..150] of string[30];
+  Units:Array[1..150] of string[30];
+  l,FN,GRFN,RhoFN,VpFN,VsFN:Integer;
+  PopPrint,PopExport,PopMinMax:TNotifyEvent;
+  Pat,Path:String;
+  P:Integer;
+  TableScroll: TDataSetNotifyEvent;
+  OutFile : TextFile;
+  OutString : string;
+  NullV:Real;
+  NullVal:String;
+  FirstLine:String;
+  ForFree:array[1..2] of TLabel;
+  IsCalc,IsTime,IsFiltered:Boolean;
+  CalcHeight:Integer;
+  LastDepth,FirstDepth:Real;
+  InsertedRecord:Boolean=False;
+  FirstField:String;
+  ChartTools1:TMarksTipTool;
+  ChartTools2:TAxisScrollTool;
+  XMIN,XMAX:Real;
+  The_Value:Real;
+  TempFile:TextFile;
+  w:integer;
+  mppp:Integer;
+  Log_Scale:Real;
+  ChartEditor:TChartEditor;
+  ChartP:TChartPreviewer;
+  Scaled:Boolean;
+implementation
+
+ uses TablePrintPage,Search,AboutPage,SelectLogPage,Configuration,
+  SelectLogs, ChartPrint, Printers, ElasticCorrelationP,
+  DensityGRaySelection, ZoomedChart, SetMinMaxPage, TLapsePage,
+  VsEquationPage, CrossPlotsPage, PagingPage;
+
+Function CorrelationCoefficient(CalculatedTable : TTable; SourceLog : String; CalculatedLog : String):Real;
+var
+  Count : Integer;
+  Xi,Yi,Xi2,Yi2,XiYi : Real;
+Begin
+  Xi:=0;
+  Yi:=0;
+  Xi2:=0;
+  Yi2:=0;
+  XiYi:=0;
+  Count:=0;
+  with CalculationForm do
+    begin
+      Table.DisableControls;
+      CalculatedTable.DisableControls;
+      Try
+        if Table.IsEmpty=false then
+          begin
+            Table.First;
+            Table.AfterScroll:=nil;
+            CalculatedTable.First;
+            while not(Table.Eof) do
+              begin
+                if not(Table.FieldByName(SourceLog).AsString='') then
+                  begin
+                    if not(CalculatedTable.FieldByName(CalculatedLog).AsString='') then
+                      begin
+                        Xi:=Xi+Table.FieldValues[SourceLog];
+                        Xi2:=Xi2+sqr(Table.FieldValues[SourceLog]);
+                        Yi:=Yi+CalculatedTable.FieldValues[CalculatedLog];
+                        Yi2:=Yi2+sqr(CalculatedTable.FieldValues[CalculatedLog]);
+                        XiYi:=XiYi+CalculatedTable.FieldValues[CalculatedLog]*Table.FieldValues[SourceLog];
+                        Count:=Count+1;
+                      end;
+                  end;
+                if not (CalculatedTable.TableName=Table.TableName) then
+                  CalculatedTable.Next;
+                Table.Next;
+              end;
+            try
+              if sqrt((Xi2-(sqr(Xi)/Count))*(Yi2-(sqr(Yi)/Count)))<>0 then
+                begin
+                  CorrelationCoefficient:=(XiYi-(Xi*Yi/Count))/sqrt((Xi2-(sqr(Xi)/Count))*(Yi2-(sqr(Yi)/Count)));
+                end;
+            except
+              Result:=0;
+            end;
+          end;
+      Finally
+        Table.EnableControls;
+        Table.AfterScroll:=TableScroll;
+        CalculatedTable.EnableControls;
+      end;
+    end;
+
+End;
+
+{$R *.dfm}
+
+procedure TCalculationForm.Lasfilez1Click(Sender: TObject);
+var
+Lines:TStringList;
+s,s2,s3,s4, old_s2:string;
+p1,p2,code,i,j:integer;
+LPD:integer;
+EmptyS1,EmptyS2,Digit:Boolean;
+clr,c,k,l:Integer;
+m:Longint;
+indexes:string;
+MySeries:THorizLineSeries;
+wrapped,upward:integer;
+BadFormat:Boolean;
+NullP1,NullP2,repeated_no:integer;
+NewItem:TMenuItem;
+PopupMenu:TPopupMenu;
+begin
+try
+  if FileExists('Table.db') then DeleteFile('Table.db');
+  if FileExists('TABLE.DB') then DeleteFile('TABLE.DB');
+  OpenDialog3.FileName:='';
+  Table.TableName:='Table.db';
+  repeated_no:=1;
+  if not Table.Exists then
+    begin
+      if opendialog3.execute then
+        begin
+          if not(OpenDialog3.FileName='') then
+            begin
+               Statusbar1.Panels[0].Text:='Reading file data, please wait...';
+               StatusBar1.Refresh;
+               Screen.Cursor := crHourGlass;
+                 ForFree[1]:=TLabel.Create(Self);
+               RhoAdded:=False;
+               VpAdded:=False;
+               VsAdded:=False;
+               GRAdded:=False;
+               VrLabelSource.Visible:=True;
+               IsLas:=True;
+                 Table:=TTable.Create(Self);
+               DBGrid1.Visible:=True;
+               DBGrid2.Visible:=True;
+               VrLabelCalc.Visible:=True;
+               Rhow:=0;
+               GRw:=0;
+               Vpw:=0;
+               Vsw:=0;
+               Memo1.Visible:=True;
+               VrLabel111.Visible:=True;
+               Repaint;
+                 Table.FieldDefs.Add('Rec',ftInteger,0,False);
+               Lines:=TStringList.Create;
+               Lines.LoadFromFile(OpenDialog3.FileName);
+               OpenedFile:=OpenDialog3.FileName;
+               s:=Lines[2];
+               wrapped:=0;
+               wrapped:=pos('YES',s);
+               for i:=6 to Lines.Count-1 do
+                 begin
+                   s:=Lines[i];
+                   p:=Pos('STEP',s);
+                   if p<>0 then Break;
+                 end;
+               upward:=Pos('-',s);
+
+               For i:=7 to Lines.Count-1 do
+                 begin
+                  s:=Lines[i];
+                  P:=Pos('NULL',s);
+                  if P<>0 then Break;
+                 end;
+               s:=Lines[i];
+               NullP1:=Pos('.',s);
+               NullP2:=Pos(':',s);
+               s2:=Copy(s,NullP1+1,NullP2-NullP1-1);
+               s2:=Trim(s2);
+               NullVal:=s2;
+               NullV:=StrToFloat(s2);
+               For i:=0 to Lines.Count-1 do
+                 begin
+                  s:=Lines[i];
+                  P:=Pos('~C',s);
+                  if P=1 then Break;
+                 end;
+               i:=i+1;
+               FN:=1;
+               repeat
+                s:=Lines[i];
+                s2:='';
+                s3 := Copy( s, 1,1);
+                P1:=Pos('.',s);
+                if P1=0 then P1:=Pos(' ',s);
+                s2 := Copy( s, 1,P1-1);
+                s2:=TrimLeft(s2);
+                s2:=TrimRight(s2);
+                if s2=old_s2 then
+                  begin
+                    s2:=s2+IntToStr(repeated_no);
+                    repeated_no:=repeated_no+1;
+                  end
+                else
+                  old_s2:=s2;
+                P2:=Pos('     ',s);
+                s4 := Copy( s, P1+1,P2-P1);
+                s4:=TrimLeft(s4);
+                s4:=TrimRight(s4);
+                     if ((s2='DEPTH')or(s2='DEPT')) then
+                     begin
+                       if s4='M' then
+                         DepthSystem:='m';
+                       if ((s4='F')or(s4='FT')) then
+                         DepthSystem:='ft';
+                     end;
+                     if s2='TIME' then
+                       DepthSystem:='m';
+                     if not(s4='') then
+                       s4:='('+s4+')';
+
+                     if ((s2='RHOB')or(s2='RHOZ')or(s2='RHOZ_val')or(s2='RHO8')or(s2='ZCOR')or(s2='ZDEN')or(s2='RHGA')or(s2='DENR')or(s2='EDRH')or(s2='EMRH')or(s2='ERHO')or(s2='FDEN')or(s2='RHEV')or(s2='RHM2')or(s2='RHMA')or(s2='RHOC')or(s2='RHOF')or(s2='RHOH')or(s2='RHOO')or(s2='RHOW')or(s2='RHOG')or(s2='ZDRH')or(s2='ZRHO')or(s2='DENC')or(s2='DENS')or(s2='CDL')or(s2='FDT')or(s2='DLDNH')or(s2='DLDN')) then
+                     begin
+                       Rhow:=Rhow+1;
+                       RhoAdded:=True;
+                       RhoFields[Rhow]:=s2;
+                       RhoFN:=FN;
+                       if ((s4='(G/CC)')or(s4='(G/CM3)')or(s4='(GM/CC)')or(s4='(G/C3)')or(s4='(GM/C3)')) then
+                         RhoSystem:='GC';
+                       if ((s4='(K/M3)')or(s4='(K/M)')) then
+                         RhoSystem:='KM';
+                     end;
+                     if ((s2='GR')or(s2='ECGR')or(s2='GRC')or(s2='C_GR')or(s2='BHC_GR')or(s2='CCATGR')or(s2='CSNG')or(s2='DIELGR')or(s2='G_GR')or(s2='GAMMA')or(s2='GR_DC')or(s2='GR_DN')or(s2='GR_DSN')or(s2='CGR')or(s2='EGR')or(s2='GRCO')or(s2='GRTO')or(s2='RGR')or(s2='SUMG')or(s2='IDGR')or(s2='GSGR')) then
+                     begin
+                       GRw:=GRw+1;
+                       GRAdded:=True;
+                       GRFields[GRw]:=s2;
+                       GrFN:=FN;
+                     end;
+                     if ((s2='DT')or(s2='DTCO')or(s2='DT24')or(s2='DT-P')or(s2='DTP')or(s2='DTP_val')or(s2='DT-PED')or(s2='ACTCL')) then
+                     begin
+                       Vpw:=Vpw+1;
+                       VpAdded:=True;
+                       VpFields[Vpw]:=s2;
+                       VpFN:=FN;
+                       if ((s4='(US/FT)')or(s4='(US/F)')) then
+                         VSystem:='FT';
+                     end;
+                     if ((s2='DTSM')or(s2='DT-S')or(s2='DTS')or(s2='DTS_val')or(s2='DT-SED')) then
+                     begin
+                       Vsw:=Vsw+1;
+                       VsAdded:=True;
+                       VsFields[Vsw]:=s2;
+                       VsFN:=FN;
+                     end;
+                if ((not(s2=''))and(not(s3='~'))and(not(s3='#'))) then
+                 begin
+                 if FN=1 then
+                   begin
+                    Table.FieldDefs.Add('DEPTH',ftFloat,0,False);
+                  end
+                  else
+                    begin
+                      if Table.FieldDefs.IndexOf(S2)=-1 then
+                        Table.FieldDefs.Add(S2,ftFloat,0,False);
+                    end;
+                  TotalFields[FN]:=S2+S4;
+                  Units[FN]:=S4;
+                  Fields[FN]:=s2;
+                  FN:=FN+1;
+                 end;
+                i:=i+1;
+               until s3='~';
+               For j:=i-1 to Lines.Count-1 do
+                 begin
+                  s:=Lines[j];
+                  P:=Pos('~A',s);
+                  if P=1 then Break;
+                 end;
+                 Table.FieldDefs.Add('Counting',ftFloat,0,False);
+               Pat:=Application.ExeName;
+               P:=Pos('RockLog.exe',Pat);
+               if P=0 then
+                 P:=Pos('ROCKLOG.EXE',Pat);
+               Path := Copy(Pat, 1, P - 1);
+               ChDir(Path);
+               if IOResult <> 0 then
+                 MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+                   Table.TableName:='Table.db';
+                   Table.CreateTable;
+                   Table.Open;
+                   Table.FieldByName('Rec').DisplayLabel:='Rec. #';
+               for c:=0 to Table.FieldDefs.Count-2 do
+                 begin
+                   Table.Fields[c+1].DisplayLabel:=TotalFields[c+1];
+                 end;
+               Table.FieldByName('Counting').Visible:=False;
+               DataSource1.DataSet:=Table;
+             DBGrid2.Columns[1].Title.Caption:=DBGrid1.Columns[1].Title.Caption;
+             for i:=1 to Table.FieldDefs.Count-3 do
+               begin
+                Charts[i]:=TDBChart.Create(ForFree[1]);
+                Charts[i].Parent := PageControl1.Pages[1];
+                Charts[i].Top:=5;
+                Charts[i].Width:=150;
+                Charts[i].Height:=565;
+                Charts[i].Left:=488+(150*(i-1));
+                PageControl1.Width:=600+(150*(i));
+                HorzScrollBar.Position:=600+(150*(i));
+                Charts[i].View3D:=False;
+                Charts[i].BackImage.Bitmap.LoadFromFile('.\Patterns\Unknown');
+                Charts[i].BackImageInside:=True;
+                Charts[i].BackImageMode:=pbmStretch;
+                Charts[i].Legend.Visible:=False;
+                Charts[i].MarginUnits:=muPixels;
+                Charts[i].MarginTop:=0;
+                Charts[i].MarginLeft:=0;
+                Charts[i].MarginRight:=0;
+                Charts[i].MarginBottom:=23;
+                Charts[i].Title.Text.Text:=Table.Fields[i+1].DisplayLabel;
+                Charts[i].Title.Visible:=True;
+                Charts[i].RightAxis.Visible:=False;
+                Charts[i].BottomAxis.Visible:=False;
+                Charts[i].LeftAxis.Inverted:=True;
+                Charts[i].LeftAxis.Visible:=True;
+                Charts[i].Title.Font.Style:=[fsBold];
+                Charts[i].TopAxis.StartPosition:=5;
+                Charts[i].TopAxis.EndPosition:=95;
+                Charts[i].LeftAxis.StartPosition:=0;
+                Charts[i].LeftAxis.EndPosition:=100;
+                Charts[i].BevelInner:=bvLowered;
+                Charts[i].BevelOuter:=bvRaised;
+                Charts[i].Zoom.Brush.Color:=clYellow;
+                Charts[i].Zoom.Brush.Style:=bsSolid;
+                Charts[i].Zoom.Pen.Color:=clRed;
+//                Charts[i].Zoom.Animated:=True;
+                Charts[i].AllowPanning:=pmNone;
+                Charts[i].Show;
+                Charts[i].OnZoom:=Zooming;
+                MySeries:=THorizLineSeries.Create(ForFree[1]);
+                MySeries.Tag:=i;
+                MySeries.Stairs:=True;
+                MySeries.Pen.Width:=1;
+                MySeries.HorizAxis:=aTopAxis;
+                if i>=10 then
+                  MySeries.Color:=ChartColors[(i-1) mod 9]
+                else
+                  MySeries.Color:=ChartColors[i-1];
+                MySeries.ParentChart:=Charts[i];
+                Charts[i].Series[0].Title:=Table.FieldDefs[i+1].Name;
+                Charts[i].Series[0].XValues.ValueSource:=Table.FieldDefs[i+1].Name;
+                Charts[i].Series[0].XValues.Name:=Table.FieldDefs[i+1].Name;
+                Charts[i].Series[0].YValues.ValueSource:=Table.FieldDefs[1].Name;
+                Charts[i].Series[0].YValues.Name:=Table.FieldDefs[1].Name;
+                Charts[i].Series[0].DataSource:=Table;
+                Charts[i].Axes.Top.OnDrawLabel:= TopAxisDrawLabel;
+                Charts[i].Axes.Top.LabelStyle:=talAuto;
+                ChartTools1:=TMarksTipTool.Create(ForFree[1]);
+                ChartTools1.ParentChart:=Charts[i];
+                ChartTools1.Series:=nil;
+                ChartTools1.Style:=smsXY;
+                ChartTools1.MouseDelay:=0;
+                ChartTools1.MouseAction:=mtmClick;
+//                ChartTools2:=TAxisScrollTool.Create(ForFree[1]);
+//                ChartTools2.ParentChart:=Charts[i];
+//                ChartTools2.Active:=False;
+                Charts[i].Axes.Top.TickLength:=6;
+                Charts[i].Axes.Left.TickLength:=6;
+                Charts[i].Axes.Top.Ticks.Width:=2;
+                Charts[i].Axes.Left.Ticks.Width:=2;
+                Charts[i].Axes.Top.MinorTickLength:=4;
+                Charts[i].Axes.Left.MinorTickLength:=4;
+                Charts[i].Axes.Top.MinorTickCount:=3;
+                Charts[i].Axes.Top.MinorGrid.Visible:=True;
+                Charts[i].Axes.Top.MinorGrid.Color:=clGray;
+                Charts[i].Axes.Top.MinorGrid.Style:=psDot;
+                Charts[i].TopAxis.LabelsOnAxis:=True;
+                Charts[i].TopAxis.RoundFirstLabel:=True;
+                Charts[i].TopAxis.MaximumOffset:=5;
+                Charts[i].TopAxis.MinimumOffset:=5;
+                Charts[i].Walls.Back.Pen.Width:=2;
+                PopupMenu:=TPopupMenu.Create(ForFree[1]);
+                PopupMenu.AutoPopup:=True;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Print';
+                NewItem.OnClick:=PopPrint;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Print All';
+                NewItem.OnClick:=PopPrintPages;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Export';
+                NewItem.OnClick:=PopExport;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Set Min,Max';
+                NewItem.OnClick:=PopMinMax;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Make Logarithmic';
+                NewItem.OnClick:=PopLogarithmic;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Change Color';
+                NewItem.OnClick:=PopColor;
+                Charts[i].PopupMenu:=PopupMenu;
+                Tags:=i;
+               end;
+             PageControl1.ActivePageIndex:=0;
+             PageControl1.Height:=610;
+             CalcHeight:=610;
+             PageControl1.Width:=1000;
+             VertScrollBar.Position:=0;
+             HorzScrollBar.Position:=0;
+               DBGrid1.Columns[0].Width:=37;
+               DBGrid1.Columns[0].Title.Font.Size:=8;
+               DBGrid1.Columns[0].Title.Font.Color:=clBlack;
+               DBGrid1.Columns[0].Title.Color:=clBtnFace;
+               DBGrid1.Columns[0].Color:=clBtnFace;
+               DBGrid1.Columns[0].Font.Style:=[fsBold];
+               DBGrid1.Columns[1].Title.Font.Size:=10;
+               DBGrid1.Columns[1].Title.Font.Color:=clYellow;
+               DBGrid1.Columns[1].Title.Color:=clBlack;
+               DBGrid1.Columns[1].Font.Color:=clYellow;
+               DBGrid1.Columns[1].Color:=clBlack;
+               for c:=2 to FN-1 do
+                begin
+                  if c> 7 then
+                    clr:=c mod 9
+                  else
+                    clr:=c;
+                  DBGrid1.Columns[c].Title.Font.Color:=MainColors[clr];
+                  DBGrid1.Columns[c].Title.Color:=Colors[clr];
+                  DBGrid1.Columns[c].Font.Color:=MainColors[clr];
+                  DBGrid1.Columns[c].Color:=Colors[clr];
+                end;
+               DBGrid1.Refresh;
+               For m:=0 to j do
+                 begin
+                  Memo1.Lines.Add(Lines[m]);
+                 end;
+               Table.DisableControls;
+               Table.AfterScroll:=nil;
+              CalculationForm.Repaint;
+              AssignFile(TempFile,OpenDialog3.FileName);
+              Reset(TempFile);
+              for i:=0 to m-1 do
+                Readln(TempFile);
+                  while not(EoF(TempFile)) do
+                    begin
+                      if upward=0 then
+                        Table.Append
+                      else
+                        Table.Insert;
+                      for i:=1 to Table.FieldCount-2 do
+                        begin
+                            try
+                              Read(TempFile,The_Value);
+                            except
+                              Break;
+                            end;
+                            if NullV=The_Value then
+                              begin
+                                Table.Fields[i].AsString:='';
+                              end
+                            else
+                              begin
+                                Table.Fields[i].AsFloat:=The_Value;
+                              end;
+                        end;
+                    end;
+                    CloseFile(TempFile);
+                    if upward=0 then
+                      begin
+                        Table.Last;
+                        Table.Delete;
+                      end
+                    else
+                      begin
+                        Table.First;
+                        Table.Delete;
+                      end;
+                Table.First;
+                for i:=1 to Table.RecordCount do
+                  begin
+                    Table.Edit;
+                    Table.Fields[0].AsInteger:=Table.RecNo;
+                    Table.Next;
+                  end;
+              DBChart8.Series[0].XValues.ValueSource:='Counting';
+              DBChart8.Series[0].YValues.ValueSource:=Table.FieldDefs[1].Name;
+              DBChart8.LeftAxis.Title.Caption:=Table.Fields[1].DisplayLabel;
+              DBchart8.Series[0].DataSource:=Table;
+              DBChart8.Series[0].CheckDataSource;
+              Edit1.Text:=IntToStr(Table.RecordCount);
+              Edit2.Text:=IntToStr(FN-2);
+              Table.First;
+              TopDepth:=Table.Fields[1].Value;
+              FirstDepth:=Table.Fields[1].Value;
+              Edit3.Text:=FloatToStr(Table.Fields[1].Value);
+              Edit6.Text:=FloatToStr(Table.Fields[1].Value);
+              LithoLogBottomDepth.MinValue:=TopDepth;
+              LithoLogTopDepth.MinValue:=TopDepth;
+              Table.Last;
+              BottomDepth:=Table.Fields[1].Value;
+              LastDepth:=Table.Fields[1].Value;
+              Edit4.Text:=FloatToStr(Table.Fields[1].Value);
+              Edit7.Text:=FloatToStr(Table.Fields[1].Value);
+              LithoLogTopDepth.MaxValue:=BottomDepth;
+              LithoLogBottomDepth.MaxValue:=BottomDepth;
+              Edit5.Text:=FloatToStr((StrToFloat(Edit4.Text)-StrToFloat(Edit3.Text))/(StrToFloat(Edit1.Text)-1));
+           for i:=1 to Table.FieldDefs.Count-3 do
+             begin
+               Charts[i].RefreshData;
+               Charts[i].Axes.Top.Items.Clear;
+               if Charts[i].Series[0].MinXValue<>0 then
+                 begin
+                   SetRoundMode(rmDown);
+                   Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MinXValue)));
+                   SetRoundMode(rmNearest);
+                   XMIN:=RoundTo(Charts[i].Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+                 end
+               else
+                   XMIN:=0;
+               if Charts[i].Series[0].MaxXValue<>0 then
+                 begin
+                   SetRoundMode(rmUp);
+                   Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MaxXValue)));
+                   SetRoundMode(rmNearest);
+                   XMAX:=RoundTo(Charts[i].Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+                 end
+               else
+                 XMAX:=0;
+               Charts[i].TopAxis.SetMinMax(XMIN,XMAX);
+               Charts[i].Axes.Top.Items.Add(XMIN);
+               Charts[i].Axes.Top.Items.Add(XMAX);
+               Charts[i].Axes.Top.Items[0].Value:=XMIN;
+               Charts[i].Axes.Top.Items[Charts[i].Axes.Top.Items.Count-1].Value:=XMAX;
+             end;
+             Table.AfterScroll:=TableScroll;
+             Table.EnableControls;
+             Lines.Free;
+             Edit1.Text:=IntToStr(Table.RecordCount);
+             Statusbar1.Panels[0].Text:='Ready';
+             Emptytable1.Enabled:=True;
+             Savetable1.Enabled:=True;
+             Printtable1.Enabled:=True;
+             Printtracks1.Enabled:=True;
+             Find1.Enabled:=True;
+             Filter1.Enabled:=True;
+             UndoFilter1.Enabled:=True;
+             ElasticCorrelations1.Enabled:=True;
+             Elasticparameters1.Enabled:=True;
+             Correlationcoefficients1.Enabled:=True;
+             Scale1.Enabled:=True;
+             NoScale1.Enabled:=True;
+             Screen.Cursor := crDefault;
+        end;
+      end;
+   end;
+    Pat:=Application.ExeName;
+    P:=Pos('RockLog.exe',Pat);
+    if P=0 then
+      P:=Pos('ROCKLOG.EXE',Pat);
+    Path := Copy(Pat, 1, P - 1);
+    ChDir(Path);
+          if IOResult <> 0 then
+            MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+except
+  MessageDlg('Error reading file.',mterror,[mbok],0);
+  Table.EnableControls;
+  Table.AfterScroll:=TableScroll;
+  Table.Cancel;
+  Table.Close;
+  Screen.Cursor:=crDefault;
+end;
+end;
+
+procedure TCalculationForm.TopAxisDrawLabel(Sender:TChartAxis; var X,Y,Z:Integer;
+                                               var Text:String;
+                                               var DrawLabel:Boolean);
+begin
+    with Sender do
+    if X=CalcPosValue(Minimum) then  // first label
+    begin
+      with ParentChart.Canvas do
+      begin
+        TextAlign:=TextAlign - TA_CENTER + TA_LEFT;  // align to left
+        Font.Style:=[fsBold];
+      end;
+    end
+    else
+    if X=CalcPosValue(Maximum) then  // last label
+    begin
+      with ParentChart.Canvas do
+      begin
+        TextAlign:=TextAlign - TA_CENTER + TA_RIGHT; // align to right
+        Font.Style:=[fsBold];
+      end;
+    end;
+end;
+
+
+procedure TCalculationForm.FormCreate(Sender: TObject);
+begin
+    Pat:=Application.ExeName;
+    P:=Pos('RockLog.exe',Pat);
+    if P=0 then
+      P:=Pos('ROCKLOG.EXE',Pat);
+    Path := Copy(Pat, 1, P - 1);
+    ChDir(Path);
+    if IOResult <> 0 then
+      MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+    Table:=TTable.Create(Self);
+    IsCalc:=False;
+    CalcHeight:=610;
+    Statusbar1.Panels[0].Text:='Ready';
+    Emptytable1.Enabled:=False;
+    Savetable1.Enabled:=False;
+    Printtable1.Enabled:=False;
+    Printtracks1.Enabled:=False;
+    Find1.Enabled:=False;
+    Filter1.Enabled:=False;
+    UndoFilter1.Enabled:=False;
+    ElasticCorrelations1.Enabled:=False;
+    Elasticparameters1.Enabled:=False;
+    Correlationcoefficients1.Enabled:=False;
+    Scale1.Enabled:=False;
+    NoScale1.Enabled:=False;
+    OpenTable1.Enabled:=True;
+    Log_Scale:=200;
+    Scaled:=False;
+end;
+
+procedure TCalculationForm.ASCIIfile1Click(Sender: TObject);
+var
+Lines:TStringList;
+m,clr,c,P1,P2,i,j:Integer;
+s2,s3,s:string;
+s4:string;
+NewItem:TMenuItem;
+PopupMenu:TPopupMenu;
+Begin
+try
+  if FileExists('Table.db') then DeleteFile('Table.db');
+  if FileExists('TABLE.DB') then DeleteFile('TABLE.DB');
+  OpenDialog3.FileName:='';
+  Table.TableName:='Table.db';
+  if not Table.Exists then
+    begin
+      if OpenDialog1.Execute then
+        begin
+          if not(OpenDialog1.FileName='') then
+            begin
+               Statusbar1.Panels[0].Text:='Reading file data, please wait...';
+               StatusBar1.Refresh;
+               Screen.Cursor := crHourGlass;
+               IsTime:=False;
+               RhoAdded:=False;
+               VpAdded:=False;
+               VsAdded:=False;
+               GRAdded:=False;
+               Rhow:=0;
+               GRw:=0;
+               Vpw:=0;
+               Vsw:=0;
+               IsLAS:=False;
+               Lines:=TStringList.Create;
+               Lines.LoadFromFile(OpenDialog1.FileName);
+               FirstLine:=Lines[0];
+               j:=0;
+               s:=Lines[j];
+               P:=Pos('Column 1 : ',s);
+               if P=0 then
+                 begin
+                   MessageDlg('Error reading file : '+OpenDialog1.FileName,mtwarning,[mbok],0);
+                   Lines.Free;
+                   StatusBar1.Panels[0].Text:='Error reading file.';
+                   Exit;
+                 end;
+               Emptytable1.Enabled:=True;
+               Savetable1.Enabled:=True;
+               Printtable1.Enabled:=True;
+               Printtracks1.Enabled:=True;
+               Find1.Enabled:=True;
+               Filter1.Enabled:=True;
+               UndoFilter1.Enabled:=True;
+               ElasticCorrelations1.Enabled:=True;
+               Elasticparameters1.Enabled:=True;
+               Correlationcoefficients1.Enabled:=True;
+               VrLabelSource.Visible:=True;
+               Table:=TTable.Create(Self);
+               Memo1.Visible:=False;
+               VrLabel111.Visible:=False;
+               VrLabelCalc.Visible:=True;
+               Repaint;
+               Table.FieldDefs.Add('Rec',ftInteger,0,False);
+               OpenedFile:=OpenDialog1.FileName;
+               FN:=1;
+               Delete(s,1,11);
+               P1:=Pos(' ',s);
+               s2:=Copy(s,1,P1);
+               s2:=TrimRight(s2);
+               s2:=TrimLeft(s2);
+               Delete(s,1,P1);
+               s3:=TrimLeft(s);
+               s3:=TrimRight(s3);
+               DepthSystem:=s3;
+               s3:='('+s3+')';
+               s4:=s2+s3;
+                   Table.FieldDefs.Add(s2,ftFloat,0,False);
+                   FirstField:=s2;
+                   Fields[1]:=s2;
+                   TotalFields[1]:=s4;
+                   Units[1]:=s3;
+               FN:=FN+1;
+               j:=1;
+               repeat
+                 s:=Lines[j];
+                 P:=Pos('Column',s);
+                 if P=1 then
+                   begin
+                     P1:=Pos(':',s);
+                     P2:=Pos('(',s);
+                     s2 := Copy( s, p1+1,p2-p1-1);
+                     s2:=TrimLeft(s2);
+                     s2:=TrimRight(s2);
+                     Fields[j+1]:=s2;
+                     P1:=Pos('Units :',s);
+                     s3:=Copy(s,P1+8,31);
+                     s3:=TrimLeft(s3);
+                     s3:=TrimRight(s3);
+                     s3:='('+s3+')';
+                     s4:=s2+s3;
+                     if s2='Density' then
+                     begin
+                       Rhow:=Rhow+1;
+                       RhoAdded:=True;
+                       RhoFields[Rhow]:=s2;
+                       RhoFN:=FN;
+                       if ((s3='(G/CC)')or(s3='(G/CM3)')or(s3='(G/C3)')) then
+                         RhoSystem:='GC';
+                       if ((s3='(K/M3)')or(s3='(K/M)')) then
+                         RhoSystem:='KM';
+                     end;
+                     if s2='Gamma Ray' then
+                     begin
+                       GRw:=GRw+1;
+                       GRAdded:=True;
+                       GRFields[GRw]:=s2;
+                       GrFN:=FN;
+                     end;
+                     if s2='P-wave' then
+                     begin
+                       Vpw:=Vpw+1;
+                       VpAdded:=True;
+                       VpFields[Vpw]:=s2;
+                       VpFN:=FN;
+                     end;
+                     if s2='S-wave' then
+                     begin
+                       Vsw:=Vsw+1;
+                       VsAdded:=True;
+                       VsFields[Vsw]:=s2;
+                       VsFN:=FN;
+                     end;
+                     if not(s4='') then
+                       begin
+                         Table.FieldDefs.Add(S2,ftFloat,0,False);
+                         TotalFields[j+1]:=s4;
+                         Units[j+1]:=s3;
+                         FN:=FN+1;
+                       end;
+                     j:=j+1;
+                   end;
+               until P=0;
+               Table.FieldDefs.Add('Counting',ftFloat,0,False);
+               Pat:=Application.ExeName;
+               P:=Pos('RockLog.exe',Pat);
+               if P=0 then
+                 P:=Pos('ROCKLOG.EXE',Pat);
+               Path := Copy(Pat, 1, P - 1);
+               ChDir(Path);
+               if IOResult <> 0 then
+                 MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+               Table.TableName:='Table.db';
+               Table.CreateTable;
+               Table.AfterScroll:=TableScroll;
+               Table.Open;
+               Table.FieldByName('Rec').DisplayLabel:='Rec. #';
+               for j:=2 to FN do
+                 Table.Fields[j].DisplayLabel:=TotalFields[j];
+               Table.FieldByName('Counting').Visible:=False;
+               DataSource1.DataSet:=Table;
+             DBGrid2.Columns[1].Title.Caption:=DBGrid1.Columns[1].Title.Caption;
+             ForFree[1]:=TLabel.Create(Self);
+             for l:=1 to Table.FieldDefs.Count-3 do
+               begin
+                Charts[l]:=TDBChart.Create(ForFree[1]);
+                Charts[l].Parent := PageControl1.Pages[1];
+                Charts[l].Top:=5;
+                Charts[l].Width:=150;
+                Charts[l].Height:=565;
+                Charts[l].Left:=488+(150*(l-1));
+                PageControl1.Width:=600+(150*(l));
+                HorzScrollBar.Position:=600+(150*(l));
+                Charts[l].View3D:=False;
+                Charts[l].BackImage.Bitmap.LoadFromFile('.\Patterns\Unknown');
+                Charts[l].BackImageInside:=True;
+                Charts[l].BackImageMode:=pbmStretch;
+                Charts[l].Legend.Visible:=False;
+                Charts[l].MarginUnits:=muPixels;
+                Charts[l].MarginTop:=0;
+                Charts[l].MarginLeft:=0;
+                Charts[l].MarginRight:=0;
+                Charts[l].MarginBottom:=23;
+                Charts[l].Title.Text.Text:=Table.Fields[l+1].DisplayLabel;
+                Charts[l].Title.Visible:=True;
+                Charts[l].Title.Font.Style:=[fsBold];
+                Charts[l].TopAxis.StartPosition:=5;
+                Charts[l].TopAxis.EndPosition:=95;
+                Charts[l].LeftAxis.StartPosition:=0;
+                Charts[l].LeftAxis.EndPosition:=100;
+                Charts[l].RightAxis.Visible:=False;
+                Charts[l].BottomAxis.Visible:=False;
+                Charts[l].LeftAxis.Inverted:=True;
+                Charts[l].LeftAxis.Visible:=True;
+                Charts[l].BevelInner:=bvLowered;
+                Charts[l].BevelOuter:=bvRaised;
+                Charts[l].Zoom.Brush.Color:=clYellow;
+                Charts[l].Zoom.Brush.Style:=bsSolid;
+                Charts[l].AllowPanning:=pmNone;
+                Charts[l].Show;
+                Charts[l].OnZoom:=Zooming;
+                MySeries:=THorizLineSeries.Create(ForFree[1]);
+                MySeries.Tag:=l;
+                MySeries.Stairs:=True;
+                MySeries.Pen.Width:=1;
+                MySeries.HorizAxis:=aTopAxis;
+                if l>=10 then
+                  MySeries.Color:=ChartColors[(l-1) mod 9]
+                else
+                  MySeries.Color:=ChartColors[l-1];
+                MySeries.ParentChart:=Charts[l];
+                Charts[l].Series[0].Title:=Table.FieldDefs[l+1].Name;
+                Charts[l].Series[0].XValues.ValueSource:=Table.FieldDefs[l+1].Name;
+                Charts[l].Series[0].XValues.Name:=Table.FieldDefs[l+1].Name;
+                Charts[l].Series[0].YValues.ValueSource:=Table.FieldDefs[1].Name;
+                Charts[l].Series[0].YValues.Name:=Table.FieldDefs[1].Name;
+                Charts[l].BottomAxis.Visible:=False;
+                Charts[l].Series[0].DataSource:=Table;
+                Charts[l].Axes.Top.OnDrawLabel:= TopAxisDrawLabel;
+                Charts[l].Axes.Top.LabelStyle:=talValue;
+                ChartTools1:=TMarksTipTool.Create(ForFree[1]);
+                ChartTools1.ParentChart:=Charts[l];
+                ChartTools1.Series:=nil;
+                ChartTools1.Style:=smsXY;
+                ChartTools1.MouseDelay:=0;
+                ChartTools1.MouseAction:=mtmClick;
+                Charts[l].Axes.Top.TickLength:=6;
+                Charts[l].Axes.Top.Ticks.Width:=2;
+                Charts[l].Axes.Left.Ticks.Width:=2;
+                Charts[l].Axes.Top.MinorTickLength:=4;
+                Charts[l].Axes.Left.TickLength:=6;
+                Charts[l].Axes.Left.MinorTickLength:=4;
+                Charts[l].Axes.Top.MinorTickCount:=3;
+                Charts[l].Axes.Top.MinorGrid.Visible:=True;
+                Charts[l].Axes.Top.MinorGrid.Color:=clGray;
+                Charts[l].Axes.Top.MinorGrid.Style:=psDot;
+                Charts[l].TopAxis.LabelsOnAxis:=True;
+                Charts[l].TopAxis.RoundFirstLabel:=True;
+                Charts[l].TopAxis.MaximumOffset:=5;
+                Charts[l].TopAxis.MinimumOffset:=5;
+                Charts[l].Walls.Back.Pen.Width:=2;
+                PopupMenu:=TPopupMenu.Create(ForFree[1]);
+                PopupMenu.AutoPopup:=True;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=l;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Print';
+                NewItem.OnClick:=PopPrint;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=l;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Export';
+                NewItem.OnClick:=PopExport;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=l;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Set Min,Max';
+                NewItem.OnClick:=PopMinMax;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Make Logarithmic';
+                NewItem.OnClick:=PopLogarithmic;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=l;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Change Color';
+                NewItem.OnClick:=PopColor;
+                Charts[l].PopupMenu:=PopupMenu;
+                Tags:=l;
+               end;
+             PageControl1.Height:=610;
+             CalcHeight:=610;
+             PageControl1.Width:=1000;
+             PageControl1.ActivePageIndex:=0;
+             VertScrollBar.Position:=0;
+             HorzScrollBar.Position:=0;
+               DBGrid1.Columns[0].Width:=37;
+               DBGrid1.Columns[0].Title.Font.Size:=8;
+               DBGrid1.Columns[0].Title.Font.Color:=clBlack;
+               DBGrid1.Columns[0].Title.Color:=clBtnFace;
+               DBGrid1.Columns[0].Color:=clBtnFace;
+               DBGrid1.Columns[0].Font.Style:=[fsBold];
+               DBGrid1.Columns[0].Alignment:=taLeftJustify;
+               for c:=0 to FN-2 do
+                begin
+                  if c> 8 then
+                    clr:=c mod 10
+                  else
+                    clr:=c;
+                  DBGrid1.Columns[c+1].Title.Font.Color:=MainColors[clr];
+                  DBGrid1.Columns[c+1].Title.Color:=Colors[clr];
+                  DBGrid1.Columns[c+1].Font.Color:=MainColors[clr];
+                  DBGrid1.Columns[c+1].Color:=Colors[clr];
+                  DBGrid1.Columns[c+1].Alignment:=taCenter;
+                end;
+             s2:='';
+             s3:='';
+             s:='';
+             Table.DisableControls;
+             Table.AfterScroll:=nil;
+             CalculationForm.Repaint;
+             for i:=j-2 to Lines.Count-1 do
+               begin
+                 Table.Append;
+                 s:=Lines[i];
+                 for m:=1 to FN-1 do
+                   begin
+                     if (m=FN-1) then
+                       begin
+                         s2:=Copy(s,0,11);
+                         s2:=TrimLeft(s2);
+                         s2:=TrimRight(s2);
+                         if s2='-999.0000' then
+                           begin
+                             table.Fields[m].AsString:='';
+                             Table.Fields[0].AsInteger:=i-FN+2;
+                           end
+                         else
+                           begin
+                             Table.Fields[0].AsInteger:=i-FN+2;
+                             Table.Fields[m].AsString:=s2;
+                           end;
+                       end
+                     else
+                       begin
+                         P:=Pos(#9,s);
+                         s2:=Copy(s,0,P);
+                         s2:=TrimLeft(s2);
+                         s2:=TrimRight(s2);
+                         Delete(s,1,P);
+                         if s2='-999.0000' then
+                           begin
+                             Table.Fields[m].AsString:='';
+                             Table.Fields[0].AsInteger:=i-FN+2;
+                           end
+                         else
+                           begin
+                             Table.Fields[0].AsInteger:=i-FN+2;
+                             Table.Fields[m].AsString:=s2;
+                           end;
+                       end;
+                   end;
+               end;
+             DBChart8.Series[0].XValues.ValueSource:='Counting';
+             DBChart8.Series[0].YValues.ValueSource:=Table.FieldDefs[1].Name;
+             DBChart8.LeftAxis.Title.Caption:=Table.Fields[1].DisplayLabel;
+             DBChart8.Series[0].DataSource:=Table;
+             Edit1.Text:=IntToStr(Table.RecordCount);
+             Edit2.Text:=IntToStr(FN-2);
+             Table.First;
+             TopDepth:=Table.Fields[1].Value;
+             FirstDepth:=Table.Fields[1].Value;
+             Edit3.Text:=FloatToStr(Table.Fields[1].Value);
+             Edit6.Text:=FloatToStr(Table.Fields[1].Value);
+             LithoLogBottomDepth.MinValue:=TopDepth;
+             LithoLogTopDepth.MinValue:=TopDepth;
+             Table.Last;
+             BottomDepth:=Table.Fields[1].Value;
+             LastDepth:=Table.Fields[1].Value;
+             Edit4.Text:=FloatToStr(Table.Fields[1].Value);
+             Edit7.Text:=FloatToStr(Table.Fields[1].Value);
+             LithoLogTopDepth.MaxValue:=BottomDepth;
+             LithoLogBottomDepth.MaxValue:=BottomDepth;
+             Edit5.Text:=FloatToStr((StrToFloat(Edit4.Text)-StrToFloat(Edit3.Text))/(StrToFloat(Edit1.Text)-1));
+             for i:=1 to Table.FieldDefs.Count-3 do
+               begin
+                 Charts[i].RefreshData;
+                 Charts[i].Axes.Top.Items.Clear;
+                 if Charts[i].Series[0].MinXValue<>0 then
+                   begin
+                     SetRoundMode(rmDown);
+                     Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MinXValue)));
+                     SetRoundMode(rmNearest);
+                     XMIN:=RoundTo(Charts[i].Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+                   end
+                 else
+                     XMIN:=0;
+                 if Charts[i].Series[0].MaxXValue<>0 then
+                   begin
+                     SetRoundMode(rmUp);
+                     Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MaxXValue)));
+                     SetRoundMode(rmNearest);
+                     XMAX:=RoundTo(Charts[i].Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+                   end
+                 else
+                   XMAX:=0;
+                 Charts[i].TopAxis.SetMinMax(XMIN,XMAX);
+                 Charts[i].Axes.Top.Items.Add(XMIN);
+                 Charts[i].Axes.Top.Items.Add(XMAX);
+                 Charts[i].Axes.Top.Items[0].Value:=XMIN;
+                 Charts[i].Axes.Top.Items[Charts[i].Axes.Top.Items.Count-1].Value:=XMAX;
+               end;
+             Table.EnableControls;
+             Table.AfterScroll:=TableScroll;
+             Statusbar1.Panels[0].Text:='Ready';
+             Screen.Cursor := crDefault;
+            end;
+        end;
+    end;
+except
+  MessageDlg('Error reading file.',mterror,[mbok],0);
+  Table.EnableControls;
+  Table.AfterScroll:=TableScroll;
+  Table.Cancel;
+  Table.Close;
+  Screen.Cursor:=crDefault;
+end;
+end;
+
+procedure TCalculationForm.TableScroll(Sender: TDataset);
+begin
+with Sender as TTable do
+  begin
+    if ElasticTable.IsEmpty=False then
+      ElasticTable.Locate('Depth',Fields[1].Value,[]);
+  end;
+end;
+
+procedure TCalculationForm.Emptytable1Click(Sender: TObject);
+var
+i:integer;
+begin
+if Table.Exists then
+begin
+ForFree[1].Free;
+if ElasticTable.IsEmpty=False then
+  ForFree[2].Free;
+Table.Close;
+Table.EmptyTable;
+Table.DeleteTable;
+ElasticTable.Filtered:=False;
+ElasticTable.Close;
+ElasticTable.EmptyTable;
+VrLabel10.Caption:='';
+VrLabelSourceCC.Caption:='';
+Edit1.Clear;
+Edit2.Clear;
+Edit3.Clear;
+Edit4.Clear;
+Edit5.Clear;
+Edit6.Clear;
+Edit7.Clear;
+Memo1.Clear;
+FN:=0;
+for i:=1 to Rhow do
+  RhoFields[i]:='';
+for i:=1 to GRw do
+  GRFields[i]:='';
+for i:=1 to Vpw do
+  VpFields[i]:='';
+for i:=1 to Vsw do
+  VsFields[i]:='';
+Rhow:=0;
+GRw:=0;
+Vpw:=0;
+Vsw:=0;
+RhoAdded:=False;
+VpAdded:=False;
+VsAdded:=False;
+GRAdded:=False;
+if Litholog.IsEmpty=False then
+  begin
+    LithoLog.Close;
+    LithoLog.EmptyTable;
+    image1.Canvas.Brush.Color:=clwhite;
+    image1.Canvas.Brush.Style:=bssolid;
+    image1.Canvas.FillRect(rect(0,0,image1.Width,image1.Height ));
+    LithoLogBottomDepth.MinValue:=TopDepth;
+    LithoLogTopDepth.MinValue:=TopDepth;
+  end;
+IsCalc:=False;
+PageControl1.ActivePageIndex:=0;
+PageControl1.Height:=610;
+PageControl1.Width:=1000;
+VertScrollBar.Position:=0;
+HorzScrollBar.Position:=0;
+Emptytable1.Enabled:=False;
+Savetable1.Enabled:=False;
+Printtable1.Enabled:=False;
+Printtracks1.Enabled:=False;
+Find1.Enabled:=False;
+Filter1.Enabled:=False;
+UndoFilter1.Enabled:=False;
+ElasticCorrelations1.Enabled:=False;
+Elasticparameters1.Enabled:=False;
+Correlationcoefficients1.Enabled:=False;
+Scale1.Enabled:=False;
+NoScale1.Enabled:=False;
+end;
+end;
+
+procedure TCalculationForm.Exit1Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TCalculationForm.PrintTable1Click(Sender: TObject);
+begin
+ if (Table.IsEmpty=False) then
+   begin
+     try
+       With TTablePrint.Create(Self) do
+         begin
+           ShowModal;
+           Free;
+         end;
+     except
+       Messagedlg('There is no default PRINTER installed on this computer.',mterror,[mbok],0);
+       TablePrint.Free;
+     end;
+   end;
+end;
+
+procedure TCalculationForm.Button1Click(Sender: TObject);
+begin
+  if Table.IsEmpty=False then
+    begin
+      if Litholog.IsEmpty=False then
+        begin
+          LithoLog.Close;
+          LithoLog.EmptyTable;
+          Litholog.Open;
+          image1.Canvas.Brush.Color:=clwhite;
+          image1.Canvas.Brush.Style:=bssolid;
+          image1.Canvas.FillRect(rect(0,0,image1.Width,image1.Height ));
+          LithoLogBottomDepth.MinValue:=TopDepth;
+          LithoLogTopDepth.MinValue:=TopDepth;
+        end
+      else
+        LithoLog.Open;
+      Image1.Canvas.Font.Name:='Tahoma';
+      Image1.Canvas.Font.Size:=6;
+      Image1.Canvas.Font.Style:=[fsBold];
+      Image1.Canvas.Font.Color:=clRed;
+      Image1.Canvas.TextOut(0,Image1.Height-10,FloatToStr(BottomDepth));
+      Image1.Canvas.TextOut(0,0,FloatToStr(TopDepth));
+      Table.DisableControls;
+      Table.AfterScroll:=nil;
+      Table.First;
+      FirstDepth:=Table.Fields[1].AsFloat;
+      Table.EnableControls;
+      Table.AfterScroll:=TableScroll;
+      LithoLog.Edit;
+      LithoLog.FieldValues['TopDepth']:=FirstDepth;
+      Pat:=Application.ExeName;
+      P:=Pos('RockLog.exe',Pat);
+      if P=0 then
+        P:=Pos('ROCKLOG.EXE',Pat);
+      Path := Copy(Pat, 1, P - 1);
+      ChDir(Path);
+          if IOResult <> 0 then
+            MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+    end
+   else
+     Messagedlg('Source Table is empty.',mtInformation,[mbok],0);
+end;
+
+procedure TCalculationForm.Button3Click(Sender: TObject);
+var
+Lines2:TStringList;
+S,S2:String;
+i:Integer;
+begin
+if Table.IsEmpty=False then
+begin
+if ((LithoLog.IsEmpty=True)or(Litholog.RecordCount<=1)) then
+ begin
+  try
+    if OpenDialog2.Execute then
+      if not(OpenDialog2.FileName='') then
+        begin
+           LithoLog.DisableControls;
+           if LithoLog.IsEmpty=False then
+             begin
+               LithoLog.Close;
+               LithoLog.EmptyTable;
+             end;  
+           Litholog.Open;
+           Lines2 := TStringList.Create;
+           Lines2.LoadFromFile(Opendialog2.FileName);
+           for i:=2 to Lines2.Count-1 do
+             begin
+               Litholog.Append;
+               S:=Lines2[i];
+               P := Pos(#9, S);
+               S2 := Copy(S, 1, P - 1);
+               Delete(S, 1, P);
+               LithoLog.FieldByName('TopDepth').Value:=S2;
+               P := Pos(#9, S);
+               S2 := Copy(S, 1, P - 1);
+               Delete(S, 1, P);
+               LithoLog.FieldByName('BottomDepth').Value:=S2;
+               P := Pos(#9, S);
+               S2 := Copy(S, 1, P - 1);
+               Delete(S, 1, P);
+               LithoLog.FieldByName('Lithology').Value:=S2;
+             end
+        end;
+  finally
+    LithoLog.EnableControls;
+    Lines2.Free;
+    Pat:=Application.ExeName;
+    P:=Pos('RockLog.exe',Pat);
+    if P=0 then
+      P:=Pos('ROCKLOG.EXE',Pat);
+    Path := Copy(Pat, 1, P - 1);
+    ChDir(Path);
+          if IOResult <> 0 then
+            MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+  end;
+ end;
+end
+else
+  Messagedlg('Source Table is empty.',mtInformation,[mbok],0);
+end;
+
+procedure TCalculationForm.Button2Click(Sender: TObject);
+begin
+if Litholog.IsEmpty=False then
+ begin
+  Try
+    Litholog.DisableControls;
+    if SaveDialog3.Execute then
+     if not(SaveDialog3.FileName='') then
+      begin
+        AssignFile( OutFile, SaveDialog3.FileName );
+        Rewrite( OutFile );
+        Writeln(outfile,'RockLog Software  Ver. 2.1       LithoLog Information');
+        Writeln(outfile,'TopDepth       BottomDepth    Lithology');
+        LithoLog.First;
+        while not Litholog.Eof do
+          begin
+            OutString := '';
+            OutString := OutString + LithoLog.Fields[0].AsString +#9;
+            OutString := OutString + LithoLog.Fields[1].AsString +#9;
+            OutString := OutString + LithoLog.Fields[2].AsString +#9;
+            Writeln( OutFile, OutString );
+            LithoLog.Next;
+          end;
+        CloseFile( OutFile );
+      end;
+  Finally
+    LithoLog.EnableControls;
+    Pat:=Application.ExeName;
+    P:=Pos('RockLog.exe',Pat);
+    if P=0 then
+      P:=Pos('ROCKLOG.EXE',Pat);
+    Path := Copy(Pat, 1, P - 1);
+    ChDir(Path);
+          if IOResult <> 0 then
+            MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+  end;
+ end
+else
+  Messagedlg('Litholog information table is empty.',mtinformation,[mbok],0);
+end;
+
+procedure TCalculationForm.Button4Click(Sender: TObject);
+begin
+if Litholog.IsEmpty=False then
+ begin
+  if SaveDialog2.Execute then
+   begin
+    Image1.Picture.SaveToFile(Savedialog2.FileName);
+    Pat:=Application.ExeName;
+    P:=Pos('RockLog.exe',Pat);
+    if P=0 then
+      P:=Pos('ROCKLOG.EXE',Pat);
+    Path := Copy(Pat, 1, P - 1);
+    ChDir(Path);
+          if IOResult <> 0 then
+            MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+   end;
+ end
+else
+  Messagedlg('Litholog information table is empty.',mtInformation,[mbok],0);
+end;
+
+procedure TCalculationForm.LithologLithologyChange(Sender: TField);
+var
+BitMap:TBitMap;
+Topd,Bottomd,P:Integer;
+Pat,Path:string;
+begin
+  with LithoLog do
+    begin
+      TopD:=Image1.Height*(FieldValues['TopDepth']-TopDepth)/(BottomDepth-TopDepth);
+      BottomD:=Image1.Height*(FieldValues['BottomDepth']-TopDepth)/(BottomDepth-TopDepth);
+      BitMap:=TBitMap.Create;
+      Pat:=Application.ExeName;
+      P:=Pos('RockLog.exe',Pat);
+      if P=0 then
+        P:=Pos('ROCKLOG.EXE',Pat);
+      Path := Copy(Pat, 1, P - 1);
+      ChDir(Path);
+      image1.Canvas.Brush.Color:=clwhite;
+      image1.Canvas.Brush.Style:=bssolid;
+      Image1.Canvas.FillRect(Rect(0,TopD,40,BottomD));
+      BitMap.LoadFromFile('.\Patterns\'+FieldValues['Lithology']);
+      Image1.Canvas.Brush.Bitmap:=BitMap;
+      Image1.Canvas.FillRect(Rect(0,TopD,40,BottomD));
+      Image1.Canvas.Font.Name:='Tahoma';
+      Image1.Canvas.Font.Size:=6;
+      Image1.Canvas.Font.Style:=[fsBold];
+      Image1.Canvas.Font.Color:=clRed;
+      Image1.Canvas.TextOut(0,BottomD-10,FieldValues['BottomDepth']);
+      Bitmap.Free;
+      Edit;
+    end;
+    Image1.Canvas.Font.Name:='Tahoma';
+    Image1.Canvas.Font.Size:=6;
+    Image1.Canvas.Font.Style:=[fsBold];
+    Image1.Canvas.Font.Color:=clRed;
+    Image1.Canvas.TextOut(0,Image1.Height-10,FloatToStr(BottomDepth));
+    Image1.Canvas.TextOut(0,0,FloatToStr(TopDepth));
+if InsertedRecord then
+  begin
+    LithoLog.DisableControls;
+    LithoLog.Next;
+    LithoLog.Edit;
+    LithoLog.FieldValues['TopDepth']:=FirstDepth;
+    LithoLog.Prior;
+    LithoLog.Fields[2].FocusControl;
+    LithoLog.EnableControls;
+    InsertedRecord:=False;
+  end;
+end;
+
+procedure TCalculationForm.LithologLithologyValidate(Sender: TField);
+var
+i:integer;
+Listed:Integer;
+begin
+  Listed:=0;
+  for i:=0 to 59 do
+    begin
+      if LithoLog.Fields[2].AsString<>DBGrid3.Columns[2].PickList.Strings[i] then
+        begin
+          Listed:=Listed+1;
+        end;
+    end;
+  if Listed=60 then
+    begin
+      DataBaseError('Please select a lithology from drop-down list.',nil);
+    end;
+end;
+
+Procedure TCalculationForm.ChartPreviewAfterDraw(Sender: TObject);
+begin
+  with ChartP.PreviewPanel do
+    begin
+      Canvas.Font.Color:=clRed;
+      Canvas.Font.Size:=10;
+      Canvas.Font.Style:=[fsBold];
+      Canvas.TextOut(PaperRect.Left +10, PaperRect.Top +6, 'P.U.T RockLog Print');
+    end;
+end;
+
+Procedure TCalculationForm.PopPrint(Sender: TObject);
+var
+TempChart:TDBChart;
+begin
+  with Sender as TMenuItem do
+    begin
+      ChartP:=TChartPreviewer.Create(Self);
+      ChartP.Title:='Print Preview';
+      SaveChartToFile(TCustomChart(Charts[Tag]),'tempchart.tee',True);
+      TempChart:=TDBChart.Create(ChartP);
+      LoadChartFromFile(TCustomChart(TempChart),'tempchart.tee');
+      TempChart.LeftAxis.Title.Font.Color:=clBlue;
+      TempChart.LeftAxis.Title.Font.Style:=[fsBold];
+      TempChart.LeftAxis.Title.Angle:=90;
+      TempChart.LeftAxis.Title.Caption:=DBChart8.LeftAxis.Title.Caption;
+      TempChart.LeftAxis.Title.Font.InterCharSize:=15;
+      TempChart.LeftAxis.Visible:=True;
+      TempChart.Width:=200;
+      ChartP.Chart:=TempChart;
+      TempChart.MarginRight:=15;
+      TempChart.TopAxis.OnDrawLabel:=TopAxisDrawLabel;
+      TempChart.BottomAxis.OnDrawLabel:=TopAxisDrawLabel;
+      TempChart.TopAxis.Items.Clear;
+      if TempChart.Series[0].MinXValue<>0 then
+        begin
+          SetRoundMode(rmDown);
+          Round_Points:=Round(Log10(ABS(TempChart.Series[0].MinXValue)));
+          SetRoundMode(rmNearest);
+          XMIN:=RoundTo(TempChart.Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+        end
+      else
+        XMIN:=0;
+      if TempChart.Series[0].MaxXValue<>0 then
+        begin
+          SetRoundMode(rmUp);
+          Round_Points:=Round(Log10(ABS(TempChart.Series[0].MaxXValue)));
+          SetRoundMode(rmNearest);
+          XMAX:=RoundTo(TempChart.Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+        end
+      else
+        XMAX:=0;
+      TempChart.TopAxis.SetMinMax(XMIN,XMAX);
+      TempChart.Axes.Top.Items.Add(XMIN);
+      TempChart.Axes.Top.Items.Add(XMAX);
+      TempChart.Axes.Top.Items[0].Value:=XMIN;
+      TempChart.Axes.Top.Items[TempChart.Axes.Top.Items.Count-1].Value:=XMAX;
+//      ChartP.OnAfterDraw:=ChartPreviewAfterDraw;
+      ChartP.Execute;
+      ChartP.Free;
+      Pat:=Application.ExeName;
+      P:=Pos('RockLog.exe',Pat);
+      if P=0 then
+        P:=Pos('ROCKLOG.EXE',Pat);
+      Path := Copy(Pat, 1, P - 1);
+      ChDir(Path);
+    end;
+end;
+
+Procedure TCalculationForm.PopPrintPages(Sender: TObject);
+var
+TempChart:TDBChart;
+begin
+  with Sender as TMenuItem do
+    begin
+      SaveChartToFile(TCustomChart(Charts[Tag]),'tempchart.tee',True);
+      TempChart:=TDBChart.Create(Self);
+      LoadChartFromFile(TCustomChart(TempChart),'tempchart.tee');
+      TempChart.LeftAxis.Title.Font.Color:=clBlue;
+      TempChart.LeftAxis.Title.Font.Style:=[fsBold];
+      TempChart.LeftAxis.Title.Angle:=90;
+      TempChart.LeftAxis.Title.Caption:=DBChart8.LeftAxis.Title.Caption;
+      TempChart.LeftAxis.Title.Font.InterCharSize:=15;
+      TempChart.LeftAxis.Visible:=True;
+      TempChart.Width:=200;
+//      ChartEditor1.Chart:=TempChart;
+      TempChart.MarginRight:=15;
+      TempChart.TopAxis.OnDrawLabel:=TopAxisDrawLabel;
+      TempChart.BottomAxis.OnDrawLabel:=TopAxisDrawLabel;
+      TempChart.TopAxis.Items.Clear;
+      if TempChart.Series[0].MinXValue<>0 then
+        begin
+          SetRoundMode(rmDown);
+          Round_Points:=Round(Log10(ABS(TempChart.Series[0].MinXValue)));
+          SetRoundMode(rmNearest);
+          XMIN:=RoundTo(TempChart.Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+        end
+      else
+        XMIN:=0;
+      if TempChart.Series[0].MaxXValue<>0 then
+        begin
+          SetRoundMode(rmUp);
+          Round_Points:=Round(Log10(ABS(TempChart.Series[0].MaxXValue)));
+          SetRoundMode(rmNearest);
+          XMAX:=RoundTo(TempChart.Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+        end
+      else
+        XMAX:=0;
+      TempChart.TopAxis.SetMinMax(XMIN,XMAX);
+      TempChart.Axes.Top.Items.Add(XMIN);
+      TempChart.Axes.Top.Items.Add(XMAX);
+      TempChart.Axes.Top.Items[0].Value:=XMIN;
+      TempChart.Axes.Top.Items[TempChart.Axes.Top.Items.Count-1].Value:=XMAX;
+      With PrintDialog1 do
+        begin
+          FromPage:=1;
+          ToPage:=TempChart.NumPages;
+          MinPage:=FromPage;
+          MaxPage:=ToPage;
+          if Execute then
+            TempChart.PrintPages(FromPage,ToPage);
+        end;
+//      ChartEditor1.Execute;
+      TempChart.Free;
+      Pat:=Application.ExeName;
+      P:=Pos('RockLog.exe',Pat);
+      if P=0 then
+        P:=Pos('ROCKLOG.EXE',Pat);
+      Path := Copy(Pat, 1, P - 1);
+      ChDir(Path);
+    end;
+end;
+
+Procedure TCalculationForm.PopExport(Sender: TObject);
+begin
+  with Sender as TMenuItem do
+    begin
+      TeeExport(Charts[Tag],Charts[Tag]);
+      Pat:=Application.ExeName;
+      P:=Pos('RockLog.exe',Pat);
+      if P=0 then
+        P:=Pos('ROCKLOG.EXE',Pat);
+      Path := Copy(Pat, 1, P - 1);
+      ChDir(Path);
+    end;
+end;
+
+Procedure TCalculationForm.PopLogarithmic(Sender: TObject);
+var
+Is_Logarithmic:Boolean;
+begin
+  with Sender as TMenuItem do
+    begin
+      Is_Logarithmic:=Charts[Tag].Axes.Top.Logarithmic;
+      if Is_Logarithmic then
+        begin
+          Charts[Tag].Axes.Top.Logarithmic:=False;
+          Caption:='Make Logarithmic';
+        end
+      else
+        begin
+          Charts[Tag].Axes.Top.Logarithmic:=True;
+          Caption:='Make Ordinal';
+        end;
+      Pat:=Application.ExeName;
+      P:=Pos('RockLog.exe',Pat);
+      if P=0 then
+        P:=Pos('ROCKLOG.EXE',Pat);
+      Path := Copy(Pat, 1, P - 1);
+      ChDir(Path);
+    end;
+end;
+
+procedure TCalculationForm.PopMinMax(Sender: TObject);
+begin
+  with Sender as TMenuItem do
+    begin
+      XMIN:=Charts[Tag].Axes.Top.Minimum;
+      XMAX:=Charts[Tag].Axes.Top.Maximum;
+      SetMinMax:=TSetMinMAx.Create(Self);
+      SetMinMax.ESBFloatEdit1.Text:=FloatToStr(XMIN);
+      SetMinMax.ESBFloatEdit2.Text:=FloatToStr(XMAX);
+      SetMinMax.ShowModal;
+      SetMinMax.Free;
+      if (ChartMin=0)and(ChartMax=0) then Exit;
+      XMIN:=ChartMin;
+      XMAX:=ChartMax;
+      if (ChartMin<ChartMax) then
+        begin
+          Charts[Tag].TopAxis.Items.Clear;
+          Charts[Tag].TopAxis.SetMinMax(XMIN,XMAX);
+          Charts[Tag].Axes.Top.Items.Add(XMIN);
+          Charts[Tag].Axes.Top.Items.Add(XMAX);
+          Charts[Tag].Axes.Top.Items[0].Value:=XMIN;
+          Charts[Tag].Axes.Top.Items[Charts[Tag].Axes.Top.Items.Count-1].Value:=XMAX;
+        end;
+    end;
+end;
+
+procedure TCalculationForm.PopColor(Sender: TObject);
+var
+ColorD:TColorDialog;
+begin
+  with Sender as TMenuItem do
+    begin
+      ColorD:=TColorDialog.Create(Self);
+      if ColorD.Execute then
+        Charts[Tag].Series[0].Color:=ColorD.Color;
+      ColorD.Free;
+    end;
+end;
+
+
+procedure TCalculationForm.Elasticparameters1Click(Sender: TObject);
+var
+i,p:integer;
+Pat, Path: String;
+RhoValue,VpValue,VsValue:Real;
+LastLeft:Integer;
+NewItem:TMenuItem;
+PopupMenu:TPopupMenu;
+begin
+try
+    if not Table.Exists then
+      Exit;
+    Pat:=Application.ExeName;
+    P:=Pos('RockLog.exe',Pat);
+    if P=0 then
+      P:=Pos('ROCKLOG.EXE',Pat);
+    Path := Copy(Pat, 1, P - 1);
+    ChDir(Path);
+    CCanceled:=True;
+    SelectPL:=TSelectPL.Create(Self);
+    SelectPL.ShowModal;
+    SelectPl.Free;
+    Repaint;
+    if CCanceled then Exit;
+    if RhoField='' then RhoAdded:=False;
+    if GRField='' then GRAdded:=False;
+    if VpField='' then VpAdded:=False;
+    if VsField='' then VsAdded:=False;
+    if not RhoAdded then Exit;
+    if not VpAdded then Exit;
+    if not VsAdded then
+      begin
+        VsEquation:=TVsEquation.Create(Self);
+        VsEquation.ShowModal;
+        VsEquation.Free;
+      end;
+    if CCanceled then Exit;
+    if ElasticTable.IsEmpty=False then
+      begin
+        ElasticTable.Close;
+        ElasticTable.EmptyTable;
+        ElasticTable.Open;
+      end;
+    Statusbar1.Panels[0].Text:='Calculating elastic parameters, please wait...';
+    StatusBar1.Refresh;
+    Screen.Cursor := crHourGlass;
+    ElasticTable.Fields[1].DisplayLabel:=Table.Fields[1].DisplayLabel;
+    ElasticTable.Fields[15].DisplayLabel:=RhoField+' (Kg/m3)';
+//    Table.AfterScroll:=nil;
+          ElasticTable.Open;
+            for i:=1 to Tags do
+              begin
+                if Charts[i].Left>0 then
+                  LastLeft:=Charts[i].Left;
+              end;
+             for i:=1+Tags to (ElasticTable.FieldDefs.Count-3+Tags) do
+               begin
+                Charts[i]:=TDBChart.Create(ForFree[1]);
+                Charts[i].Parent := PageControl1.Pages[1];
+                Charts[i].View3D:=False;
+                Charts[i].Top:=5;
+                Charts[i].Width:=150;
+                Charts[i].Height:=565;
+                PageControl1.Width:=LastLeft+150*(i+1-Tags);
+                Charts[i].Left:=LastLeft+150*(i-Tags);
+                HorzScrollBar.Position:=LastLeft+150*(i-Tags);
+                Charts[i].BackImage.Bitmap.LoadFromFile('.\Patterns\Unknown');
+                Charts[i].BackImageInside:=True;
+                Charts[i].BackImageMode:=pbmStretch;
+                Charts[i].Legend.Visible:=False;
+                Charts[i].MarginUnits:=muPixels;
+                Charts[i].MarginTop:=0;
+                Charts[i].MarginLeft:=0;
+                Charts[i].MarginRight:=0;
+                Charts[i].MarginBottom:=23;
+                Charts[i].Title.Font.Style:=[fsBold];
+                Charts[i].TopAxis.StartPosition:=5;
+                Charts[i].TopAxis.EndPosition:=95;
+                Charts[i].LeftAxis.StartPosition:=0;
+                Charts[i].LeftAxis.EndPosition:=100;
+                Charts[i].RightAxis.Visible:=False;
+                Charts[i].BottomAxis.Visible:=False;
+                Charts[i].LeftAxis.Inverted:=True;
+                Charts[i].LeftAxis.Visible:=True;
+                Charts[i].Title.Font.Name:='Arial';
+                Charts[i].Title.Font.Size:=8;
+                Charts[i].Title.Text.Text:=ElasticTable.Fields[i+1-Tags].DisplayLabel;
+                Charts[i].Title.Visible:=True;
+                Charts[i].BevelInner:=bvLowered;
+                Charts[i].BevelOuter:=bvRaised;
+                Charts[i].Zoom.Brush.Color:=clYellow;
+                Charts[i].Zoom.Brush.Style:=bsSolid;
+                Charts[i].Zoom.Pen.Color:=clRed;
+//                Charts[i].Zoom.Animated:=True;
+                Charts[i].AllowPanning:=pmNone;
+                Charts[i].Show;
+                Charts[i].OnZoom:=Zooming;
+                MySeries:=THorizLineSeries.Create(ForFree[1]);
+                MySeries.Tag:=i;
+                MySeries.Stairs:=True;
+                MySeries.Pen.Width:=1;
+                MySeries.HorizAxis:=aTopAxis;
+                if (i-Tags)>=10 then
+                  MySeries.Color:=ChartColors[(i-1-Tags) mod 9]
+                else
+                  MySeries.Color:=ChartColors[i-1-Tags];
+                MySeries.ParentChart:=Charts[i];
+                Charts[i].Series[0].Title:=ElasticTable.Fields[i+1-Tags].DisplayLabel;
+                Charts[i].Series[0].XValues.ValueSource:=ElasticTable.FieldDefs[i+1-Tags].Name;
+                Charts[i].Series[0].YValues.ValueSource:=ElasticTable.FieldDefs[1].Name;
+                Charts[i].Series[0].XValues.Name:=ElasticTable.Fields[i+1-Tags].DisplayLabel;
+                Charts[i].Series[0].YValues.Name:=ElasticTable.Fields[1].DisplayLabel;
+                Charts[i].BottomAxis.Visible:=False;
+                Charts[i].Axes.Top.OnDrawLabel:= TopAxisDrawLabel;
+                Charts[i].Axes.Top.LabelStyle:=talValue;
+                ChartTools1:=TMarksTipTool.Create(ForFree[1]);
+                ChartTools1.ParentChart:=Charts[i];
+                ChartTools1.Series:=nil;
+                ChartTools1.Style:=smsXY;
+                ChartTools1.MouseDelay:=0;
+                ChartTools1.MouseAction:=mtmClick;
+//                ChartTools2:=TAxisScrollTool.Create(ForFree[1]);
+//                ChartTools2.ParentChart:=Charts[i];
+//                ChartTools2.Active:=False;
+                Charts[i].Axes.Top.TickLength:=6;
+                Charts[i].Axes.Left.TickLength:=6;
+                Charts[i].Axes.Top.MinorTickLength:=4;
+                Charts[i].Axes.Left.MinorTickLength:=4;
+                Charts[i].Axes.Top.Ticks.Width:=2;
+                Charts[i].Axes.Left.Ticks.Width:=2;
+                Charts[i].Axes.Top.MinorTickCount:=3;
+                Charts[i].Axes.Top.MinorGrid.Visible:=True;
+                Charts[i].Axes.Top.MinorGrid.Color:=clGray;
+                Charts[i].Axes.Top.MinorGrid.Style:=psDot;
+                Charts[i].TopAxis.LabelsOnAxis:=True;
+                Charts[i].TopAxis.RoundFirstLabel:=True;
+                Charts[i].TopAxis.MaximumOffset:=5;
+                Charts[i].TopAxis.MinimumOffset:=5;
+                Charts[i].Walls.Back.Pen.Width:=2;
+                PopupMenu:=TPopupMenu.Create(ForFree[1]);
+                PopupMenu.AutoPopup:=True;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Print';
+                NewItem.OnClick:=PopPrint;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Print All';
+                NewItem.OnClick:=PopPrintPages;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Export';
+                NewItem.OnClick:=PopExport;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Set Min,Max';
+                NewItem.OnClick:=PopMinMax;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Make Logarithmic';
+                NewItem.OnClick:=PopLogarithmic;
+                NewItem:=TMenuItem.Create(PopupMenu);
+                NewItem.Tag:=i;
+                PopupMenu.Items.Add(NewItem);
+                NewItem.Caption:='Change Color';
+                NewItem.OnClick:=PopColor;
+                Charts[i].PopupMenu:=PopupMenu;
+               end;
+          PageControl1.ActivePageIndex:=0;
+          PageControl1.Width:=1000;
+          VertScrollBar.Position:=0;
+          HorzScrollBar.Position:=0;
+          CalCulationForm.Repaint;
+    if ( (RhoAdded)and(VpAdded)and(VsAdded) ) then
+       begin
+          Elastictable.Open;
+          Table.DisableControls;
+          Table.AfterScroll:=nil;
+          ElasticTable.DisableControls;
+          Table.First;
+          while not(Table.Eof) do
+            begin
+              if DepthSystem='ft' then
+                begin
+                  if Table.FieldByName(RhoField).AsString<>'' then
+                  begin
+                    if RhoSystem='GC' then
+                      RhoValue:=1000*Table.FieldByName(RhoField).Value;
+                    if RhoSystem='KM' then
+                      RhoValue:=Table.FieldByName(RhoField).Value;
+                  end;
+                  if Table.FieldByName(VpField).AsString<>'' then
+                    VpValue:=1000000*0.3048/Table.FieldByName(VpField).Value;
+                  if Table.FieldByName(VsField).AsString<>'' then
+                    VsValue:=1000000*0.3048/Table.FieldByName(VsField).Value;
+                end;
+              if DepthSystem='ms' then
+                begin
+                  if Table.FieldByName(RhoField).AsString<>'' then
+                  begin
+                    if RhoSystem='GC' then
+                      RhoValue:=1000*Table.FieldByName(RhoField).Value;
+                    if RhoSystem='KM' then
+                      RhoValue:=Table.FieldByName(RhoField).Value;
+                  end;
+                  if Table.FieldByName(VpField).AsString<>'' then
+                    VpValue:=1000000*0.3048/Table.FieldByName(VpField).Value;
+                  if Table.FieldByName(VsField).AsString<>'' then
+                    VsValue:=1000000*0.3048/Table.FieldByName(VsField).Value;
+                end;
+              if DepthSystem='m' then
+                begin
+                  if Table.FieldByName(RhoField).AsString<>'' then
+                  begin
+                    if RhoSystem='GC' then
+                      RhoValue:=1000*Table.FieldByName(RhoField).Value;
+                    if RhoSystem='KM' then
+                      RhoValue:=Table.FieldByName(RhoField).Value;
+                  end;
+                  if VSystem='FT' then
+                    begin
+                      if Table.FieldByName(VpField).AsString<>'' then
+                        VpValue:=1000000*0.3048/Table.FieldByName(VpField).Value;
+                      if Table.FieldByName(VsField).AsString<>'' then
+                        VsValue:=1000000*0.3048/Table.FieldByName(VsField).Value;
+                    end
+                  else
+                    begin
+                      if Table.FieldByName(VpField).AsString<>'' then
+                        VpValue:=1000000/Table.FieldByName(VpField).Value;
+                      if Table.FieldByName(VsField).AsString<>'' then
+                        VsValue:=1000000/Table.FieldByName(VsField).Value;
+                    end;
+                end;
+              with ElasticTable do
+                begin
+                  Append;
+                  FieldByName('Rec').Value :=Table.FieldValues['Rec'];
+                  Fields[1].Value :=Table.FieldValues[Table.FieldDefs[1].Name];
+                  if (Table.FieldByName(VpField).AsString<>'')and(Table.FieldByName(VsField).AsString<>'') then
+                    FieldByName('Poisson Ratio').Value:=RoundTo((sqr(VpValue)-2*sqr(VsValue))/(2*(sqr(VpValue)-sqr(VsValue))),-4)
+                  else FieldByName('Poisson Ratio').AsString :='';
+                  if (Table.FieldByName(VpField).AsString<>'')and(Table.FieldByName(VsField).AsString<>'')and(Table.FieldByName(RhoField).AsString<>'') then
+                    FieldByName('Lame Constant').Value:=RoundTo(0.000000001*RhoValue*(sqr(VpValue)-2*(sqr(VsValue))),-4)
+                  else FieldByName('Lame Constant').AsString :='';
+                  if (Table.FieldByName(VpField).AsString<>'')and(Table.FieldByName(VsField).AsString<>'')and(Table.FieldByName(RhoField).AsString<>'') then
+                    FieldByName('Bulk Modulus').Value:=RoundTo(0.000000001*RhoValue*(sqr(VpValue)-4/3*(sqr(VsValue))),-4)
+                  else FieldByName('Bulk Modulus').AsString :='';
+                  if (Table.FieldByName(VsField).AsString<>'')and(Table.FieldByName(RhoField).AsString<>'') then
+                    FieldByName('Shear modulus').Value:=RoundTo(0.000000001*RhoValue*(sqr(VsValue)),-4)
+                  else FieldByName('Shear Modulus').AsString :='';
+                  if (Table.FieldByName(VpField).AsString<>'')and(Table.FieldByName(VsField).AsString<>'')and(Table.FieldByName(RhoField).AsString<>'') then
+                    FieldByName('Young modulus').Value:=RoundTo(0.000000001*RhoValue*sqr(VsValue)*((3*sqr(VpValue)-4*sqr(VsValue))/(sqr(VpValue)-sqr(VsValue))),-4)
+                  else FieldByName('Young Modulus').AsString :='';
+                  if (Table.FieldByName(VpField).AsString<>'')and(Table.FieldByName(RhoField).AsString<>'') then
+                    FieldByName('P-Impedance').Value:=RoundTo(0.001*RhoValue*VpValue,-4)
+                  else FieldByName('P-Impedance').AsString :='';
+                  if (Table.FieldByName(VsField).AsString<>'')and(Table.FieldByName(RhoField).AsString<>'') then
+                    FieldByName('S-Impedance').Value:=RoundTo(0.001*RhoValue*VsValue,-4)
+                  else FieldByName('S-Impedance').AsString :='';
+                  if (Table.FieldByName(VpField).AsString<>'')and(Table.FieldByName(VsField).AsString<>'') then
+                    FieldByName('Landa/Miu').Value:=RoundTo((sqr(VpValue)-2*(sqr(VsValue)))/(sqr(VsValue)),-4)
+                  else FieldByName('Landa/Miu').AsString :='';
+                  if (Table.FieldByName(VpField).AsString<>'')and(Table.FieldByName(VsField).AsString<>'') then
+                    FieldByName('Vp/Vs').Value :=RoundTo(VpValue/VsValue,-4)
+                  else FieldByName('Vp/Vs').AsString :='';
+                  if (Table.FieldByName(VpField).AsString<>'')and(Table.FieldByName(VsField).AsString<>'')and(Table.FieldByName(RhoField).AsString<>'') then
+                    FieldByName('Landa.Rho').Value:=RoundTo(0.000000001*sqr(RhoValue)*(sqr(VpValue)-2*(sqr(VsValue))),-4)
+                  else FieldByName('Landa.Rho').AsString :='';
+                  if (Table.FieldByName(RhoField).AsString<>'')and(Table.FieldByName(VsField).AsString<>'') then
+                    FieldByName('Miu.Rho').Value:=RoundTo(0.000000001*sqr(RhoValue)*(sqr(VsValue)),-4)
+                  else FieldByName('Miu.Rho').AsString :='';
+                  if (Table.FieldByName(VpField).AsString<>'') then
+                   FieldByName('Vp').Value:=RoundTo(VpValue,-4)
+                  else FieldByName('Vp').AsString :='';
+                  if (Table.FieldByName(VsField).AsString<>'') then
+                    FieldByName('Vs').Value:=RoundTo(VsValue,-4)
+                  else FieldByName('Vs').AsString :='';
+                  if (Table.FieldByName(RhoField).AsString<>'') then
+                    FieldByName('Rho').Value:=RoundTo(RhoValue,-4)
+                  else FieldByName('Rho').AsString :='';
+                  Next;
+                end;
+              Table.Next;
+            end;
+        end
+      else
+       if ( (RhoAdded)and(VpAdded) ) then
+         begin
+          Elastictable.Open;
+          Table.DisableControls;
+          Table.AfterScroll:=nil;
+          ElasticTable.DisableControls;
+          Table.First;
+          while not(Table.Eof) do
+            begin
+              if not( (Table.FieldByName(RhoField).AsString='')or(Table.FieldByName(VpField).AsString='') ) then
+              begin
+              if DepthSystem='ft' then
+                begin
+                  if RhoSystem='GC' then
+                    RhoValue:=1000*Table.FieldByName(RhoField).Value;
+                  if RhoSystem='KM' then
+                    RhoValue:=Table.FieldByName(RhoField).Value;
+                  VpValue:=1000000*0.3048/Table.FieldByName(VpField).Value;
+                  if VsEquationNumber=0 then
+                    VsValue:=VpValue/sqrt(3);
+                  if VsEquationNumber=1 then
+                    VsValue:=Vs_First_Par*VpValue-Vs_Sec_Par;
+                  if (VsEquationNumber=2)or(VsEquationNumber=3) then
+                    begin
+                      Vc:=(Table.Fields[GRFN].Value-GR_Min)/(GR_Max-GR_Min);
+                      VsValue:=0.67*V0-0.75*K1*Table.FieldByName(PhiValue).Value-0.92*K2*Vc;
+                    end;
+                end;
+              if DepthSystem='ms' then
+                begin
+                  if RhoSystem='GC' then
+                    RhoValue:=1000*Table.FieldByName(RhoField).Value;
+                  if RhoSystem='KM' then
+                    RhoValue:=Table.FieldByName(RhoField).Value;
+                  VpValue:=1000000*0.3048/Table.FieldByName(VpField).Value;
+                  if VsEquationNumber=0 then
+                    VsValue:=VpValue/sqrt(3);
+                  if VsEquationNumber=1 then
+                    VsValue:=Vs_First_Par*VpValue-Vs_Sec_Par;
+                  if (VsEquationNumber=2)or(VsEquationNumber=3) then
+                    begin
+                      Vc:=(Table.Fields[GRFN].Value-GR_Min)/(GR_Max-GR_Min);
+                      VsValue:=0.67*V0-0.75*K1*Table.FieldByName(PhiValue).Value-0.92*K2*Vc;
+                    end;
+                end;
+              if DepthSystem='m' then
+                begin
+                  if RhoSystem='GC' then
+                    RhoValue:=1000*Table.FieldByName(RhoField).Value;
+                  if RhoSystem='KM' then
+                    RhoValue:=Table.FieldByName(RhoField).Value;
+                  VpValue:=1000000/Table.FieldByName(VpField).Value;
+                  if VsEquationNumber=0 then
+                    VsValue:=VpValue/sqrt(3);
+                  if VsEquationNumber=1 then
+                    VsValue:=Vs_First_Par*VpValue-Vs_Sec_Par;
+                  if (VsEquationNumber=2)or(VsEquationNumber=3) then
+                    begin
+                      Vc:=(Table.Fields[GRFN].Value-GR_Min)/(GR_Max-GR_Min)*100;
+                      VsValue:=0.67*V0-0.75*K1*Table.FieldByName(PhiValue).Value-0.92*K2*Vc;
+                    end;
+                end;
+              with ElasticTable do
+                begin
+                  Append;
+                  FieldByName('Rec').Value :=Table.FieldValues['Rec'];
+                  Fields[1].Value :=Table.FieldValues[Table.FieldDefs[1].Name];
+                  FieldByName('Poisson Ratio').Value:=RoundTo((sqr(VpValue)-2*sqr(VsValue))/(2*(sqr(VpValue)-sqr(VsValue))),-4);
+                  FieldByName('Lame Constant').Value:=RoundTo(0.000000001*RhoValue*(sqr(VpValue)-2*(sqr(VsValue))),-4);
+                  FieldByName('Bulk Modulus').Value:=RoundTo(0.000000001*RhoValue*(sqr(VpValue)-4/3*(sqr(VsValue))),-4);
+                  FieldByName('Shear modulus').Value:=RoundTo(0.000000001*RhoValue*(sqr(VsValue)),-4);
+                  FieldByName('Young modulus').Value:=RoundTo(0.000000001*RhoValue*sqr(VsValue)*((3*sqr(VpValue)-4*sqr(VsValue))/(sqr(VpValue)-sqr(VsValue))),-4);
+                  FieldByName('P-Impedance').Value:=RoundTo(0.001*RhoValue*VpValue,-4);
+                  FieldByName('S-Impedance').Value:=RoundTo(0.001*RhoValue*VsValue,-4);
+                  FieldByName('Landa/Miu').Value:=RoundTo((sqr(VpValue)-2*(sqr(VsValue)))/(sqr(VsValue)),-4);
+                  FieldByName('Vp/Vs').Value :=RoundTo(VpValue/VsValue,-4);
+                  FieldByName('Landa.Rho').Value:=RoundTo(0.000000001*sqr(RhoValue)*(sqr(VpValue)-2*(sqr(VsValue))),-4);
+                  FieldByName('Miu.Rho').Value:=RoundTo(0.000000001*sqr(RhoValue*VsValue),-4);
+                  FieldByName('Vp').Value:=RoundTo(VpValue,-4);
+                  FieldByName('Vs').Value:=RoundTo(VsValue,-4);
+                  FieldByName('Rho').Value:=RoundTo(RhoValue,-4);
+                  Post;
+                end;
+             end
+             else
+             begin
+              with ElasticTable do
+                begin
+                  Append;
+                  FieldByName('Rec').AsString :=Table.FieldValues['Rec'];
+                  Fields[1].Value :=Table.FieldValues[Table.FieldDefs[1].Name];
+                  FieldByName('Poisson Ratio').AsString :='';
+                  FieldByName('Lame Constant').AsString :='';
+                  FieldByName('Bulk Modulus').AsString :='';
+                  FieldByName('Shear modulus').AsString :='';
+                  FieldByName('Young modulus').AsString :='';
+                  FieldByName('P-Impedance').AsString :='';
+                  FieldByName('S-Impedance').AsString :='';
+                  FieldByName('Landa/Miu').AsString :='';
+                  FieldByName('Vp/Vs').AsString :='';
+                  FieldByName('Landa.Rho').AsString :='';
+                  FieldByName('Miu.Rho').AsString :='';
+                  FieldByName('Vp').AsString :='';
+                  FieldByName('Vs').AsString :='';
+                  FieldByName('Rho').AsString:='';
+                  Post;
+                end;
+             end;
+              Table.Next;
+            end;
+
+
+        end;
+             for i:=1+Tags to (ElasticTable.FieldDefs.Count-3+Tags) do
+               begin
+                 Charts[i].Series[0].DataSource:=ElasticTable;
+                 Charts[i].Axes.Top.Items.Clear;
+                 if Charts[i].Series[0].MinXValue<>0 then
+                   begin
+                     SetRoundMode(rmDown);
+                     Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MinXValue)));
+                     SetRoundMode(rmNearest);
+                     XMIN:=RoundTo(Charts[i].Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+                   end
+                 else
+                   XMIN:=0;
+                 if Charts[i].Series[0].MaxXValue<>0 then
+                   begin
+                     SetRoundMode(rmUp);
+                     Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MaxXValue)));
+                     SetRoundMode(rmNearest);
+                     XMAX:=RoundTo(Charts[i].Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+                   end
+                 else
+                   XMAX:=0;
+                 Charts[i].TopAxis.SetMinMax(XMIN,XMAX);
+                 Charts[i].Axes.Top.Items.Add(XMIN);
+                 Charts[i].Axes.Top.Items.Add(XMAX);
+                 Charts[i].Axes.Top.Items[0].Value:=XMIN;
+                 Charts[i].Axes.Top.Items[Charts[i].Axes.Top.Items.Count-1].Value:=XMAX;
+               end;
+
+ finally
+    Table.EnableControls;
+    ElasticTable.EnableControls;
+    Table.AfterScroll:=TableScroll;
+    Screen.Cursor := crDefault;
+    Statusbar1.Panels[0].Text:='Ready';
+ end;
+end;
+
+procedure TCalculationForm.Find1Click(Sender: TObject);
+begin
+if Table.IsEmpty=False then
+  with TSearchPage.Create(Self) do
+    begin
+      Show;
+    end;
+end;
+
+procedure TCalculationForm.About2Click(Sender: TObject);
+begin
+  with TAboutForm.Create(Self) do
+  begin
+        ShowModal;
+        Free;
+  end;
+end;
+
+procedure TCalculationForm.PageControl1Change(Sender: TObject);
+begin
+  if PageControl1.ActivePageIndex=1 then
+    begin
+      if not(FN=0) then
+        if ElasticTable.IsEmpty=False then
+          PageControl1.Width:=600+(150*(FN-2+13))
+        else
+          if 600+(150*(FN-2))>PageControl1.Width then
+            PageControl1.Width:=600+(150*(FN-2))
+      else
+       begin
+        PageControl1.Width:=1000;
+       end;
+      PageControl1.Height:=610;
+    end;
+  if PageControl1.ActivePageIndex=0 then
+    begin
+      PageControl1.Width:=1000;
+      PageControl1.Height:=CalcHeight;
+    end;
+  VertScrollBar.Position:=0;
+  HorzScrollBar.Position:=0;
+end;
+
+procedure TCalculationForm.Correlationcoefficients1Click(Sender: TObject);
+var
+i,j:integer;
+Labels:TLabel;
+begin
+  if not Table.Exists then
+      Exit;
+  CalcHeight:=PageControl1.Height;
+  SourceLogF:='';
+  SelectLog:=TSelectLog.Create(Self);
+  SelectLog.ShowModal;
+  SelectLog.Free;
+  Repaint;
+  if SourceLogF='' then
+      Exit;
+  Table.DisableControls;
+  Table.AfterScroll:=nil;
+  ElasticTable.DisableControls;
+  StatusBar1.Panels[0].Text:='Calculating correlation coefficients, please wait...';
+  StatusBar1.Refresh;
+  Screen.Cursor := crHourGlass;
+  VrLabelSourceCC.Caption:=SourceLogF;
+  VrLabel10.Caption:='Reference:';
+  if IsCalc then
+    begin
+      ForFree[1].Free;
+      ForFree[1]:=TLabel.Create(Self);
+    end
+  else
+    ForFree[1]:=TLabel.Create(Self);
+      for i:=1 to (FN-2) do
+        begin
+          Labels:=TLabel.Create(ForFree[1]);
+          Labels.Parent:=PageControl1.Pages[0];
+          Labels.Font.Color:=clNavy;
+          Labels.Font.Size:=8;
+          Labels.Font.Style:=[fsBold];
+          Labels.Caption:=Fields[i+1];
+          Labels.AutoSize:=True;
+          Labels.Transparent:=True;
+          Labels.Top:=(i+1)*25;
+          Labels.Left:=850;
+          Labels.Show;
+          Labels:=TLabel.Create(ForFree[1]);
+          Labels.Parent:=PageControl1.Pages[0];
+          Labels.Font.Color:=clGreen;
+          Labels.Font.Size:=8;
+          Labels.Font.Style:=[fsBold];
+          Labels.Caption:=FloatToStrF(CorrelationCoefficient(Table,SourceLogF,Table.Fields[i+1].FullName),ffFixed,4,4);
+          Labels.AutoSize:=True;
+          Labels.Transparent:=True;
+          Labels.Top:=(i+1)*25;
+          Labels.Left:=950;
+          Labels.Show;
+          IsCalc:=True;
+        end;
+    if ElasticTable.IsEmpty=False then
+     begin
+  if IsCalc then
+    begin
+      ForFree[2].Free;
+      ForFree[2]:=TLabel.Create(Self);
+    end
+  else
+    ForFree[2]:=TLabel.Create(Self);
+      for j:=2 to 14 do
+        begin
+          Labels:=TLabel.Create(ForFree[2]);
+          Labels.Parent:=PageControl1.Pages[0];
+          Labels.Font.Color:=clNavy;
+          Labels.Font.Size:=8;
+          Labels.Font.Style:=[fsBold];
+          Labels.Font.Name:='Arial';
+          Labels.Caption:=ElasticTable.Fields[j].FullName;
+          Labels.AutoSize:=True;
+          Labels.Transparent:=True;
+          Labels.Top:=(i+1)*25;
+          Labels.Left:=850;
+          Labels.Show;
+          Labels:=TLabel.Create(ForFree[2]);
+          Labels.Parent:=PageControl1.Pages[0];
+          Labels.Font.Color:=clGreen;
+          Labels.Font.Name:='Arial';
+          Labels.Font.Size:=8;
+          Labels.Font.Style:=[fsBold];
+          Labels.Caption:=FloatToStrF(CorrelationCoefficient(ElasticTable,SourceLogF,ElasticTable.Fields[j].FullName),ffFixed,4,4);
+          Labels.AutoSize:=True;
+          Labels.Transparent:=True;
+          Labels.Top:=(i+1)*25;
+          Labels.Left:=950;
+          Labels.Show;
+          i:=i+1;
+          IsCalc:=True;
+        end;
+     end;
+ if not((i+2)*25<610) then
+   PageControl1.Height:=(i+2)*25;
+ CalcHeight:=PageControl1.Height;
+ Table.AfterScroll:=TableScroll;
+ Table.EnableControls;
+ ElasticTable.EnableControls;
+ Screen.Cursor := crDefault;
+ Statusbar1.Panels[0].Text:='Ready';
+end;
+
+procedure TCalculationForm.Savetable1Click(Sender: TObject);
+var
+P2,p,i,j,k:integer;
+s1,s2:string;
+begin
+  if islas then
+    begin
+      if ElasticTable.IsEmpty=False then
+       begin
+        Try
+          StatusBar1.Panels[0].Text:='Saving table to file, please wait...';
+          StatusBar1.Refresh;
+          ElasticTable.DisableControls;
+          if SaveDialog1.Execute then
+           if not(SaveDialog1.FileName='') then
+            begin
+              Repaint;
+              AssignFile( OutFile, SaveDialog1.FileName );
+              Rewrite( OutFile );
+              writeln(outFile,'~VERSION INFORMATION');
+              writeln(outFile,' VERS.                 2.0:   CWLS LOG ASCII STANDARD - VERSION 2.0');
+              writeln(outFile,' WRAP.                  NO:   ONE LINE PER DEPTH STEP');
+              writeln(outFile,'~WELL INFORMATION BLOCK');
+              writeln(outFile,'#MNEM.UNIT      DATA             DESCRIPTION');
+              writeln(outFile,'#---- ------ --------------   -----------------------------');
+              Table.DisableControls;
+              Table.AfterScroll:=nil;
+              Table.First;
+              if DepthSystem='m' then
+                writeln(outFile,' STRT.M          '+Table.Fields[1].AsString+':    START DEPTH');
+              if DepthSystem='ft' then
+                writeln(outFile,' STRT.F          '+Table.Fields[1].AsString+':    START DEPTH');
+              Table.Last;
+              if DepthSystem='m' then
+                writeln(outFile,' STOP.M          '+Table.Fields[1].AsString+':    STOP DEPTH');
+              if DepthSystem='ft' then
+                writeln(outFile,' STOP.F          '+Table.Fields[1].AsString+':    STOP DEPTH');
+              Table.AfterScroll:=TableScroll;
+              Table.EnableControls;
+              if DepthSystem='m' then
+                Writeln(outFile,' STEP.M             '+Edit5.Text+':    STEP VALUE');
+              if DepthSystem='ft' then
+                Writeln(outFile,' STEP.F             '+Edit5.Text+':    STEP VALUE');
+              s2:='';
+              for j:=1 to Memo1.Lines.Count do
+                begin
+                  s1:=Memo1.Lines[j];
+                  if (Pos('NULL',s1)=1) or (Pos('NULL',s1)=2) then
+                    begin
+                      i:=j;
+                      Break;
+                    end;
+                end;
+              s1:=Memo1.Lines[i];
+              s2:=Copy(s1,1,2);
+              while s2<>'~C' do
+                begin
+                  writeln(outFile,s1);
+                  i:=i+1;
+                  s1:=Memo1.Lines[i];
+                  s2:=Copy(s1,1,2);
+                end;
+              writeln(outFile,'~CURVE INFORMATION');
+              writeln(outFile,'#MNEM.UNIT      API CODE      CURVE DESCRIPTION');
+              writeln(outFile,'#---------    -------------   ------------------------------');
+              if DepthSystem='m' then
+                writeln(outFile,' DEPT .M                        :  1  DEPTH');
+              if DepthSystem='ft' then
+                writeln(outFile,' DEPT .F                        :  1  DEPTH');
+              writeln(outFile,' PR   .                         :  2  POISSON RATIO ( DIMENSIONLESS )');
+              writeln(outFile,' LC   .GP                       :  3  LAME CONSTANT ( G PASCAL )');
+              writeln(outFile,' BM   .GP                       :  4  BULK MODULUS ( G PASCAL )');
+              writeln(outFile,' SM   .GP                       :  5  SHEAR MODULUS ( G PASCAL )');
+              writeln(outFile,' YM   .GP                       :  6  YOUNG MODULUS ( G PASCAL )');
+              writeln(outFile,' PI   .MG/SM2                   :  7  P-IMPEDANCE( KM/S.KG/M3 )');
+              writeln(outFile,' SI   .MG/SM2                   :  8  S-IMPEDANCE( KM/S.KG/M3 )');
+              writeln(outFile,' L/M  .                         :  9  LAME CONSTANT/SHEAR MODULUS ( DIMENSIONLESS )');
+              writeln(outFile,' VP/VS.                         :  10 VP/VS ( DIMENSIONLESS )');
+              writeln(outFile,' LR   .GPKG/M3                  :  11 LAME CONSTANT.DENSITY ( G PASCAL.KG/M3 )');
+              writeln(outFile,' MR   .GPKG/M3                  :  12 SHEAR MODULUS.DENSITY ( G PASCAL.KG/M3 )');
+              i:=i+1;
+              s1:=Memo1.Lines[i];
+              s2:=Copy(s1,1,1);
+              while s2<>'~' do
+                begin
+                  i:=i+1;
+                  s1:=Memo1.Lines[i];
+                  s2:=Copy(s1,1,1);
+                end;
+              s1:=Memo1.Lines[i];
+              s2:=Copy(s1,1,2);
+              while not((s2='~O')or(i=Memo1.Lines.Count-1)) do
+                begin
+                  writeln(outFile,s1);
+                  i:=i+1;
+                  s1:=Memo1.Lines[i];
+                  s2:=Copy(s1,1,2);
+                end;
+              writeln(outFile,'~OTHER INFIORMATION');
+              writeln(outFile,'#-------------------------------------------------------------------------------------------');
+              writeln(outFile,'  This file is created in P.U.T RockLog software.');
+              writeln(outFile,'#-------------------------------------------------------------------------------------------');
+              writeln(outFile,'~A     DEPTH          PR          LC          BM          SM          YM          PI          SI         L/M       VP/VS          LR          MR');
+              ElasticTable.First;
+              s1:='';
+              s2:='';
+              while not(ElasticTable.Eof) do
+                begin
+                  for j:=1 to ElasticTable.FieldDefs.Count-1 do
+                    begin
+                      s1:='';
+                      s2:='';
+                      P:=Length(ElasticTable.Fields[j].AsString);
+                      P2:=12-P;
+                      for k:=1 to P2 do
+                        begin
+                          s1:=s1+' ';
+                        end;
+                      if not(ElasticTable.Fields[j].AsString='') then
+                        s2:=s1+ElasticTable.Fields[j].AsString
+                      else
+                        begin
+                          s1:='';
+                          s2:='';
+                          p:=Length(NullVal);
+                          p2:=12-p;
+                          for k:=1 to p2 do
+                            s1:=s1+' ';
+                          s2:=s1+NullVal;
+                        end;
+                      write(outFile,s2);
+                    end;
+                  writeln(outFile);
+                  ElasticTable.Next;
+                end;
+              CloseFile( OutFile );
+            end;
+        Finally
+          ElasticTable.EnableControls;
+          Pat:=Application.ExeName;
+          P:=Pos('RockLog.exe',Pat);
+          if P=0 then
+            P:=Pos('ROCKLOG.EXE',Pat);
+          Path := Copy(Pat, 1, P - 1);
+          ChDir(Path);
+          if IOResult <> 0 then
+            MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+        end;
+    end;
+    end;
+  if not(islas) then
+    begin
+      if ElasticTable.IsEmpty=False then
+       begin
+        Try
+          ElasticTable.DisableControls;
+          if SaveDialog4.Execute then
+           if not(SaveDialog4.FileName='') then
+            begin
+              AssignFile( OutFile, SaveDialog4.FileName );
+              Rewrite( OutFile );
+              writeln(outFile,FirstLine);
+              writeln(outFile,'Column 2 : Poisson Ratio (Poisson Ratio) - Units : ');
+              writeln(outFile,'Column 3 : Lame Constant (Lame Constant) - Units : MPa');
+              writeln(outFile,'Column 4 : Bulk Modulus (Bulk Modulus) - Units : MPa');
+              writeln(outFile,'Column 5 : Shear Modulus (Shear Modulus) - Units : MPa');
+              writeln(outFile,'Column 6 : Young Modulus (Young Modulus) - Units : MPa');
+              writeln(outFile,'Column 7 : P-Impedance (P-Impedance) - Units : us/ft');
+              writeln(outFile,'Column 8 : S-Impedance (S-Impedance) - Units : us/ft');
+              writeln(outFile,'Column 9 : Lambda/Miu (Lambda/Miu) - Units : ');
+              writeln(outFile,'Column 10 : P-wave/S-wave (P-wave/S-wave) - Units : ');
+              ElasticTable.First;
+              while not(ElasticTable.Eof) do
+                begin
+                  for j:=1 to 10 do
+                    begin
+                      s1:='';
+                      s2:='';
+                      P:=Length(ElasticTable.Fields[j].AsString);
+                      P2:=10-P;
+                      for k:=1 to P2 do
+                        begin
+                          s1:=s1+' ';
+                        end;
+                      if not(ElasticTable.Fields[j].AsString='') then
+                        s2:=s1+ElasticTable.Fields[j].AsString
+                      else
+                        s2:=' -999.0000';
+                      write(outFile,s2);
+                      if j<>10 then
+                        write(outFile,#9);
+                    end;
+                  writeln(outFile);
+                  ElasticTable.Next;
+                end;
+              CloseFile( OutFile );
+            end;
+        Finally
+          ElasticTable.EnableControls;
+          Pat:=Application.ExeName;
+          P:=Pos('RockLog.exe',Pat);
+          if P=0 then
+            P:=Pos('ROCKLOG.EXE',Pat);
+          Path := Copy(Pat, 1, P - 1);
+          ChDir(Path);
+          if IOResult <> 0 then
+            MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+        end;
+    end;
+    end;
+    StatusBar1.Panels[0].Text:='Ready';
+    StatusBar1.Refresh;
+end;
+
+procedure TCalculationForm.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+var
+ i,code:integer;
+begin
+  if ElasticTable.IsEmpty=False then
+    begin
+      code:=MessageDlg('Elastic table is not empty. Do you want to save it before exit?',mtInformation,mbYesNoCancel,0);
+      if code=mrYes then
+        begin
+          Savetable1Click(Self);
+          ElasticTable.Close;
+          ElasticTable.EmptyTable;
+          Table.Close;
+          Table.DeleteTable;
+          CanClose:=True;
+        end;
+      if code=mrNo then
+        begin
+          ElasticTable.Close;
+          ElasticTable.EmptyTable;
+          Table.Close;
+          Table.DeleteTable;
+          CanClose:=True;
+        end;
+      if code=mrCancel then
+        begin
+          CanClose:=False;
+          Exit;
+        end;
+    end;
+  if LithoLog.IsEmpty=False then
+    begin
+      code:=MessageDlg('LithoLog table has changed. Do you want to save it before exit?',mtInformation,mbYesNoCancel,0);
+      if code=mrYes then
+        begin
+          Button2Click(Self);
+          Button4Click(Self);
+          LithoLog.Close;
+          LithoLog.EmptyTable;
+          CanClose:=True;
+        end;
+      if code=mrNo then
+        begin
+          LithoLog.Close;
+          LithoLog.EmptyTable;
+          CanClose:=True;
+        end;
+      if code=mrCancel then
+        begin
+          CanClose:=False;
+          Exit;
+        end;
+    end;
+
+  if Table.Exists then
+    begin
+      Table.Close;
+      Table.EmptyTable;
+      Table.DeleteTable;
+      Table.Free;
+      CanClose:=True;
+    end;
+  if Table1.Exists then
+    begin
+      Table1.Close;
+      Table1.EmptyTable;
+      Table1.DeleteTable;
+      Table1.Free;
+      CanClose:=True;
+    end;
+  for i:=150 downto 1 do
+    if FileExists('tempchart'+IntToStr(i)+'.tee') then DeleteFile('tempchart'+IntToStr(i)+'.tee');
+
+  if FileExists('tempchart.tee') then DeleteFile('tempchart.tee');
+  if FileExists('temp.tmp') then DeleteFile('temp.tmp');
+end;
+
+procedure TCalculationForm.Filter1Click(Sender: TObject);
+var
+Filterst:string;
+i:integer;
+BitMap:TBitMap;
+Topd,Bottomd:Integer;
+Pat,Path:string;
+begin
+if isFiltered then UndoFilter1Click(Self);
+if Table.IsEmpty then Exit;
+try
+StatusBar1.Panels[0].Text:='Applying filter, please wait...';
+StatusBar1.Refresh;
+Table.DisableControls;
+Table.AfterScroll:=nil;
+ElasticTable.DisableControls;
+Table.Filtered:=True;
+Filterst:=Table.Fields[1].FieldName+'>='+Edit6.AsString+' and '+Table.Fields[1].FieldName+'<='+Edit7.AsString;
+Table.Filter:=Filterst;
+if ElasticTable.IsEmpty=True then
+  begin
+    for i:=1 to Tags do
+      begin
+        Charts[i].RefreshData;
+        Charts[i].Axes.Top.Items.Clear;
+        if Charts[i].Series[0].MinXValue<>0 then
+          begin
+            SetRoundMode(rmDown);
+            Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MinXValue)));
+            SetRoundMode(rmNearest);
+            XMIN:=RoundTo(Charts[i].Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+          end
+        else
+          XMIN:=0;
+        if Charts[i].Series[0].MaxXValue<>0 then
+          begin
+            SetRoundMode(rmUp);
+            Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MaxXValue)));
+            SetRoundMode(rmNearest);
+            XMAX:=RoundTo(Charts[i].Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+          end
+        else
+          XMAX:=0;
+        Charts[i].TopAxis.SetMinMax(XMIN,XMAX);
+        Charts[i].Axes.Top.Items.Add(XMIN);
+        Charts[i].Axes.Top.Items.Add(XMAX);
+        Charts[i].Axes.Top.Items[0].Value:=XMIN;
+        Charts[i].Axes.Top.Items[Charts[i].Axes.Top.Items.Count-1].Value:=XMAX;
+      end;
+  end
+else
+  begin
+    ElasticTable.Filtered:=True;
+    Filterst:='Depth>='+Edit6.AsString+' and '+'Depth<='+Edit7.AsString;
+    ElasticTable.Filter:=Filterst;
+    for i:=1 to (Tags+13) do
+      begin
+        Charts[i].RefreshData;
+        Charts[i].Axes.Top.Items.Clear;
+        if Charts[i].Series[0].MinXValue<>0 then
+          begin
+            SetRoundMode(rmDown);
+            Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MinXValue)));
+            SetRoundMode(rmNearest);
+            XMIN:=RoundTo(Charts[i].Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+          end
+        else
+          XMIN:=0;
+        if Charts[i].Series[0].MaxXValue<>0 then
+          begin
+            SetRoundMode(rmUp);
+            Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MaxXValue)));
+            SetRoundMode(rmNearest);
+            XMAX:=RoundTo(Charts[i].Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+          end
+        else
+          XMAX:=0;
+        Charts[i].TopAxis.SetMinMax(XMIN,XMAX);
+        Charts[i].Axes.Top.Items.Add(XMIN);
+        Charts[i].Axes.Top.Items.Add(XMAX);
+        Charts[i].Axes.Top.Items[0].Value:=XMIN;
+        Charts[i].Axes.Top.Items[Charts[i].Axes.Top.Items.Count-1].Value:=XMAX;
+      end;
+  end;
+ DBChart8.RefreshData;
+ TopDepth:=Edit6.AsFloat;
+ BottomDepth:=Edit7.AsFloat;
+if Litholog.IsEmpty=False then
+  begin
+    LithoLog.First;
+    Litholog.DisableControls;
+    Litholog.Close;
+    LithoLog.Open;
+    Filterst:='TopDepth>='+Edit6.AsString+' and '+'BottomDepth<='+Edit7.AsString;
+    LithoLog.First;
+  while not LithoLog.EoF do
+    begin
+      TopD:=Image1.Height*(LithoLog.FieldValues['TopDepth']-TopDepth)/(BottomDepth-TopDepth);
+      BottomD:=Image1.Height*(LithoLog.FieldValues['BottomDepth']-TopDepth)/(BottomDepth-TopDepth);
+      BitMap:=TBitMap.Create;
+      Pat:=Application.ExeName;
+      P:=Pos('RockLog.exe',Pat);
+      if P=0 then
+        P:=Pos('ROCKLOG.EXE',Pat);
+      Path := Copy(Pat, 1, P - 1);
+      ChDir(Path);
+      image1.Canvas.Brush.Color:=clwhite;
+      image1.Canvas.Brush.Style:=bssolid;
+      Image1.Canvas.FillRect(Rect(0,TopD,40,BottomD));
+      BitMap.LoadFromFile('.\Patterns\'+LithoLog.FieldValues['Lithology']);
+      Image1.Canvas.Brush.Bitmap:=BitMap;
+      Image1.Canvas.FillRect(Rect(0,TopD,40,BottomD));
+      Image1.Canvas.Font.Name:='Tahoma';
+      Image1.Canvas.Font.Size:=6;
+      Image1.Canvas.Font.Style:=[fsBold];
+      Image1.Canvas.Font.Color:=clRed;
+      Image1.Canvas.TextOut(0,BottomD-10,LithoLog.FieldByName('BottomDepth').AsString);
+      Bitmap.Free;
+      LithoLog.Next;
+    end;
+//    LithoLog.Filtered:=True;
+//    LithoLog.Filter:=Filterst;
+    Image1.Canvas.Font.Name:='Tahoma';
+    Image1.Canvas.Font.Size:=6;
+    Image1.Canvas.Font.Style:=[fsBold];
+    Image1.Canvas.Font.Color:=clRed;
+    Image1.Canvas.TextOut(0,Image1.Height-10,FloatToStr(BottomDepth));
+    Image1.Canvas.TextOut(0,0,FloatToStr(TopDepth));
+  end;
+finally
+Litholog.EnableControls;
+IsFiltered:=True;
+Table.AfterScroll:=TableScroll;
+Table.EnableControls;
+ElasticTable.EnableControls;
+StatusBar1.Panels[0].Text:='Ready';
+StatusBar1.Refresh;
+end;
+end;
+
+procedure TCalculationForm.UndoFilter1Click(Sender: TObject);
+var
+i:integer;
+begin
+if not IsFiltered then Exit;
+if Table.IsEmpty then Exit;
+StatusBar1.Panels[0].Text:='Undoing filter, please wait...';
+StatusBar1.Refresh;
+Table.DisableControls;
+Table.AfterScroll:=nil;
+ElasticTable.DisableControls;
+LithoLog.DisableControls;
+Table.Filtered:=True;
+Table.Filter:='';
+Table.First;
+TopDepth:=Table.Fields[1].Value;
+FirstDepth:=Table.Fields[1].Value;
+Table.Last;
+BottomDepth:=Table.Fields[1].Value;
+LastDepth:=Table.Fields[1].Value;
+if ElasticTable.IsEmpty=True then
+  begin
+    for i:=1 to Tags do
+      begin
+        Charts[i].RefreshData;
+        Charts[i].Axes.Top.Items.Clear;
+        if Charts[i].Series[0].MinXValue<>0 then
+          begin
+            SetRoundMode(rmDown);
+            Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MinXValue)));
+            SetRoundMode(rmNearest);
+            XMIN:=RoundTo(Charts[i].Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+          end
+        else
+          XMIN:=0;
+        if Charts[i].Series[0].MaxXValue<>0 then
+          begin
+            SetRoundMode(rmUp);
+            Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MaxXValue)));
+            SetRoundMode(rmNearest);
+            XMAX:=RoundTo(Charts[i].Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+          end
+        else
+          XMAX:=0;
+        Charts[i].TopAxis.SetMinMax(XMIN,XMAX);
+        Charts[i].Axes.Top.Items.Add(XMIN);
+        Charts[i].Axes.Top.Items.Add(XMAX);
+        Charts[i].Axes.Top.Items[0].Value:=XMIN;
+        Charts[i].Axes.Top.Items[Charts[i].Axes.Top.Items.Count-1].Value:=XMAX;
+      end;
+  end
+else
+  begin
+    ElasticTable.Filtered:=True;
+    ElasticTable.Filter:='';
+    for i:=1 to (Tags+13) do
+      begin
+        Charts[i].RefreshData;
+        Charts[i].Axes.Top.Items.Clear;
+        if Charts[i].Series[0].MinXValue<>0 then
+          begin
+            SetRoundMode(rmDown);
+            Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MinXValue)));
+            SetRoundMode(rmNearest);
+            XMIN:=RoundTo(Charts[i].Series[0].MinXValue-Power(10,Round_Points-1),Round_Points-1);
+          end
+        else
+          XMIN:=0;
+        if Charts[i].Series[0].MaxXValue<>0 then
+          begin
+            SetRoundMode(rmUp);
+            Round_Points:=Round(Log10(ABS(Charts[i].Series[0].MaxXValue)));
+            SetRoundMode(rmNearest);
+            XMAX:=RoundTo(Charts[i].Series[0].MaxXValue+Power(10,Round_Points-1),Round_Points-1);
+          end
+        else
+          XMAX:=0;
+        Charts[i].TopAxis.SetMinMax(XMIN,XMAX);
+        Charts[i].Axes.Top.Items.Add(XMIN);
+        Charts[i].Axes.Top.Items.Add(XMAX);
+        Charts[i].Axes.Top.Items[0].Value:=XMIN;
+        Charts[i].Axes.Top.Items[Charts[i].Axes.Top.Items.Count-1].Value:=XMAX;
+      end;
+  end;
+DBChart8.RefreshData;
+LithoLog.Open;
+//LithoLog.Filtered:=False;
+Litholog.First;
+image1.Canvas.Brush.Color:=clwhite;
+image1.Canvas.Brush.Style:=bssolid;
+Image1.Canvas.FillRect(Rect(0,0,40,Image1.Height));
+while not Litholog.Eof do
+  begin
+    LithologLithologyChange(LithologLithology);
+    LithoLog.Next;
+  end;
+IsFiltered:=False;
+Table.AfterScroll:=TableScroll;
+Table.EnableControls;
+ElasticTable.EnableControls;
+LithoLog.EnableControls;
+StatusBar1.Panels[0].Text:='Ready';
+StatusBar1.Refresh;
+end;
+
+procedure TCalculationForm.sButton1Click(Sender: TObject);
+begin
+Filter1Click(Self);
+end;
+
+procedure TCalculationForm.sButton2Click(Sender: TObject);
+begin
+UndoFilter1Click(Self);
+end;
+
+procedure TCalculationForm.sButton3Click(Sender: TObject);
+begin
+if Table.Exists then
+begin
+ColumnConfiguration:=TColumnConfiguration.Create(Self);
+ColumnConfiguration.ShowModal;
+ColumnConfiguration.Free;
+end;
+end;
+
+procedure TCalculationForm.Printtracks1Click(Sender: TObject);
+begin
+if Table.IsEmpty=False then
+begin
+ChartPrintP:=TChartPrintP.Create(Self);
+ChartPrintP.ShowModal;
+ChartPrintP.Free;
+end;
+end;
+
+procedure TCalculationForm.ElasticCorrelations1Click(Sender: TObject);
+begin
+if Table.IsEmpty=False then
+  begin
+    DGSelection:=TDGSelection.Create(Self);
+    DGSelection.ShowModal;
+  end;
+end;
+
+procedure TCalculationForm.Zooming( Sender: TObject);
+begin
+  with Sender as TDBChart do
+    begin
+      SaveChartToFile(TCustomChart(Sender),'tempchart',True);
+      ZoomChart:=TZoomChart.Create(Self);
+      ZoomChart.DBChart1.LeftAxis.Visible:=True;
+      ZoomChart.DBChart1.LeftAxis.Title.Caption:=DBChart8.LeftAxis.Title.Caption;
+      ZoomChart.DBChart1.Legend.Visible:=True;
+      ZoomChart.DBChart1.Legend.CheckBoxes:=True;
+      ZoomChart.X0:=TCustomChart(Sender).Zoom.X0;
+      ZoomChart.Y0:=TCustomChart(Sender).Zoom.Y0;
+      ZoomChart.X1:=TCustomChart(Sender).Zoom.X1;
+      ZoomChart.Y1:=TCustomChart(Sender).Zoom.Y1;
+      TCustomChart(Sender).UndoZoom;
+      ZoomChart.Show;
+    end;
+end;
+
+procedure TCalculationForm.LithologBottomDepthChange(Sender: TField);
+begin
+if not (LithoLog.FieldValues['BottomDepth']>LastDepth) then
+  FirstDepth:=LithoLog.FieldValues['BottomDepth'];
+end;
+
+procedure TCalculationForm.LithologTopDepthChange(Sender: TField);
+begin
+LithoLog.FieldByName('BottomDepth').FocusControl;
+end;
+
+procedure TCalculationForm.DBGrid3ColEnter(Sender: TObject);
+begin
+LithoLog.Edit;
+if DBGrid3.SelectedIndex=1 then
+ if  FirstDepth<LastDepth then
+  LithoLog.FieldValues['TopDepth']:=FirstDepth;
+end;
+
+procedure TCalculationForm.LithologAfterInsert(DataSet: TDataSet);
+begin
+if FirstDepth=LastDepth then
+  begin
+    LithoLog.Cancel;
+  end;
+end;
+
+procedure TCalculationForm.DBNavigator1Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+  if Button=nbInsert then
+    begin
+      LithoLog.DisableControls;
+      LithoLog.Prior;
+      FirstDepth:=LithoLog.FieldValues['BottomDepth'];
+      LithoLog.Next;
+      LithoLog.Insert;
+      LithoLog.FieldValues['TopDepth']:=FirstDepth;
+      LithoLog.EnableControls;
+      LithoLog.Fields[1].FocusControl;
+      LithoLog.Edit;
+      InsertedRecord:=True;
+    end;
+  if Button=nbDelete then
+    begin
+      LithoLog.DisableControls;
+      FirstDepth:=LithoLog.FieldValues['TopDepth'];
+      LithoLog.Prior;
+      LithoLog.Edit;
+      LithoLog.FieldValues['BottomDepth']:=FirstDepth;
+      LithologLithologyChange(LithologLithology);
+      LithoLog.EnableControls;
+    end;
+end;
+
+procedure TCalculationForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+if NewHeight<Height then
+Resize:=False;
+if NewWidth<Width then
+Resize:=False;
+end;
+
+procedure TCalculationForm.Lapse1Click(Sender: TObject);
+begin
+TLapse:=TTLapse.Create(Self);
+TLapse.ShowModal;
+TLapse.Free;
+end;
+
+procedure TCalculationForm.N3Click(Sender: TObject);
+begin
+CrossPlots:=TCrossPlots.Create(Self);
+CrossPlots.Show;
+end;
+
+procedure TCalculationForm.Scale1Click(Sender: TObject);
+var
+i,j,mppp:integer;
+Scale_Value:String;
+Clicked_Ok:Boolean;
+Conversion_Unit:Real;
+begin
+  Scale_Value:=FloatToStr(Log_Scale);
+  Clicked_Ok:=InputQuery('Scale value', 'Please enter the scale value:', Scale_Value);
+  if Clicked_Ok then
+    begin
+      Log_Scale:=StrToFloat(Scale_Value);
+      if DepthSystem='ft' then
+        begin
+          Conversion_Unit:=1152;
+        end;
+      if DepthSystem='m' then
+        begin
+          Conversion_Unit:=3779.527559055;
+        end;
+      mppp:=Round(Log_Scale/StrToFloat(Edit5.Text)*(Charts[1].ChartRect.Bottom-Charts[1].ChartRect.Top)/Conversion_Unit);
+      for i:=1 to Table.FieldDefs.Count-3 do
+        begin
+          Charts[i].MaxPointsPerPage:=mppp;
+          Charts[i].ScaleLastPage:=False;
+          Charts[i].AllowPanning:=pmVertical;
+        end;
+      if ElasticTable.IsEmpty=False then
+        begin
+          for j:=i to (i+ElasticTable.FieldDefs.Count-4) do
+            begin
+              Charts[j].MaxPointsPerPage:=mppp;
+              Charts[j].ScaleLastPage:=False;
+              Charts[j].AllowPanning:=pmVertical;
+            end;
+        end;
+//      DBChart8.MaxPointsPerPage:=mppp;
+//      DBChart8.ScaleLastPage:=False;
+//      DBChart8.AllowPanning:=pmVertical;
+      if not Scaled then
+        begin
+          Paging:=Tpaging.Create(Self);
+          Paging.Show;
+        end;
+      Scaled:=True;
+    end;
+end;
+
+procedure TCalculationForm.NoScale1Click(Sender: TObject);
+var
+i,j:integer;
+begin
+  for i:=1 to Table.FieldDefs.Count-3 do
+    begin
+      Charts[i].MaxPointsPerPage:=0;
+      Charts[i].AllowPanning:=pmNone;
+    end;
+  if ElasticTable.IsEmpty=False then
+    begin
+      for j:=i to (i+ElasticTable.FieldDefs.Count-4) do
+        begin
+          Charts[j].MaxPointsPerPage:=0;
+          Charts[j].AllowPanning:=pmNone;
+        end;
+    end;
+//  DBChart8.MaxPointsPerPage:=0;
+//  DBChart8.AllowPanning:=pmNone;
+  if Scaled then
+    begin
+      Paging.Free;
+      Scaled:=False;
+    end;
+end;
+
+end.

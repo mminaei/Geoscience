@@ -1,0 +1,2446 @@
+unit LoadForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, ComCtrls, Grids, Math, ExtActns, DB,
+  DBTables, StrUtils;
+
+type
+  TLoad_Form = class(TForm)
+    Panel1: TPanel;
+    Button3: TButton;
+    Button4: TButton;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    GroupBox2: TGroupBox;
+    Edit1: TEdit;
+    Memo1: TMemo;
+    Label10: TLabel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    ComboBox1: TComboBox;
+    ComboBox2: TComboBox;
+    ComboBox3: TComboBox;
+    ComboBox4: TComboBox;
+    ComboBox5: TComboBox;
+    ComboBox6: TComboBox;
+    ComboBox7: TComboBox;
+    ComboBox8: TComboBox;
+    ComboBox9: TComboBox;
+    StringGrid1: TStringGrid;
+    GroupBox3: TGroupBox;
+    Button2: TButton;
+    GroupBox4: TGroupBox;
+    Button5: TButton;
+    Edit6: TEdit;
+    Memo2: TMemo;
+    GroupBox5: TGroupBox;
+    ComboBox10: TComboBox;
+    Label11: TLabel;
+    Label12: TLabel;
+    Edit2: TEdit;
+    Edit4: TEdit;
+    Label14: TLabel;
+    Label13: TLabel;
+    Edit3: TEdit;
+    Edit5: TEdit;
+    Label15: TLabel;
+    Label16: TLabel;
+    GroupBox6: TGroupBox;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    ComboBox11: TComboBox;
+    ComboBox12: TComboBox;
+    ComboBox13: TComboBox;
+    ComboBox14: TComboBox;
+    ComboBox15: TComboBox;
+    ComboBox16: TComboBox;
+    ComboBox17: TComboBox;
+    ComboBox18: TComboBox;
+    ComboBox19: TComboBox;
+    StringGrid2: TStringGrid;
+    Button7: TButton;
+    OpenDialog1: TOpenDialog;
+    StatusBar1: TStatusBar;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    Button1: TButton;
+    ComboBox20: TComboBox;
+    Label26: TLabel;
+    ComboBox21: TComboBox;
+    Label27: TLabel;
+    procedure Button3Click(Sender: TObject);
+    procedure Fill( var Combo: TComboBox);
+    procedure FormCreate(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure ComboBox2Change(Sender: TObject);
+    procedure ComboBox3Change(Sender: TObject);
+    procedure ComboBox4Change(Sender: TObject);
+    procedure ComboBox5Change(Sender: TObject);
+    procedure ComboBox6Change(Sender: TObject);
+    procedure ComboBox7Change(Sender: TObject);
+    procedure ComboBox8Change(Sender: TObject);
+    procedure ComboBox9Change(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure ComboBox11Change(Sender: TObject);
+    procedure ComboBox12Change(Sender: TObject);
+    procedure ComboBox13Change(Sender: TObject);
+    procedure ComboBox14Change(Sender: TObject);
+    procedure ComboBox15Change(Sender: TObject);
+    procedure ComboBox16Change(Sender: TObject);
+    procedure ComboBox17Change(Sender: TObject);
+    procedure ComboBox18Change(Sender: TObject);
+    procedure ComboBox19Change(Sender: TObject);
+    procedure DeleteFiles;
+    procedure ReadLAS(File_Name: String);
+    procedure ReadASCII(File_Name: String);
+    procedure Button7Click(Sender: TObject);
+    procedure Find_GR;
+    procedure Find_BS;
+    procedure Find_CALIPER;
+    procedure Find_MSFL;
+    procedure Find_LLD;
+    procedure Find_LLS;
+    procedure Find_NPHI;
+    procedure Find_RHO;
+    procedure Find_PEF;
+    procedure Find_DT;
+    procedure Button1Click(Sender: TObject);
+    procedure ComboBox20Change(Sender: TObject);
+    procedure ComboBox21Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    Database_Opened:Boolean;
+
+    RHO_Track_Number,
+    PHI_Track_Number,
+    PEF_Track_Number,
+    NPHI_Track_Number,
+    GR_Track_Number,
+    CALI_Track_Number,
+    BS_Track_Number,
+    MSFL_Track_Number,
+    LLM_Track_Number,
+    LLD_Track_Number,
+    DT_Track_Number     :Smallint;
+
+    No_Lines_Skip,
+    No_Columns,
+    Depth_Column,
+    DepthUnitString,
+    NullValueString,
+    StepValueString,
+    Null_Value_String:string;
+    
+    { Public declarations }
+  end;
+
+  TLASFile = class(TObject)
+  private
+    { Private declarations }
+  public
+     FileName              :String ;
+     LASVersion            :ShortString ;
+     IsWrapped             :Boolean ;
+     DLMChar               :Char ;
+     StartValue            :Single ;
+     StopValue             :Single ;
+     StepValue             :Single ;
+     NullValue             :Single;
+     DepthUnit             :ShortString ;
+     NoTracks              :Byte;
+     NoColumns             :Integer;
+     NoLinesPerDepth       :Shortint;
+     NoRecords             :Integer;
+     DataStartLineNo       :Integer;
+     Properties            :TTable;
+     Values                :TTable;
+    { Public declarations }
+  end;
+
+var
+  Load_Form: TLoad_Form;
+  OpenedFile :TLASFile;
+
+implementation
+
+uses FirstForm, Main_Form2;
+
+{$R *.dfm}
+
+procedure TLoad_Form.Button3Click(Sender: TObject);
+begin
+  Close;
+  First_Form.Visible:=True;
+end;
+
+procedure TLoad_Form.Fill( var Combo: TComboBox);
+var
+i:integer;
+begin
+  Combo.Items.Clear;
+  for i:=0 to OpenedFile.Values.FieldDefs.Count-1 do
+    begin
+      Combo.Items.Add(OpenedFile.Values.FieldDefs[i].Name);
+    end;
+  Combo.ItemIndex:=-1;
+  Combo.Text:='';
+end;
+
+procedure TLoad_Form.FormCreate(Sender: TObject);
+begin
+  StringGrid1.Cells[0,0]:='Minimum Value';
+  StringGrid1.Cells[1,0]:='Maximum Value';
+  Database_Opened:=False;
+end;
+
+procedure TLoad_Form.Button4Click(Sender: TObject);
+var
+i:integer;
+begin
+if PageControl1.TabIndex=1 then
+  begin
+  with MainForm2 do
+    begin
+      BS_Track_Number:=ComboBox11.ItemIndex;
+      CALI_Track_Number:=ComboBox12.ItemIndex;
+      GR_Track_Number:=ComboBox13.ItemIndex;
+      MSFL_Track_Number:=ComboBox14.ItemIndex;
+      LLM_Track_Number:=ComboBox15.ItemIndex;
+      LLD_Track_Number:=ComboBox16.ItemIndex;
+      RHO_Track_Number:=ComboBox17.ItemIndex;
+      NPHI_Track_Number:=ComboBox18.ItemIndex;
+      PEF_Track_Number:=ComboBox19.ItemIndex;
+      DT_Track_Number:=ComboBox21.ItemIndex;
+
+      with OpenedFile do
+        begin
+          if GR_Track_Number<>-1 then
+            begin
+              DBChart1.Series[0].XValues.ValueSource:=Values.FieldDefs[GR_Track_Number].Name;
+              DBChart1.Series[0].XValues.Name:=Values.FieldDefs[GR_Track_Number].Name;
+              Properties.First;
+              for i:=0 to GR_Track_Number-1 do
+                Properties.Next;
+              DBChart5.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart1.Series[0].XValues.ValueSource:='';
+              DBChart1.Series[0].XValues.Name:='';
+              DBChart5.CustomAxes[0].Title.Caption :='[GR]';
+            end;
+
+          if CALI_Track_Number<>-1 then
+            begin
+              DBChart1.Series[1].XValues.ValueSource:=Values.FieldDefs[CALI_Track_Number].Name;
+              DBChart1.Series[1].XValues.Name:=Values.FieldDefs[CALI_Track_Number].Name;
+              Properties.First;
+              for i:=0 to CALI_Track_Number-1 do
+                Properties.Next;
+              DBChart5.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart1.Series[1].XValues.ValueSource:='';
+              DBChart1.Series[1].XValues.Name:='';
+              DBChart5.CustomAxes[1].Title.Caption :='[CALIPER]';
+            end;
+
+          if BS_Track_Number<>-1 then
+            begin
+              DBChart1.Series[2].XValues.ValueSource:=Values.FieldDefs[BS_Track_Number].Name;
+              DBChart1.Series[2].XValues.Name:=Values.FieldDefs[BS_Track_Number].Name;
+              Properties.First;
+              for i:=0 to BS_Track_Number-1 do
+                Properties.Next;
+              DBChart5.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart1.Series[2].XValues.ValueSource:='';
+              DBChart1.Series[2].XValues.Name:='';
+              DBChart5.CustomAxes[2].Title.Caption :='[BIT SIZE]';
+            end;
+
+          if MSFL_Track_Number<>-1 then
+            begin
+              DBChart3.Series[0].XValues.ValueSource:=Values.FieldDefs[MSFL_Track_Number].Name;
+              DBChart3.Series[0].XValues.Name:=Values.FieldDefs[MSFL_Track_Number].Name;
+              Properties.First;
+              for i:=0 to MSFL_Track_Number-1 do
+                Properties.Next;
+              DBChart7.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart3.Series[0].XValues.ValueSource:='';
+              DBChart3.Series[0].XValues.Name:='';
+              DBChart7.CustomAxes[0].Title.Caption :='[MSFL]';
+            end;
+
+          if LLM_Track_Number<>-1 then
+            begin
+              DBChart3.Series[1].XValues.ValueSource:=Values.FieldDefs[LLM_Track_Number].Name;
+              DBChart3.Series[1].XValues.Name:=Values.FieldDefs[LLM_Track_Number].Name;
+              Properties.First;
+              for i:=0 to LLM_Track_Number-1 do
+                Properties.Next;
+              DBChart7.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart3.Series[1].XValues.ValueSource:='';
+              DBChart3.Series[1].XValues.Name:='';
+              DBChart7.CustomAxes[1].Title.Caption :='[LLM]';
+            end;
+
+          if LLD_Track_Number<>-1 then
+            begin
+              DBChart7.Series[2].XValues.ValueSource:=Values.FieldDefs[LLD_Track_Number].Name;
+              DBChart7.Series[2].XValues.Name:=Values.FieldDefs[LLD_Track_Number].Name;
+              Properties.First;
+              for i:=0 to LLD_Track_Number-1 do
+                Properties.Next;
+              DBChart7.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart3.Series[2].XValues.ValueSource:='';
+              DBChart3.Series[2].XValues.Name:='';
+              DBChart7.CustomAxes[2].Title.Caption :='[LLD]';
+            end;
+
+          if RHO_Track_Number<>-1 then
+            begin
+              DBChart4.Series[0].XValues.ValueSource:=Values.FieldDefs[RHO_Track_Number].Name;
+              DBChart4.Series[0].XValues.Name:=Values.FieldDefs[RHO_Track_Number].Name;
+              Properties.First;
+              for i:=0 to RHO_Track_Number-1 do
+                Properties.Next;
+              DBChart8.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart4.Series[0].XValues.ValueSource:='';
+              DBChart4.Series[0].XValues.Name:='';
+              DBChart8.CustomAxes[0].Title.Caption :='[RHO]';
+            end;
+
+          if NPHI_Track_Number<>-1 then
+            begin
+              DBChart4.Series[1].XValues.ValueSource:=Values.FieldDefs[NPHI_Track_Number].Name;
+              DBChart4.Series[1].XValues.Name:=Values.FieldDefs[NPHI_Track_Number].Name;
+              Properties.First;
+              for i:=0 to NPHI_Track_Number-1 do
+                Properties.Next;
+              DBChart8.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart4.Series[1].XValues.ValueSource:='';
+              DBChart4.Series[1].XValues.Name:='';
+              DBChart8.CustomAxes[1].Title.Caption :='[NPHI]';
+            end;
+
+          if PEF_Track_Number<>-1 then
+            begin
+              DBChart4.Series[2].XValues.ValueSource:=Values.FieldDefs[PEF_Track_Number].Name;
+              DBChart4.Series[2].XValues.Name:=Values.FieldDefs[PEF_Track_Number].Name;
+              Properties.First;
+              for i:=0 to PEF_Track_Number-1 do
+                Properties.Next;
+              DBChart8.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart4.Series[2].XValues.ValueSource:='';
+              DBChart4.Series[2].XValues.Name:='';
+              DBChart8.CustomAxes[2].Title.Caption :='[PEF]';
+            end;
+
+          if DT_Track_Number<>-1 then
+            begin
+              DBChart4.Series[3].XValues.ValueSource:=Values.FieldDefs[DT_Track_Number].Name;
+              DBChart4.Series[3].XValues.Name:=Values.FieldDefs[DT_Track_Number].Name;
+              Properties.First;
+              for i:=0 to DT_Track_Number-1 do
+                Properties.Next;
+              DBChart8.CustomAxes[3].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart4.Series[3].XValues.ValueSource:='';
+              DBChart4.Series[3].XValues.Name:='';
+              DBChart8.CustomAxes[3].Title.Caption :='[DT]';
+            end;
+
+        end;
+    end;
+  end
+else
+  begin
+  with MainForm2 do
+    begin
+      BS_Track_Number:=ComboBox1.ItemIndex;
+      CALI_Track_Number:=ComboBox2.ItemIndex;
+      GR_Track_Number:=ComboBox3.ItemIndex;
+      MSFL_Track_Number:=ComboBox4.ItemIndex;
+      LLM_Track_Number:=ComboBox5.ItemIndex;
+      LLD_Track_Number:=ComboBox6.ItemIndex;
+      RHO_Track_Number:=ComboBox7.ItemIndex;
+      NPHI_Track_Number:=ComboBox8.ItemIndex;
+      PEF_Track_Number:=ComboBox9.ItemIndex;
+      DT_Track_Number:=ComboBox20.ItemIndex;
+
+      with OpenedFile do
+        begin
+          if GR_Track_Number<>-1 then
+            begin
+              DBChart1.Series[0].XValues.ValueSource:=Values.FieldDefs[GR_Track_Number].Name;
+              DBChart1.Series[0].XValues.Name:=Values.FieldDefs[GR_Track_Number].Name;
+              Properties.First;
+              for i:=0 to GR_Track_Number-1 do
+                Properties.Next;
+              DBChart5.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart1.Series[0].XValues.ValueSource:='';
+              DBChart1.Series[0].XValues.Name:='';
+              DBChart5.CustomAxes[0].Title.Caption :='[GR]';
+            end;
+
+          if CALI_Track_Number<>-1 then
+            begin
+              DBChart1.Series[1].XValues.ValueSource:=Values.FieldDefs[CALI_Track_Number].Name;
+              DBChart1.Series[1].XValues.Name:=Values.FieldDefs[CALI_Track_Number].Name;
+              Properties.First;
+              for i:=0 to CALI_Track_Number-1 do
+                Properties.Next;
+              DBChart5.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart1.Series[1].XValues.ValueSource:='';
+              DBChart1.Series[1].XValues.Name:='';
+              DBChart5.CustomAxes[1].Title.Caption :='[CALIPER]';
+            end;
+
+          if BS_Track_Number<>-1 then
+            begin
+              DBChart1.Series[2].XValues.ValueSource:=Values.FieldDefs[BS_Track_Number].Name;
+              DBChart1.Series[2].XValues.Name:=Values.FieldDefs[BS_Track_Number].Name;
+              Properties.First;
+              for i:=0 to BS_Track_Number-1 do
+                Properties.Next;
+              DBChart5.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart1.Series[2].XValues.ValueSource:='';
+              DBChart1.Series[2].XValues.Name:='';
+              DBChart5.CustomAxes[2].Title.Caption :='[BIT SIZE]';
+            end;
+
+          if MSFL_Track_Number<>-1 then
+            begin
+              DBChart3.Series[0].XValues.ValueSource:=Values.FieldDefs[MSFL_Track_Number].Name;
+              DBChart3.Series[0].XValues.Name:=Values.FieldDefs[MSFL_Track_Number].Name;
+              Properties.First;
+              for i:=0 to MSFL_Track_Number-1 do
+                Properties.Next;
+              DBChart7.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart3.Series[0].XValues.ValueSource:='';
+              DBChart3.Series[0].XValues.Name:='';
+              DBChart7.CustomAxes[0].Title.Caption :='[MSFL]';
+            end;
+
+          if LLM_Track_Number<>-1 then
+            begin
+              DBChart3.Series[1].XValues.ValueSource:=Values.FieldDefs[LLM_Track_Number].Name;
+              DBChart3.Series[1].XValues.Name:=Values.FieldDefs[LLM_Track_Number].Name;
+              Properties.First;
+              for i:=0 to LLM_Track_Number-1 do
+                Properties.Next;
+              DBChart7.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart3.Series[1].XValues.ValueSource:='';
+              DBChart3.Series[1].XValues.Name:='';
+              DBChart7.CustomAxes[1].Title.Caption :='[LLM]';
+            end;
+
+          if LLD_Track_Number<>-1 then
+            begin
+              DBChart7.Series[2].XValues.ValueSource:=Values.FieldDefs[LLD_Track_Number].Name;
+              DBChart7.Series[2].XValues.Name:=Values.FieldDefs[LLD_Track_Number].Name;
+              Properties.First;
+              for i:=0 to LLD_Track_Number-1 do
+                Properties.Next;
+              DBChart7.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart3.Series[2].XValues.ValueSource:='';
+              DBChart3.Series[2].XValues.Name:='';
+              DBChart7.CustomAxes[2].Title.Caption :='[LLD]';
+            end;
+
+          if RHO_Track_Number<>-1 then
+            begin
+              DBChart4.Series[0].XValues.ValueSource:=Values.FieldDefs[RHO_Track_Number].Name;
+              DBChart4.Series[0].XValues.Name:=Values.FieldDefs[RHO_Track_Number].Name;
+              Properties.First;
+              for i:=0 to RHO_Track_Number-1 do
+                Properties.Next;
+              DBChart8.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart4.Series[0].XValues.ValueSource:='';
+              DBChart4.Series[0].XValues.Name:='';
+              DBChart8.CustomAxes[0].Title.Caption :='[RHO]';
+            end;
+
+          if NPHI_Track_Number<>-1 then
+            begin
+              DBChart4.Series[1].XValues.ValueSource:=Values.FieldDefs[NPHI_Track_Number].Name;
+              DBChart4.Series[1].XValues.Name:=Values.FieldDefs[NPHI_Track_Number].Name;
+              Properties.First;
+              for i:=0 to NPHI_Track_Number-1 do
+                Properties.Next;
+              DBChart8.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart4.Series[1].XValues.ValueSource:='';
+              DBChart4.Series[1].XValues.Name:='';
+              DBChart8.CustomAxes[1].Title.Caption :='[NPHI]';
+            end;
+
+          if PEF_Track_Number<>-1 then
+            begin
+              DBChart4.Series[2].XValues.ValueSource:=Values.FieldDefs[PEF_Track_Number].Name;
+              DBChart4.Series[2].XValues.Name:=Values.FieldDefs[PEF_Track_Number].Name;
+              Properties.First;
+              for i:=0 to PEF_Track_Number-1 do
+                Properties.Next;
+              DBChart8.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart4.Series[2].XValues.ValueSource:='';
+              DBChart4.Series[2].XValues.Name:='';
+              DBChart8.CustomAxes[2].Title.Caption :='[PEF]';
+            end;
+
+          if DT_Track_Number<>-1 then
+            begin
+              DBChart4.Series[3].XValues.ValueSource:=Values.FieldDefs[DT_Track_Number].Name;
+              DBChart4.Series[3].XValues.Name:=Values.FieldDefs[DT_Track_Number].Name;
+              Properties.First;
+              for i:=0 to DT_Track_Number-1 do
+                Properties.Next;
+              DBChart8.CustomAxes[3].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+            end
+          else
+            begin
+              DBChart4.Series[3].XValues.ValueSource:='';
+              DBChart4.Series[3].XValues.Name:='';
+              DBChart8.CustomAxes[3].Title.Caption :='[DT]';
+            end;
+
+        end;
+    end;
+  end;
+  Close;
+  First_Form.Visible:=True;
+end;
+
+procedure TLoad_Form.ComboBox1Change(Sender: TObject);
+begin
+      BS_Track_Number:=ComboBox1.ItemIndex;
+      if BS_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart1.Series[2].XValues.ValueSource:=OpenedFile.Values.FieldDefs[BS_Track_Number].Name;
+          MainForm2.DBChart1.Series[2].XValues.Name:=OpenedFile.Values.FieldDefs[BS_Track_Number].Name;
+          StringGrid1.Cells[0,1]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[2].MinXValue, -4));
+          StringGrid1.Cells[1,1]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[2].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,1]:='0';
+          StringGrid1.Cells[1,1]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox2Change(Sender: TObject);
+begin
+      CALI_Track_Number:=ComboBox2.ItemIndex;
+      if CALI_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart1.Series[1].XValues.ValueSource:=OpenedFile.Values.FieldDefs[CALI_Track_Number].Name;
+          MainForm2.DBChart1.Series[1].XValues.Name:=OpenedFile.Values.FieldDefs[CALI_Track_Number].Name;
+          StringGrid1.Cells[0,2]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[1].MinXValue, -4));
+          StringGrid1.Cells[1,2]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[1].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,2]:='0';
+          StringGrid1.Cells[1,2]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox3Change(Sender: TObject);
+begin
+      GR_Track_Number:=ComboBox3.ItemIndex;
+      if GR_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart1.Series[0].XValues.ValueSource:=OpenedFile.Values.FieldDefs[GR_Track_Number].Name;
+          MainForm2.DBChart1.Series[0].XValues.Name:=OpenedFile.Values.FieldDefs[GR_Track_Number].Name;
+          StringGrid1.Cells[0,3]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[0].MinXValue, -4));
+          StringGrid1.Cells[1,3]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[0].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,3]:='0';
+          StringGrid1.Cells[1,3]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox4Change(Sender: TObject);
+begin
+      MSFL_Track_Number:=ComboBox4.ItemIndex;
+      if MSFL_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart3.Series[0].XValues.ValueSource:=OpenedFile.Values.FieldDefs[MSFL_Track_Number].Name;
+          MainForm2.DBChart3.Series[0].XValues.Name:=OpenedFile.Values.FieldDefs[MSFL_Track_Number].Name;
+          StringGrid1.Cells[0,4]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[0].MinXValue, -4));
+          StringGrid1.Cells[1,4]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[0].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,4]:='0';
+          StringGrid1.Cells[1,4]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox5Change(Sender: TObject);
+begin
+      LLM_Track_Number:=ComboBox5.ItemIndex;
+      if LLM_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart3.Series[1].XValues.ValueSource:=OpenedFile.Values.FieldDefs[LLM_Track_Number].Name;
+          MainForm2.DBChart3.Series[1].XValues.Name:=OpenedFile.Values.FieldDefs[LLM_Track_Number].Name;
+          StringGrid1.Cells[0,5]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[1].MinXValue, -4));
+          StringGrid1.Cells[1,5]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[1].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,5]:='0';
+          StringGrid1.Cells[1,5]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox6Change(Sender: TObject);
+begin
+      LLD_Track_Number:=ComboBox6.ItemIndex;
+      if LLD_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart3.Series[2].XValues.ValueSource:=OpenedFile.Values.FieldDefs[LLD_Track_Number].Name;
+          MainForm2.DBChart3.Series[2].XValues.Name:=OpenedFile.Values.FieldDefs[LLD_Track_Number].Name;
+          StringGrid1.Cells[0,6]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[2].MinXValue, -4));
+          StringGrid1.Cells[1,6]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[2].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,6]:='0';
+          StringGrid1.Cells[1,6]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox7Change(Sender: TObject);
+begin
+      RHO_Track_Number:=ComboBox7.ItemIndex;
+      if RHO_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart4.Series[0].XValues.ValueSource:=OpenedFile.Values.FieldDefs[RHO_Track_Number].Name;
+          MainForm2.DBChart4.Series[0].XValues.Name:=OpenedFile.Values.FieldDefs[RHO_Track_Number].Name;
+          StringGrid1.Cells[0,7]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[0].MinXValue, -4));
+          StringGrid1.Cells[1,7]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[0].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,7]:='0';
+          StringGrid1.Cells[1,7]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox8Change(Sender: TObject);
+begin
+      NPHI_Track_Number:=ComboBox8.ItemIndex;
+      if NPHI_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart4.Series[1].XValues.ValueSource:=OpenedFile.Values.FieldDefs[NPHI_Track_Number].Name;
+          MainForm2.DBChart4.Series[1].XValues.Name:=OpenedFile.Values.FieldDefs[NPHI_Track_Number].Name;
+          StringGrid1.Cells[0,8]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[1].MinXValue, -4));
+          StringGrid1.Cells[1,8]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[1].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,8]:='0';
+          StringGrid1.Cells[1,8]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox9Change(Sender: TObject);
+begin
+      PEF_Track_Number:=ComboBox9.ItemIndex;
+      if PEF_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart4.Series[2].XValues.ValueSource:=OpenedFile.Values.FieldDefs[PEF_Track_Number].Name;
+          MainForm2.DBChart4.Series[2].XValues.Name:=OpenedFile.Values.FieldDefs[PEF_Track_Number].Name;
+          StringGrid1.Cells[0,9]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[2].MinXValue, -4));
+          StringGrid1.Cells[1,9]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[2].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,9]:='0';
+          StringGrid1.Cells[1,9]:='0';
+        end;
+end;
+
+procedure TLoad_Form.Button2Click(Sender: TObject);
+var
+P : integer;
+Pat, Path: string;
+Execute_File:TFileRun;
+begin
+  Pat:=Application.ExeName;
+  P:=Pos('PetroEval.exe',Pat);
+  if P=0 then
+    P:=Pos('PETROEVAL.EXE',Pat);
+  Path := Copy(Pat, 1, P - 1);
+  ChDir(Path);
+  Execute_File:=TFileRun.Create(Self);
+  Execute_File.FileName:='dlisconverter.exe';
+  if not Execute_File.Execute then
+    begin
+      MessageDlg('Specified module not found. Please reinstall the program.', mtError, [mbOk],0);
+    end;
+  Execute_File.Free;
+end;
+
+procedure TLoad_Form.Button5Click(Sender: TObject);
+begin
+      with OpenDialog1 do
+        begin
+          DefaultExt:='TXT';
+          Filter:='Text files|*.txt';
+          Title:='Open Text files';
+        end;
+      if OpenDialog1.Execute then
+        begin
+          Edit6.Text:=OpenDialog1.FileName;
+          Memo2.Lines.LoadFromFile(OpenDialog1.FileName);
+        end;
+end;
+
+procedure TLoad_Form.ComboBox11Change(Sender: TObject);
+begin
+      BS_Track_Number:=ComboBox11.ItemIndex;
+      if BS_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart1.Series[2].XValues.ValueSource:=OpenedFile.Values.FieldDefs[BS_Track_Number].Name;
+          MainForm2.DBChart1.Series[2].XValues.Name:=OpenedFile.Values.FieldDefs[BS_Track_Number].Name;
+          StringGrid2.Cells[0,1]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[2].MinXValue, -4));
+          StringGrid2.Cells[1,1]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[2].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,1]:='0';
+          StringGrid2.Cells[1,1]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox12Change(Sender: TObject);
+begin
+      CALI_Track_Number:=ComboBox12.ItemIndex;
+      if CALI_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart1.Series[1].XValues.ValueSource:=OpenedFile.Values.FieldDefs[CALI_Track_Number].Name;
+          MainForm2.DBChart1.Series[1].XValues.Name:=OpenedFile.Values.FieldDefs[CALI_Track_Number].Name;
+          StringGrid2.Cells[0,2]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[1].MinXValue, -4));
+          StringGrid2.Cells[1,2]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[1].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,2]:='0';
+          StringGrid2.Cells[1,2]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox13Change(Sender: TObject);
+begin
+      GR_Track_Number:=ComboBox13.ItemIndex;
+      if GR_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart1.Series[0].XValues.ValueSource:=OpenedFile.Values.FieldDefs[GR_Track_Number].Name;
+          MainForm2.DBChart1.Series[0].XValues.Name:=OpenedFile.Values.FieldDefs[GR_Track_Number].Name;
+          StringGrid2.Cells[0,3]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[0].MinXValue, -4));
+          StringGrid2.Cells[1,3]:=FloatToStr(RoundTo(MainForm2.DBChart1.Series[0].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,3]:='0';
+          StringGrid2.Cells[1,3]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox14Change(Sender: TObject);
+begin
+      MSFL_Track_Number:=ComboBox14.ItemIndex;
+      if MSFL_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart3.Series[0].XValues.ValueSource:=OpenedFile.Values.FieldDefs[MSFL_Track_Number].Name;
+          MainForm2.DBChart3.Series[0].XValues.Name:=OpenedFile.Values.FieldDefs[MSFL_Track_Number].Name;
+          StringGrid2.Cells[0,4]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[0].MinXValue, -4));
+          StringGrid2.Cells[1,4]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[0].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,4]:='0';
+          StringGrid2.Cells[1,4]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox15Change(Sender: TObject);
+begin
+      LLM_Track_Number:=ComboBox15.ItemIndex;
+      if LLM_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart3.Series[1].XValues.ValueSource:=OpenedFile.Values.FieldDefs[LLM_Track_Number].Name;
+          MainForm2.DBChart3.Series[1].XValues.Name:=OpenedFile.Values.FieldDefs[LLM_Track_Number].Name;
+          StringGrid2.Cells[0,5]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[1].MinXValue, -4));
+          StringGrid2.Cells[1,5]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[1].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,5]:='0';
+          StringGrid2.Cells[1,5]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox16Change(Sender: TObject);
+begin
+      LLD_Track_Number:=ComboBox16.ItemIndex;
+      if LLD_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart3.Series[2].XValues.ValueSource:=OpenedFile.Values.FieldDefs[LLD_Track_Number].Name;
+          MainForm2.DBChart3.Series[2].XValues.Name:=OpenedFile.Values.FieldDefs[LLD_Track_Number].Name;
+          StringGrid2.Cells[0,6]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[2].MinXValue, -4));
+          StringGrid2.Cells[1,6]:=FloatToStr(RoundTo(MainForm2.DBChart3.Series[2].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,6]:='0';
+          StringGrid2.Cells[1,6]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox17Change(Sender: TObject);
+begin
+      RHO_Track_Number:=ComboBox17.ItemIndex;
+      if RHO_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart4.Series[0].XValues.ValueSource:=OpenedFile.Values.FieldDefs[RHO_Track_Number].Name;
+          MainForm2.DBChart4.Series[0].XValues.Name:=OpenedFile.Values.FieldDefs[RHO_Track_Number].Name;
+          StringGrid2.Cells[0,7]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[0].MinXValue, -4));
+          StringGrid2.Cells[1,7]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[0].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,7]:='0';
+          StringGrid2.Cells[1,7]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox18Change(Sender: TObject);
+begin
+      NPHI_Track_Number:=ComboBox18.ItemIndex;
+      if NPHI_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart4.Series[1].XValues.ValueSource:=OpenedFile.Values.FieldDefs[NPHI_Track_Number].Name;
+          MainForm2.DBChart4.Series[1].XValues.Name:=OpenedFile.Values.FieldDefs[NPHI_Track_Number].Name;
+          StringGrid2.Cells[0,8]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[1].MinXValue, -4));
+          StringGrid2.Cells[1,8]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[1].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,8]:='0';
+          StringGrid2.Cells[1,8]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox19Change(Sender: TObject);
+begin
+      PEF_Track_Number:=ComboBox19.ItemIndex;
+      if PEF_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart4.Series[2].XValues.ValueSource:=OpenedFile.Values.FieldDefs[PEF_Track_Number].Name;
+          MainForm2.DBChart4.Series[2].XValues.Name:=OpenedFile.Values.FieldDefs[PEF_Track_Number].Name;
+          StringGrid2.Cells[0,9]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[2].MinXValue, -4));
+          StringGrid2.Cells[1,9]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[2].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,9]:='0';
+          StringGrid2.Cells[1,9]:='0';
+        end;
+end;
+
+procedure TLoad_Form.DeleteFiles;
+begin
+if First_Form.MainForm2_Created then
+with MainForm2 do
+  begin
+    BS_Track_Number:=-1;
+    CALI_Track_Number:=-1;
+    GR_Track_Number:=-1;
+    MSFL_Track_Number:=-1;
+    LLM_Track_Number:=-1;
+    LLD_Track_Number:=-1;
+    RHO_Track_Number:=-1;
+    NPHI_Track_Number:=-1;
+    PEF_Track_Number:=-1;
+    DT_Track_Number:=-1;
+
+    DBChart1.Series[0].YValues.ValueSource:='';
+    DBChart1.Series[0].XValues.ValueSource:='';
+    DBChart1.Series[0].DataSource:=nil;
+
+    DBChart1.Series[1].YValues.ValueSource:='';
+    DBChart1.Series[1].XValues.ValueSource:='';
+    DBChart1.Series[1].DataSource:=nil;
+
+    DBChart1.Series[2].YValues.ValueSource:='';
+    DBChart1.Series[2].XValues.ValueSource:='';
+    DBChart1.Series[2].DataSource:=nil;
+
+    DBChart3.Series[0].YValues.ValueSource:='';
+    DBChart3.Series[0].XValues.ValueSource:='';
+    DBChart3.Series[0].DataSource:=nil;
+
+    DBChart3.Series[1].YValues.ValueSource:='';
+    DBChart3.Series[1].XValues.ValueSource:='';
+    DBChart3.Series[1].DataSource:=nil;
+
+    DBChart3.Series[2].YValues.ValueSource:='';
+    DBChart3.Series[2].XValues.ValueSource:='';
+    DBChart3.Series[2].DataSource:=nil;
+
+    DBChart4.Series[0].YValues.ValueSource:='';
+    DBChart4.Series[0].XValues.ValueSource:='';
+    DBChart4.Series[0].DataSource:=nil;
+
+    DBChart4.Series[1].YValues.ValueSource:='';
+    DBChart4.Series[1].XValues.ValueSource:='';
+    DBChart4.Series[1].DataSource:=nil;
+
+    DBChart4.Series[2].YValues.ValueSource:='';
+    DBChart4.Series[2].XValues.ValueSource:='';
+    DBChart4.Series[2].DataSource:=nil;
+
+    DBChart4.Series[3].YValues.ValueSource:='';
+    DBChart4.Series[3].XValues.ValueSource:='';
+    DBChart4.Series[3].DataSource:=nil;
+
+    DBChart9.Series[0].YValues.ValueSource:='';
+    DBChart9.Series[0].XValues.ValueSource:='';
+    DBChart9.Series[0].DataSource:=nil;
+
+    DBChart9.Series[1].YValues.ValueSource:='';
+    DBChart9.Series[1].XValues.ValueSource:='';
+    DBChart9.Series[1].DataSource:=nil;
+
+    DBChart9.Series[2].YValues.ValueSource:='';
+    DBChart9.Series[2].XValues.ValueSource:='';
+    DBChart9.Series[2].DataSource:=nil;
+
+    DBChart9.Series[3].YValues.ValueSource:='';
+    DBChart9.Series[3].XValues.ValueSource:='';
+    DBChart9.Series[3].DataSource:=nil;
+
+    DBChart9.Series[4].YValues.ValueSource:='';
+    DBChart9.Series[4].XValues.ValueSource:='';
+    DBChart9.Series[4].DataSource:=nil;
+
+    DBChart9.Series[5].YValues.ValueSource:='';
+    DBChart9.Series[5].XValues.ValueSource:='';
+    DBChart9.Series[5].DataSource:=nil;
+
+    DBChart2.Series[0].YValues.ValueSource:='';
+    DBChart2.Series[0].XValues.ValueSource:='';
+    DBChart2.Series[0].DataSource:=nil;
+
+    if Database_Opened then
+      with OpenedFile do
+        begin
+          if Properties.Exists then
+            begin
+              Properties.Close;
+              Properties.FieldDefs.Clear;
+              Properties.EmptyTable;
+              Properties.DeleteTable;
+              Properties.Free;
+            end;
+          if Values.Exists then
+            begin
+              Values.Close;
+              Values.FieldDefs.Clear;
+              Values.EmptyTable;
+              Values.DeleteTable;
+              Values.Free;
+            end;
+          if Litholog.Exists then
+            begin
+              Litholog.Close;
+              Litholog.EmptyTable;
+              Litholog.DeleteTable;
+            end;
+          Free;
+          Database_Opened:=False;
+      end;
+  end;
+end;
+
+procedure TLoad_Form.Button7Click(Sender: TObject);
+var
+i: Smallint;
+s1,s2:string;
+p1,p2:integer;
+File_Name:string;
+Temp_Value:Integer;
+ConversionUnit:Single;
+Header: TStringList;
+begin
+try
+  with OpenDialog1 do
+    begin
+      DefaultExt:='LAS';
+      Filter:='LAS files|*.LAS';
+      Title:='Open LAS files';
+    end;
+  if OpenDialog1.Execute then
+    begin
+      for i:=0 to OpenDialog1.Files.Count-1 do
+        begin
+          StatusBar1.Panels[0].Text:='Reading file data. Please wait ...';
+          Repaint;
+          DeleteFiles;
+          ConversionUnit:=0;
+          s1:=ReverseString(OpenDialog1.Files[i]);
+          p1:=Pos('\',s1);
+          s1:=ReverseString(s1);
+          p2:=Length(s1)-p1+2;
+          s2:=Copy(s1,p2,p1-5);
+          File_Name:=s2;
+          try
+            OpenedFile:=TLASFile.Create;
+            with OpenedFile do
+              begin
+                Properties:=TTable.Create(Self);
+                Properties.TableName:=File_Name+'_Prop.db';
+                Properties.FieldDefs.Add('TRACK_NAME', ftString, 10, False);
+                Properties.FieldDefs.Add('TRACK_UNIT', ftString, 7, False);
+                Properties.FieldDefs.Add('MAX_VALUE', ftFloat, 0, False);
+                Properties.FieldDefs.Add('MIN_VALUE', ftFloat, 0, False);
+                Properties.CreateTable;
+                Properties.Open;
+                Values:=TTable.Create(Self);
+                Values.TableName:=File_Name+'_Val.db';
+                MainForm2.Litholog.TableName:=File_Name+'_Lith.db';
+              end;
+
+            BS_Track_Number:=-1;
+            CALI_Track_Number:=-1;
+            GR_Track_Number:=-1;
+            MSFL_Track_Number:=-1;
+            LLM_Track_Number:=-1;
+            LLD_Track_Number:=-1;
+            RHO_Track_Number:=-1;
+            NPHI_Track_Number:=-1;
+            PEF_Track_Number:=-1;
+            DT_Track_Number:=-1;
+
+            ReadLAS(OpenDialog1.Files[i]);
+
+            File_Opened:=True;
+            with MainForm2 do
+              with OpenedFile do
+                begin
+                  Properties.First;
+                  Log_Scale:=400;
+                  if DepthUnit='FT' then
+                    begin
+                      ConversionUnit:=1152;
+                    end;
+                  if DepthUnit='F' then
+                    begin
+                      ConversionUnit:=1152;
+                    end;
+                  if DepthUnit='M' then
+                    begin
+                      ConversionUnit:=3779.527559055;
+                    end;
+                  if DepthUnit='SEC' then
+                    begin
+                      ConversionUnit:=Log_Scale;
+                    end;
+                  Temp_Value:=DBChart1.MarginBottom + DBChart1.ChartRect.Top;
+                  DBChart1.Height:=Round((Properties.Fields[2].Value - Properties.Fields[3].Value) * ConversionUnit / Log_Scale) + Temp_Value;
+                  DBChart2.Height:=DBChart1.Height;
+                  DBChart3.Height:=DBChart1.Height;
+                  DBChart4.Height:=DBChart1.Height;
+                  DBChart9.Height:=DBChart1.Height;
+
+                  DBChart2.Series[0].XValues.ValueSource:=Values.FieldDefs[0].Name;
+                  DBChart2.Series[0].XValues.Name:=Values.FieldDefs[0].Name;
+                  DBChart2.Series[0].YValues.ValueSource:=Values.FieldDefs[0].Name;
+                  DBChart2.Series[0].YValues.Name:=Values.FieldDefs[0].Name;
+                  DBChart2.Series[0].DataSource:=Values;
+                  Properties.First;
+                  DBChart6.CustomAxes[0].Title.Caption:=Properties.FieldByName('TRACK_NAME').Value + ' ('+ Properties.FieldByName('TRACK_UNIT').Value + ')';
+                  DBChart2.Axes.Left.Increment:=ABS(StepValue);
+                  DBChart2.Axes.Right.Increment:=ABS(StepValue);
+                end;
+            Find_GR;
+            Find_CALIPER;
+            Find_BS;
+            Find_MSFL;
+            Find_LLD;
+            Find_LLS;
+            Find_NPHI;
+            Find_RHO;
+            Find_PEF;
+            Find_DT;
+          except
+            MessageDlg('Error occured while reading '+#13+OpenDialog1.FileName[i], mtError, [mbOk], 0);
+            Continue;
+          end;
+        end;
+
+      Database_Opened:=True;
+
+      Edit1.Text:=OpenDialog1.FileName;
+      Memo1.Clear;
+      Header:=TStringList.Create;
+      Header.LoadFromFile(OpenDialog1.FileName);
+      for i:=0 to OpenedFile.DataStartLineNo-1 do
+        Memo1.Lines.Append(Header[i]);
+      Header.Free;
+      Fill(ComboBox1);
+      Fill(ComboBox2);
+      Fill(ComboBox3);
+      Fill(ComboBox4);
+      Fill(ComboBox5);
+      Fill(ComboBox6);
+      Fill(ComboBox7);
+      Fill(ComboBox8);
+      Fill(ComboBox9);
+      Fill(ComboBox20);
+      ComboBox1.ItemIndex:=BS_Track_Number;
+      ComboBox2.ItemIndex:=CALI_Track_Number;
+      ComboBox3.ItemIndex:=GR_Track_Number;
+      ComboBox4.ItemIndex:=MSFL_Track_Number;
+      ComboBox5.ItemIndex:=LLM_Track_Number;
+      ComboBox6.ItemIndex:=LLD_Track_Number;
+      ComboBox7.ItemIndex:=RHO_Track_Number;
+      ComboBox8.ItemIndex:=NPHI_Track_Number;
+      ComboBox9.ItemIndex:=PEF_Track_Number;
+      ComboBox20.ItemIndex:=DT_Track_Number;
+      with MainForm2 do
+        begin
+          StringGrid1.Cells[0,1]:=FloatToStr(RoundTo(DBChart1.Series[2].MinXValue, -4));
+          StringGrid1.Cells[0,2]:=FloatToStr(RoundTo(DBChart1.Series[1].MinXValue, -4));
+          StringGrid1.Cells[0,3]:=FloatToStr(RoundTo(DBChart1.Series[0].MinXValue, -4));
+          StringGrid1.Cells[0,4]:=FloatToStr(RoundTo(DBChart3.Series[0].MinXValue, -4));
+          StringGrid1.Cells[0,5]:=FloatToStr(RoundTo(DBChart3.Series[1].MinXValue, -4));
+          StringGrid1.Cells[0,6]:=FloatToStr(RoundTo(DBChart3.Series[2].MinXValue, -4));
+          StringGrid1.Cells[0,7]:=FloatToStr(RoundTo(DBChart4.Series[0].MinXValue, -4));
+          StringGrid1.Cells[0,8]:=FloatToStr(RoundTo(DBChart4.Series[1].MinXValue, -4));
+          StringGrid1.Cells[0,9]:=FloatToStr(RoundTo(DBChart4.Series[2].MinXValue, -4));
+          StringGrid1.Cells[0,10]:=FloatToStr(RoundTo(DBChart4.Series[3].MinXValue, -4));
+          StringGrid1.Cells[1,1]:=FloatToStr(RoundTo(DBChart1.Series[2].MaxXValue, -4));
+          StringGrid1.Cells[1,2]:=FloatToStr(RoundTo(DBChart1.Series[1].MaxXValue, -4));
+          StringGrid1.Cells[1,3]:=FloatToStr(RoundTo(DBChart1.Series[0].MaxXValue, -4));
+          StringGrid1.Cells[1,4]:=FloatToStr(RoundTo(DBChart3.Series[0].MaxXValue, -4));
+          StringGrid1.Cells[1,5]:=FloatToStr(RoundTo(DBChart3.Series[1].MaxXValue, -4));
+          StringGrid1.Cells[1,6]:=FloatToStr(RoundTo(DBChart3.Series[2].MaxXValue, -4));
+          StringGrid1.Cells[1,7]:=FloatToStr(RoundTo(DBChart4.Series[0].MaxXValue, -4));
+          StringGrid1.Cells[1,8]:=FloatToStr(RoundTo(DBChart4.Series[1].MaxXValue, -4));
+          StringGrid1.Cells[1,9]:=FloatToStr(RoundTo(DBChart4.Series[2].MaxXValue, -4));
+          StringGrid1.Cells[1,10]:=FloatToStr(RoundTo(DBChart4.Series[3].MaxXValue, -4));
+          StatusBar1.Panels[0].Text:='Ready';
+        end;
+    end;
+finally
+  StatusBar1.Panels[0].Text:='Ready.';
+end;
+end;
+
+procedure TLoad_Form.ReadLAS(File_Name: string);
+var
+i,j,k,m,n: integer;
+p1,p2,p3:Smallint;
+s1,s2,s3,s4:string;
+Depth_Value:Single;
+Log_Value:Single;
+OneChar: Char;
+Temp_Integer:integer;
+Int1,Int2,Int3:integer;
+NVS, LGS: String;
+begin
+with OpenedFile do
+  begin
+  try
+(********* Get file name without its complete path *)
+    s1:=ReverseString(File_Name);
+    p1:=Pos('\',s1);
+    s1:=ReverseString(s1);
+    p2:=Length(s1)-p1+2;
+    s2:=Copy(s1,p2,p1);
+    FileName:=s2;
+(**********Load file into the memory*********)
+    Lines:=TStringList.Create;
+    Lines.LoadFromFile(File_Name);
+(**********To find version number *********)
+    for i:=0 to Lines.Count-1 do
+      begin
+        s1:=Trim(Lines[i]);
+        p1:=Pos('VERS',s1);
+          if (p1<>0)then Break;
+      end;
+    j:=i;
+    s1:=(Lines[j]);
+    s1:=Trim(s1);
+    m:=Pos('.',s1);
+    n:=PosEx(':', s1, m);
+    s2:=Copy(s1,m+1,n-m-1);
+    s2:=Trim(UpperCase(s2));
+    LASVersion:=s2;
+(**********To find if it is wrapped *********)
+    for i:=j to Lines.Count-1 do
+      begin
+        s1:=(Lines[i]);
+        p1:=Pos('WRAP',s1);
+        if (p1<>0)then Break;
+      end;
+    j:=i;
+    s1:=(Lines[j]);
+    s1:=Trim(s1);
+    m:=Pos('.',s1);
+    n:=PosEx(':', s1, m);
+    s2:=Copy(s1,m+1,n-m-1);
+    s2:=Trim(UpperCase(s2));
+    if UpperCase(s2)='YES' then
+      IsWrapped:=True
+    else
+      IsWrapped:=False;
+  (********* To find DLM character *********************)
+    for i:=j to Lines.Count-1 do
+      begin
+        s1:=(Lines[i]);
+        p1:=Pos('DLM',s1);
+        p2:=Pos('~W',s1);
+        if (p1<>0)or(p2<>0) then Break;
+      end;
+    j:=i;
+    s1:=(Lines[j]);
+    s1:=Trim(s1);
+    m:=Pos('.',s1);
+    n:=PosEx(':', s1, m);
+    s2:=Copy(s1,m+1,n-m-1);
+    s2:=Trim(UpperCase(s2));
+    if s2='COMMA' then DLMChar:=','
+    else if s2='SPACE' then DLMChar:=' '
+    else if s2='TAB' then DLMChar:=#9
+    else DLMChar:=' ';
+(********* To find start value *********************)
+    for i:=j to Lines.Count-1 do
+        begin
+        s1:=(Lines[i]);
+        p1:=Pos('STRT',s1);
+        if p1<>0 then Break;
+        end;
+    j:=i;
+    s1:=Trim(Lines[j]);
+
+//  To find depth units
+    m:=Pos('.',s1);
+    s2:=Copy(s1,m+1,1);
+    DepthUnit:=UpperCase(s2);
+//
+    p3:=0;
+    p2:=0;
+    p1:=PosEx(' ',s1, m);
+    for k := p1 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+          begin
+            p2:=k;
+            Break;
+          end;
+      end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    StartValue:=StrToFloat(s2);
+(********* To find stop value *********************)
+    for i:=j to Lines.Count-1 do
+      begin
+          s1:=(Lines[i]);
+        p1:=Pos('STOP',s1);
+        if p1<>0 then Break;
+      end;
+    j:=i;
+    s1:=(Lines[j]);
+    p3:=0;
+    p2:=0;
+    m:=Pos('.',s1);
+    p1:=PosEx(' ',s1, m);
+    for k := p1 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+          begin
+            p2:=k;
+            Break;
+          end;
+      end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    StopValue:=StrToFloat(s2);
+(********* To find step value *********************)
+    for i:=j to Lines.Count-1 do
+      begin
+        s1:=(Lines[i]);
+        p1:=Pos('STEP',s1);
+        if p1<>0 then Break;
+      end;
+    j:=i;
+    s1:=Trim(Lines[j]);
+    p3:=0;
+    p2:=0;
+    m:=Pos('.',s1);
+    p1:=PosEx(' ',s1, m);
+    for k := p1 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+       if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+         begin
+           p2:=k;
+           Break;
+         end;
+     end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    StepValue:=StrToFloat(s2);
+(********* To find number of records *********************)
+    NoRecords:=Trunc(ABS((StartValue-StopValue) / StepValue)) + 1;
+(********* To find null value *********************)
+    for i:=j to Lines.Count-1 do
+      begin
+        s1:=(Lines[i]);
+        p1:=Pos('NULL',s1);
+        if p1<>0 then Break;
+      end;
+    j:=i;
+    s1:=Trim(Lines[j]);
+    p3:=0;
+    p2:=0;
+    p1:=Pos('.',s1);
+    for k := p1+1 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+          begin
+            p2:=k;
+            Break;
+          end;
+      end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    NullValue:=StrToFloat(s2);
+    NVS:=FloatToStr(NullValue);
+(*******************To find number of tracks ***********)
+    for i:=j+1 to Lines.Count-1 do
+      begin
+        s1:=Trim(Lines[i]);
+        p1:=Pos('~C',s1);
+        p2:=Pos('~LOG_DEFINITION', s1);
+        if (p1<>0)or(p2<>0) then Break;
+      end;
+    k:=i;
+    Temp_Integer:=0;
+    for j := k+1 to Lines.Count - 1 do
+      begin
+        s1:=Trim(Lines[j]);
+        if (s1<>' ')and(s1<>'') then
+          begin
+            s2:=s1[1];
+            if (s2<>'~')and(s2<>'#') then
+              begin
+                Inc(Temp_Integer);
+                s3:=Lines[j+1];
+                if (s3<>' ')and(s3<>'') then
+                  begin
+                    s4:=s3[1];
+                    if (s4='~')or(s4='#') then
+                      Break;
+                  end
+                else
+                  Break;
+              end;
+          end;
+      end;
+    NoTracks:=Temp_Integer;
+    if IsWrapped then
+      NoLinesPerDepth:=Trunc((NoTracks-1)/6)+1
+    else
+      NoLinesPerDepth:=1;
+(*******************To find tracks names and units ***********)
+    j:=k+1;
+    Properties.Edit;
+    k:=0;
+    repeat
+      try
+(* To find track name *)
+        s1:=Trim(Lines[j]);
+        if (s1<>' ')and(s1<>'') then
+          begin
+            s2:=Trim(s1[1]);
+            if (s2='#')or(s2='')or(s2='~') then
+              begin
+                Inc(j);
+                Continue;
+              end;
+          end
+        else
+          begin
+            Inc(j);
+            Continue;
+          end;
+        p1:=Pos('.', s1);
+        s2:= Copy( s1, 1, p1-1);
+        Properties.Append;
+        Properties.Fields[0].Value:=Trim(s2);
+(* to find track unit  *)
+        p1:=Pos('.', s1);
+        p2:=PosEx(' ', s1, p1);
+        s3:= Copy( s1, p1+1, p2-p1);
+        Values.FieldDefs.Add(Trim(s2)+'.'+Trim(s3), ftFloat, 0, False);
+        Properties.Fields[1].Value:=Trim(s3);
+        Properties.Fields[2].Value:=-99999999;
+        Properties.Fields[3].Value:=99999999;
+        Inc(j);
+        Inc(k);
+      except
+        on E:EdataBaseError do
+          begin
+            MessageDlg('Field '+s2+' already exists.'+#13+'Please check your file.', mtError, [mbok], 0);
+            Values.FieldDefs.Add(Trim(s2)+IntToStr(k), ftFloat, 0, False);
+            p1:=Pos('.', s1);
+            p2:=PosEx(' ', s1, p1);
+            s2:= Copy( s1, p1+1, p2-p1);
+            Properties.Fields[1].Value:=Trim(s2);
+            Properties.Fields[2].Value:=-99999999;
+            Properties.Fields[3].Value:=99999999;
+            Inc(j);
+            Inc(k);
+          end;
+      end;
+    until k=NoTracks;
+    Values.CreateTable;
+    Values.Open;
+    Properties.First;
+    for n := 0 to NoTracks-1 do
+      begin
+        s1:=Properties.FieldByName('TRACK_NAME').AsString+'.'+Properties.FieldByName('TRACK_UNIT').AsString;
+        Values.Fields[n].DisplayLabel:=s1;
+        Properties.Next;
+      end;
+    Values.Open;
+    Values.First;
+(**************** Reading file data ************************)
+    for k:=j-2 to Lines.Count-1 do
+      begin
+        s1:=Trim(Lines[k]);
+        p1:=Pos('~A',s1);
+        p2:=Pos('~LOG_DATA',s1);
+        if (p1<>0)or(p2<>0) then
+          begin
+            DataStartLineNo:=k+1;
+            Break;
+          end;
+      end;
+
+   n:=0;
+   Values.DisableControls;
+   Properties.DisableControls;
+// If the LAS file is not wrapped, version 1.1, 2 and 3
+   if not IsWrapped then
+     begin
+       for i := 0 to NoRecords-1 do
+         begin
+           s1:=Trim(Lines[DataStartLineNo+i]);
+           Properties.First;
+           p3:=1;
+           Values.Edit;
+           Values.Append;
+           for j:=0 to NoTracks-1 do
+             begin
+               for k := p3 to Length(s1) do
+                 begin
+                   OneChar:=s1[k];
+                   if not(OneChar in [DLMChar,' ']) then//['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                     begin
+                       p2:=k;
+                       Break;
+                     end;
+                 end;
+               for k := p2 to Length(s1) do
+                 begin
+                   OneChar:=s1[k];
+                   if OneChar in [DLMChar,' '] then//not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                     begin
+                       p3:=k;
+                       Break;
+                     end;
+                 end;
+               if p2>p3 then
+                 p3:=Length(s1);
+               s2:=Copy(s1,p2,p3-p2);
+               s2:=Trim(s2);
+               Log_Value:=StrToFloat(Trim(s2));
+               LGS:=FloatToStr(Log_Value);
+               if LGS<>NVS then
+                 begin
+                   Values.Fields[j].AsString:=Trim(s2);
+                   Properties.Edit;
+                   if Log_Value>Properties.Fields[2].AsFloat then
+                     Properties.Fields[2].AsFloat:=RoundTo(Log_Value, -4);
+                   if Log_Value<Properties.Fields[3].AsFloat then
+                     Properties.Fields[3].AsFloat:=RoundTo(Log_Value, -4);
+                 end
+               else
+                 Values.Fields[j].AsString:='';
+               Properties.Next;
+             end;
+         end;
+     end
+// if it is wrapped
+   else
+     begin
+       try
+         NoColumns:=0;
+         NoColumns:=StrToInt(InputBox('Number of Columns', 'Your LAS file is wrapped:'+#13+'File: '+FileName+#13+'Please enter number of columns in the file:', '0'));
+         if NoColumns=0 then
+           Exit;
+       except
+         on E:EConvertError do
+           begin
+             MessageDlg(E.Message+#13+'The program will continue with 6 columns', mtError, [MbOk], 0);
+             NoColumns:=6;
+           end;
+       end;
+       for i := 0 to NoRecords-1 do
+         begin
+           s1:=Trim(Lines[DataStartLineNo+n]);
+           Inc(n);
+           for k := 0 to Length(s1) do
+             begin
+               OneChar:=s1[k];
+               if not(OneChar in [DLMChar,' ']) then//OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                 begin
+                   p2:=k;
+                   Break;
+                 end;
+             end;
+           for k := p2 to Length(s1) do
+             begin
+               OneChar:=s1[k];
+               if OneChar in [DLMChar,' '] then//not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                 begin
+                   p3:=k;
+                   Break;
+                 end;
+             end;
+           if p2>p3 then
+             p3:=Length(s1);
+           s2:=Copy(s1,p2,p3-p2);
+           s2:=Trim(s2);
+           Log_Value:=StrToFloat(Trim(s2));
+           LGS:=FloatToStr(Log_Value);
+           Values.Edit;
+           Values.Append;
+           Values.Fields[0].AsString:=s2;
+           Properties.First;
+           Properties.Edit;
+           if LGS<>NVS then
+             begin
+               if Log_Value>Properties.Fields[2].AsFloat then
+                 Properties.Fields[2].AsFloat:=RoundTo(Log_Value, -4);
+               if Log_Value<Properties.Fields[3].AsFloat then
+                 Properties.Fields[3].AsFloat:=RoundTo(Log_Value, -4);
+             end;
+           Properties.Next;
+           for m := 1 to NoLinesPerDepth-1 do
+             begin
+               s1:=Trim(Lines[DataStartLineNo+n]);
+               Inc(n);
+               p3:=0;
+               for j:=1 to NoColumns do
+                 begin
+                   for k := p3 to Length(s1) do
+                     begin
+                       OneChar:=s1[k];
+                       if not(OneChar in [DLMChar,' ']) then//OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                         begin
+                           p2:=k;
+                           Break;
+                         end;
+                     end;
+                   for k := p2 to Length(s1) do
+                     begin
+                       OneChar:=s1[k];
+                       if OneChar in [DLMChar,' '] then//not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                         begin
+                           p3:=k;
+                           Break;
+                         end;
+                     end;
+                   if p2>p3 then
+                     p3:=Length(s1);
+                   s2:=Copy(s1,p2,p3-p2);
+                   s2:=Trim(s2);
+                   Log_Value:=StrToFloat(Trim(s2));
+                   LGS:=FloatToStr(Log_Value);
+                   Values.Fields[(m-1)*6+j].AsString:=s2;
+                   Properties.Edit;
+                   if LGS<>NVS then
+                     begin
+                       if Log_Value>Properties.Fields[2].AsFloat then
+                         Properties.Fields[2].AsFloat:=RoundTo(Log_Value, -4);
+                       if Log_Value<Properties.Fields[3].AsFloat then
+                         Properties.Fields[3].AsFloat:=RoundTo(Log_Value, -4);
+                     end;
+                   Properties.Next;
+                 end;
+             end;
+// Last Line for wrapped file
+           Temp_integer:=(NoTracks-1) mod NoColumns;
+           if Temp_Integer<>0 then
+             begin
+               s1:=Trim(Lines[DataStartLineNo+n]);
+               Inc(n);
+               for j:=1 to ((NoTracks-1) mod NoColumns) do
+                 begin
+                   for k := 0 to Length(s1) do
+                     begin
+                       OneChar:=s1[k];
+                       if not(OneChar in [DLMChar,' ']) then//OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                         begin
+                           p2:=k;
+                           Break;
+                         end;
+                     end;
+                   for k := p2 to Length(s1) do
+                     begin
+                       OneChar:=s1[k];
+                       if OneChar in [DLMChar,' '] then//not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                         begin
+                           p3:=k;
+                           Break;
+                         end;
+                     end;
+                   if p2>p3 then
+                     p3:=Length(s1);
+                   s2:=Copy(s1,p2,p3-p2);
+                   s2:=Trim(s2);
+                   Log_Value:=StrToFloat(Trim(s2));
+                   LGS:=FloatToStr(Log_Value);
+                   Values.Fields[(NoLinesPerDepth-1)*6+j].AsString:=s2;
+                   Properties.Edit;
+                   if LGS<>NVS then
+                     begin
+                       if Log_Value>Properties.Fields[2].AsFloat then
+                         Properties.Fields[2].AsFloat:=RoundTo(Log_Value, -4);
+                       if Log_Value<Properties.Fields[3].AsFloat then
+                         Properties.Fields[3].AsFloat:=RoundTo(Log_Value, -4);
+                     end;
+                   Properties.Next;
+                 end;
+             end;
+         end;
+     end;
+(***********************************************************)
+    Lines.Free;
+    Values.Edit;
+    Values.Post;
+    Properties.Edit;
+    Properties.Post;
+    DataSource1.DataSet:=Properties;
+    DataSource2.DataSet:=Values;
+    Values.EnableControls;
+    Properties.EnableControls;
+  except
+    Lines.Free;
+    Values.Edit;
+    Values.Post;
+    Properties.Edit;
+    Properties.Post;
+    DataSource1.DataSet:=Properties;
+    DataSource2.DataSet:=Values;
+    Values.Close;
+    Properties.Close;
+    Values.EnableControls;
+    Properties.EnableControls;
+  end;
+end;
+end;
+
+procedure TLoad_Form.ReadASCII(File_Name: string);
+var
+j,k,n: integer;
+p1,p2,p3:Smallint;
+s1,s2,s3,s4:string;
+LGS: string;
+NVS: string;
+File_Opened: Boolean;
+OneChar: Char;
+TempFile: TextFile;
+begin
+with OpenedFile do
+  begin
+    File_Opened:=False;
+    try
+(********* Get file name without its complete path *)
+      s1:=ReverseString(File_Name);
+      p1:=Pos('\',s1);
+      s1:=ReverseString(s1);
+      p2:=Length(s1)-p1+2;
+      s2:=Copy(s1,p2,p1);
+      FileName:=s2;
+(**********Create a root with the file name*********)
+      Lines:=TStringList.Create;
+      Lines.LoadFromFile(File_Name);
+(********* To find depth units *********************)
+      DepthUnit:=DepthUnitString;
+(***************************************************)
+(********* To find step values *********************)
+      StepValue:=StrToFloat(StepValueString);
+(***************************************************)
+(********* To find null values *********************)
+      NullValue:=StrToFloat(NullValueString);
+      NVS:=FloatToStr(NullValue);
+(***************************************************)
+(********* To add curves information ***************)
+      j:=StrToInt(No_Lines_Skip);
+      s1:=(Lines[j]);
+      p3:=1;
+      p2:=0;
+      s3:='';
+      s4:='';
+      k:=0;
+      Properties.Open;
+      Properties.Edit;
+      NoTracks:=0;
+      repeat
+        try
+          for k := p3 to Length(s1) do
+            begin
+              OneChar:=s1[k];
+              if OneChar<>DLMChar then
+                begin
+                  p2:=k;
+                  Break;
+                end;
+            end;
+          for k := p2 to Length(s1) do
+            begin
+              OneChar:=s1[k];
+              if OneChar=DLMChar then
+                begin
+                  p3:=k;
+                  Break;
+                end;
+            end;
+          if p2>p3 then
+            begin
+              p3:=Length(s1)+1;
+              s4:='FINISHED';
+            end;
+          s2:=Copy(s1,p2,p3-p2);
+          Values.FieldDefs.Add(Trim(s2), ftFloat, 0, False);
+
+          Properties.Append;
+          p1:=Pos('.', s2);
+          s3:= Copy( s2, p1+1, Length(s2)-1);
+          s2:=Copy(s2,1,p1);
+
+          Properties.Fields[0].Value:=Trim(s2);
+          Properties.Fields[1].Value:=Trim(s3);
+          Properties.Fields[2].Value:=-99999999;
+          Properties.Fields[3].Value:=99999999;
+          Inc(j);
+          Inc(NoTracks);
+        except
+          on E:EdataBaseError do
+            begin
+              MessageDlg('Field '+s2+' already exists.'+#13+'Please check your file.', mtError, [mbok], 0);
+              Values.FieldDefs.Add(Trim(s2)+IntToStr(k), ftFloat, 0, False);
+              p1:=Pos('.', s2);
+              s3:= Copy( s2, p1+1, Length(s2)-1);
+              Properties.Fields[1].Value:=Trim(s3);
+              Properties.Fields[2].Value:=-99999999;
+              Properties.Fields[3].Value:=99999999;
+              Inc(NoTracks);
+              Inc(j);
+            end;
+        end;
+      until s4='FINISHED';
+    Values.CreateTable;
+    Values.Open;
+    Properties.First;
+    for n := 0 to NoTracks-1 do
+      begin
+        s1:=Properties.FieldByName('TRACK_NAME').AsString+'.'+Properties.FieldByName('TRACK_UNIT').AsString;
+        Values.Fields[n].DisplayLabel:=s1;
+        Properties.Next;
+      end;
+    Values.Open;
+    Values.First;
+(**************** Reading file data ************************)
+  AssignFile(TempFile,File_Name);
+  Reset(TempFile);
+  File_Opened:=True;
+  Values.DisableControls;
+  Properties.DisableControls;
+  for n:=0 to StrToInt(Edit2.Text)+1 do
+    Readln(TempFile);
+  while not(EoF(TempFile)) do
+    begin
+      try
+           Properties.First;
+           Values.Edit;
+           Values.Append;
+        for j:=0 to NoTracks-1 do
+          begin
+            Read(TempFile,Log_Value);
+               LGS:=FloatToStr(Log_Value);
+               if LGS<>NVS then
+                 begin
+                   Values.Fields[j].AsString:=Trim(LGS);
+                   Properties.Edit;
+                   if Log_Value>Properties.Fields[2].AsFloat then
+                     Properties.Fields[2].AsFloat:=RoundTo(Log_Value, -4);
+                   if Log_Value<Properties.Fields[3].AsFloat then
+                     Properties.Fields[3].AsFloat:=RoundTo(Log_Value, -4);
+                 end
+               else
+                 Values.Fields[j].AsString:='';
+
+               Properties.Next;
+          end;
+        Readln(TempFile);
+      except
+        Messagedlg('Corrupted data!', mtError, [mbOk], 0);
+        Values.Fields[j].AsString:='';
+        Readln(TempFile);
+      end;
+    end;
+(***********************************************************)
+  Values.Edit;
+  Values.Post;
+  Properties.Edit;
+  Properties.Post;
+  DataSource1.DataSet:=Properties;
+  DataSource2.DataSet:=Values;
+  Values.EnableControls;
+  Properties.EnableControls;
+//  Number_of_Charts:=Chart_Number;
+  CloseFile(TempFile);
+  Lines.Free;
+except
+  if File_Opened then
+//    CloseFile(TempFile);
+  Lines.Free;
+  Values.Edit;
+  Values.Post;
+  Properties.Edit;
+  Properties.Post;
+  DataSource1.DataSet:=Properties;
+  DataSource2.DataSet:=Values;
+  Values.Close;
+  Properties.Close;
+  Values.EnableControls;
+  Properties.EnableControls;
+end;
+end;
+end;
+
+procedure TLoad_Form.Find_GR;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart1.Series[0].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart1.Series[0].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart1.Series[0].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='CGR')or(Temp_Name='GR')or(Temp_Name='ECGR')or(Temp_Name='GRC')or(Temp_Name='C_GR')or(Temp_Name='BHC_GR')or(Temp_Name='CCATGR')or(Temp_Name='CSNG')or(Temp_Name='DIELGR')or(Temp_Name='G_GR')or(Temp_Name='GAMMA')or(Temp_Name='GR_DC')or(Temp_Name='GR_DN')or(Temp_Name='GR_DSN')or(Temp_Name='EGR')or(Temp_Name='GRCO')or(Temp_Name='GRTO')or(Temp_Name='RGR')or(Temp_Name='SUMG')or(Temp_Name='IDGR')or(Temp_Name='GSGR')) then
+            begin
+              DBChart1.Series[0].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart1.Series[0].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart5.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              GR_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_CALIPER;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart1.Series[1].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart1.Series[1].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart1.Series[1].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='CALI')or(Temp_Name='CALIPER')or(Temp_Name='HCAL')or(Temp_Name='CAL')) then
+            begin
+              DBChart1.Series[1].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart1.Series[1].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart5.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              CALI_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_BS;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart1.Series[2].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart1.Series[2].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart1.Series[2].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='BS')or(Temp_Name='BIT')) then
+            begin
+              DBChart1.Series[2].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart1.Series[2].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart5.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              BS_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_MSFL;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart3.Series[0].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart3.Series[0].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart3.Series[0].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='MSFL')or(Temp_Name='SFLA')or(Temp_Name='SFLU')or(Temp_Name='AHO10')) then
+            begin
+              DBChart3.Series[0].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart3.Series[0].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart7.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              MSFL_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_LLS;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart3.Series[1].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart3.Series[1].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart3.Series[1].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='LLS')or(Temp_Name='LLM')or(Temp_Name='ILS')or(Temp_Name='ILM')or(Temp_Name='HLLS')or(Temp_Name='AHT30')or(Temp_Name='AHT20')or(Temp_Name='AHT60')) then
+            begin
+              DBChart3.Series[1].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart3.Series[1].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart7.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              LLM_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_LLD;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart3.Series[2].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart3.Series[2].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart3.Series[2].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='LLD')or(Temp_Name='ILD')or(Temp_Name='HLLD')or(Temp_Name='AHF90')or(Temp_Name='AHF60')or(Temp_Name='AHT90')) then
+            begin
+              DBChart3.Series[2].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart3.Series[2].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart7.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              LLD_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_RHO;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart4.Series[0].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart4.Series[0].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart4.Series[0].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='RHOB')or(Temp_Name='RHOZ')or(Temp_Name='RHOZ_val')or(Temp_Name='RHO8')or(Temp_Name='ZCOR')or(Temp_Name='ZDEN')or(Temp_Name='RHGA')or(Temp_Name='DENR')or(Temp_Name='EDRH')or(Temp_Name='EMRH')or(Temp_Name='ERHO')or(Temp_Name='FDEN')or(Temp_Name='RHEV')or(Temp_Name='RHM2')or(Temp_Name='RHMA')or(Temp_Name='RHOC')or(Temp_Name='RHOF')or(Temp_Name='RHOH')or(Temp_Name='RHOO')or(Temp_Name='RHOW')or(Temp_Name='RHOG')or(Temp_Name='ZDRH')or(Temp_Name='ZRHO')or(Temp_Name='DENC')or(Temp_Name='DENS')or(Temp_Name='CDL')or(Temp_Name='FDT')or(Temp_Name='DLDNH')or(Temp_Name='DLDN')) then
+            begin
+              DBChart4.Series[0].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart4.Series[0].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart8.CustomAxes[0].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              RHO_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_NPHI;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart4.Series[1].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart4.Series[1].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart4.Series[1].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='NPHI')or(Temp_Name='CNL')or(Temp_Name='TNPH')or(Temp_Name='ENPH')) then
+            begin
+              DBChart4.Series[1].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart4.Series[1].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart8.CustomAxes[1].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              NPHI_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_PEF;
+var
+i:integer;
+Temp_Name: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart4.Series[2].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart4.Series[2].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart4.Series[2].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          Temp_Name:= Properties.Fields[0].AsString;
+          if ((Temp_Name='PEF')or(Temp_Name='PE')or(Temp_Name='PEF8')or(Temp_Name='PEFZ')) then
+            begin
+              DBChart4.Series[2].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart4.Series[2].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart8.CustomAxes[2].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              PEF_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+procedure TLoad_Form.Find_DT;
+var
+i:integer;
+TempName: string;
+begin
+with MainForm2 do
+  with OpenedFile do
+    begin
+      Properties.First;
+      DBChart4.Series[3].YValues.ValueSource:=Values.FieldDefs[0].Name;
+      DBChart4.Series[3].YValues.Name:=Values.FieldDefs[0].Name;
+      DBChart4.Series[3].DataSource:=Values;
+      for i:=0 to NoTracks-1 do
+        begin
+          TempName:= Properties.Fields[0].AsString;
+          if ((TempName='DT')or(TempName='DTCO')or(TempName='DT24')or(TempName='DT-P')or(TempName='DTP')or(TempName='DTP_val')or(TempName='DT-PED')or(TempName='ACTCL')) then
+            begin
+              DBChart4.Series[3].XValues.ValueSource:=Values.FieldDefs[i].Name;
+              DBChart4.Series[3].XValues.Name:=Values.FieldDefs[i].Name;
+              DBChart8.CustomAxes[3].Title.Caption :=Properties.FieldByName('TRACK_NAME').AsString + ' ('+ Properties.FieldByName('TRACK_UNIT').AsString + ')';
+              DT_Track_Number:=i;
+              Break;
+            end;
+          Properties.Next;
+        end;
+    end;
+end;
+
+
+procedure TLoad_Form.Button1Click(Sender: TObject);
+var
+s,s1,s2:string;
+p1,p2:integer;
+File_Name:string;
+Temp_Value:Integer;
+ConversionUnit:Single;
+begin
+try
+          StatusBar1.Panels[0].Text:='Reading file data. Please wait ...';
+          Repaint;
+          DeleteFiles;
+          ConversionUnit:=0;
+          s1:=ReverseString(OpenDialog1.FileName);
+          p1:=Pos('\',s1);
+          s1:=ReverseString(s1);
+          p2:=Length(s1)-p1+2;
+          s2:=Copy(s1,p2,p1-5);
+          File_Name:=s2;
+          try
+            OpenedFile:=TLASFile.Create;
+            with OpenedFile do
+              begin
+                Properties:=TTable.Create(Self);
+                Properties.TableName:=File_Name+'_Prop.db';
+                Properties.FieldDefs.Add('TRACK_NAME', ftString, 10, False);
+                Properties.FieldDefs.Add('TRACK_UNIT', ftString, 7, False);
+                Properties.FieldDefs.Add('MAX_VALUE', ftFloat, 0, False);
+                Properties.FieldDefs.Add('MIN_VALUE', ftFloat, 0, False);
+                Properties.CreateTable;
+                Properties.Open;
+                Values:=TTable.Create(Self);
+                Values.TableName:=File_Name+'_Val.db';
+                MainForm2.Litholog.TableName:=File_Name+'_Lith.db';
+              end;
+
+             with OpenedFile do
+              begin
+                s:=UpperCase(ComboBox10.Text);
+                if s='COMMA' then DLMChar:=','
+                else if s='SPACE' then DLMChar:=' '
+                else if s='TAB' then DLMChar:=#9
+                else DLMChar:=' ';
+                No_Lines_Skip:=Edit2.Text;
+                StepValueString:='0.15';
+                Depth_Column:=Edit3.Text;
+                DepthUnitString:=Edit4.Text;
+                NullValueString:=Edit5.Text;
+              end;
+
+            BS_Track_Number:=-1;
+            CALI_Track_Number:=-1;
+            GR_Track_Number:=-1;
+            MSFL_Track_Number:=-1;
+            LLM_Track_Number:=-1;
+            LLD_Track_Number:=-1;
+            RHO_Track_Number:=-1;
+            NPHI_Track_Number:=-1;
+            PEF_Track_Number:=-1;
+            DT_Track_Number:=-1;
+
+            ReadASCII(OpenDialog1.FileName);
+
+            File_Opened:=True;
+            with MainForm2 do
+            with OpenedFile do
+              begin
+                Properties.First;
+                Log_Scale:=400;
+                if DepthUnit='FT' then
+                  begin
+                    ConversionUnit:=1152;
+                  end;
+                if DepthUnit='F' then
+                  begin
+                    ConversionUnit:=1152;
+                  end;
+                if DepthUnit='M' then
+                  begin
+                    ConversionUnit:=3779.527559055;
+                  end;
+                if DepthUnit='SEC' then
+                  begin
+                    ConversionUnit:=Log_Scale;
+                  end;
+                Temp_Value:=DBChart1.MarginBottom + DBChart1.ChartRect.Top;
+                DBChart1.Height:=Round((Properties.Fields[2].Value - Properties.Fields[3].Value) * ConversionUnit / Log_Scale) + Temp_Value;
+                DBChart2.Height:=DBChart1.Height;
+                DBChart3.Height:=DBChart1.Height;
+                DBChart4.Height:=DBChart1.Height;
+                DBChart9.Height:=DBChart1.Height;
+
+                DBChart2.Series[0].XValues.ValueSource:=Values.FieldDefs[0].Name;
+                DBChart2.Series[0].XValues.Name:=Values.FieldDefs[0].Name;
+                DBChart2.Series[0].YValues.ValueSource:=Values.FieldDefs[0].Name;
+                DBChart2.Series[0].YValues.Name:=Values.FieldDefs[0].Name;
+                DBChart2.Series[0].DataSource:=Values;
+                Properties.First;
+                DBChart6.CustomAxes[0].Title.Caption:=Properties.FieldByName('TRACK_NAME').Value + ' ('+ Properties.FieldByName('TRACK_UNIT').Value + ')';
+                DBChart2.Axes.Left.Increment:=ABS(StepValue);
+                DBChart2.Axes.Right.Increment:=ABS(StepValue);
+              end;
+            BS_Track_Number:=-1;
+            CALI_Track_Number:=-1;
+            GR_Track_Number:=-1;
+            MSFL_Track_Number:=-1;
+            LLM_Track_Number:=-1;
+            LLD_Track_Number:=-1;
+            RHO_Track_Number:=-1;
+            NPHI_Track_Number:=-1;
+            PEF_Track_Number:=-1;
+            DT_Track_Number:=-1;
+            Find_GR;
+            Find_CALIPER;
+            Find_BS;
+            Find_MSFL;
+            Find_LLD;
+            Find_LLS;
+            Find_NPHI;
+            Find_RHO;
+            Find_PEF;
+            Find_DT;
+          except
+            MessageDlg('Error occured while reading '+#13+OpenDialog1.FileName, mtError, [mbOk], 0);
+          end;
+      Database_Opened:=True;
+
+      Fill(ComboBox11);
+      Fill(ComboBox12);
+      Fill(ComboBox13);
+      Fill(ComboBox14);
+      Fill(ComboBox15);
+      Fill(ComboBox16);
+      Fill(ComboBox17);
+      Fill(ComboBox18);
+      Fill(ComboBox19);
+      Fill(ComboBox21);
+      ComboBox11.ItemIndex:=BS_Track_Number;
+      ComboBox12.ItemIndex:=CALI_Track_Number;
+      ComboBox13.ItemIndex:=GR_Track_Number;
+      ComboBox14.ItemIndex:=MSFL_Track_Number;
+      ComboBox15.ItemIndex:=LLM_Track_Number;
+      ComboBox16.ItemIndex:=LLD_Track_Number;
+      ComboBox17.ItemIndex:=RHO_Track_Number;
+      ComboBox18.ItemIndex:=NPHI_Track_Number;
+      ComboBox19.ItemIndex:=PEF_Track_Number;
+      ComboBox21.ItemIndex:=DT_Track_Number;
+  with MainForm2 do
+    begin
+      StringGrid2.Cells[0,1]:=FloatToStr(RoundTo(DBChart1.Series[2].MinXValue, -4));
+      StringGrid2.Cells[0,2]:=FloatToStr(RoundTo(DBChart1.Series[1].MinXValue, -4));
+      StringGrid2.Cells[0,3]:=FloatToStr(RoundTo(DBChart1.Series[0].MinXValue, -4));
+      StringGrid2.Cells[0,4]:=FloatToStr(RoundTo(DBChart3.Series[0].MinXValue, -4));
+      StringGrid2.Cells[0,5]:=FloatToStr(RoundTo(DBChart3.Series[1].MinXValue, -4));
+      StringGrid2.Cells[0,6]:=FloatToStr(RoundTo(DBChart3.Series[2].MinXValue, -4));
+      StringGrid2.Cells[0,7]:=FloatToStr(RoundTo(DBChart4.Series[0].MinXValue, -4));
+      StringGrid2.Cells[0,8]:=FloatToStr(RoundTo(DBChart4.Series[1].MinXValue, -4));
+      StringGrid2.Cells[0,9]:=FloatToStr(RoundTo(DBChart4.Series[2].MinXValue, -4));
+      StringGrid2.Cells[0,10]:=FloatToStr(RoundTo(DBChart4.Series[3].MinXValue, -4));
+      StringGrid2.Cells[1,1]:=FloatToStr(RoundTo(DBChart1.Series[2].MaxXValue, -4));
+      StringGrid2.Cells[1,2]:=FloatToStr(RoundTo(DBChart1.Series[1].MaxXValue, -4));
+      StringGrid2.Cells[1,3]:=FloatToStr(RoundTo(DBChart1.Series[0].MaxXValue, -4));
+      StringGrid2.Cells[1,4]:=FloatToStr(RoundTo(DBChart3.Series[0].MaxXValue, -4));
+      StringGrid2.Cells[1,5]:=FloatToStr(RoundTo(DBChart3.Series[1].MaxXValue, -4));
+      StringGrid2.Cells[1,6]:=FloatToStr(RoundTo(DBChart3.Series[2].MaxXValue, -4));
+      StringGrid2.Cells[1,7]:=FloatToStr(RoundTo(DBChart4.Series[0].MaxXValue, -4));
+      StringGrid2.Cells[1,8]:=FloatToStr(RoundTo(DBChart4.Series[1].MaxXValue, -4));
+      StringGrid2.Cells[1,9]:=FloatToStr(RoundTo(DBChart4.Series[2].MaxXValue, -4));
+      StringGrid2.Cells[1,10]:=FloatToStr(RoundTo(DBChart4.Series[3].MaxXValue, -4));
+      StatusBar1.Panels[0].Text:='Ready';
+    end;
+finally
+  StatusBar1.Panels[0].Text:='Ready.';
+end;
+end;
+
+procedure TLoad_Form.ComboBox20Change(Sender: TObject);
+begin
+      DT_Track_Number:=ComboBox20.ItemIndex;
+      if DT_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart4.Series[3].XValues.ValueSource:=OpenedFile.Values.FieldDefs[ DT_Track_Number].Name;
+          MainForm2.DBChart4.Series[3].XValues.Name:=OpenedFile.Values.FieldDefs[ DT_Track_Number].Name;
+          StringGrid1.Cells[0,10]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[3].MinXValue, -4));
+          StringGrid1.Cells[1,10]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[3].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid1.Cells[0,10]:='0';
+          StringGrid1.Cells[1,10]:='0';
+        end;
+end;
+
+procedure TLoad_Form.ComboBox21Change(Sender: TObject);
+begin
+      DT_Track_Number:=ComboBox21.ItemIndex;
+      if DT_Track_Number<>-1 then
+        begin
+          MainForm2.DBChart4.Series[3].XValues.ValueSource:=OpenedFile.Values.FieldDefs[ DT_Track_Number].Name;
+          MainForm2.DBChart4.Series[3].XValues.Name:=OpenedFile.Values.FieldDefs[ DT_Track_Number].Name;
+          StringGrid2.Cells[0,10]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[3].MinXValue, -4));
+          StringGrid2.Cells[1,10]:=FloatToStr(RoundTo(MainForm2.DBChart4.Series[3].MaxXValue, -4));
+        end
+      else
+        begin
+          StringGrid2.Cells[0,10]:='0';
+          StringGrid2.Cells[1,10]:='0';
+        end;
+end;
+
+end.

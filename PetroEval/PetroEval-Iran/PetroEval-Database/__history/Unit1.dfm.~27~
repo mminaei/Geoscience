@@ -1,0 +1,74 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 379
+  ClientWidth = 711
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = MainMenu1
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 360
+    Width = 711
+    Height = 19
+    Panels = <
+      item
+        Width = 200
+      end
+      item
+        Width = 50
+      end>
+    ExplicitTop = 534
+    ExplicitWidth = 734
+  end
+  object DBGrid1: TDBGrid
+    Left = 8
+    Top = 8
+    Width = 561
+    Height = 265
+    DataSource = DataSource1
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
+  object MainMenu1: TMainMenu
+    Left = 704
+    Top = 32
+    object File1: TMenuItem
+      Caption = 'File'
+      object Open1: TMenuItem
+        Caption = 'Open'
+        OnClick = OpenTable1Click
+      end
+    end
+    object Edit1: TMenuItem
+      Caption = 'Edit'
+    end
+    object View1: TMenuItem
+      Caption = 'View'
+    end
+    object About1: TMenuItem
+      Caption = 'About'
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 704
+    Top = 64
+  end
+  object DataSource1: TDataSource
+    Left = 648
+    Top = 352
+  end
+end

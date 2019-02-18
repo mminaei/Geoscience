@@ -1,0 +1,135 @@
+unit FirstForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, Menus, StdCtrls, Buttons,   XpMan, ExtActns;
+
+type
+  TFirst_Form = class(TForm)
+    MainMenu1: TMainMenu;
+    Project1: TMenuItem;
+    About1: TMenuItem;
+    Exit1: TMenuItem;
+    About2: TMenuItem;
+    Applications1: TMenuItem;
+    Loading1: TMenuItem;
+    Well1: TMenuItem;
+    StatusBar1: TStatusBar;
+    Registration1: TMenuItem;
+    N1: TMenuItem;
+    lmdButton1: TBitBtn;
+    lmdButton2: TBitBtn;
+    lmdButton3: TBitBtn;
+    procedure Exit1Click(Sender: TObject);
+    procedure Loading1Click(Sender: TObject);
+    procedure Well1Click(Sender: TObject);
+    procedure About2Click(Sender: TObject);
+    procedure LMDButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Registration1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure lmdButton2Click(Sender: TObject);
+    procedure lmdButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    MainForm_Created: Boolean;
+    MainForm2_Created: Boolean;
+    IsRegistered:Boolean;
+    { Public declarations }
+  end;
+const
+  About_String='P.U.T PetroEval'+ #13 +
+               'Version 2.6.0.125' + #13 +
+               'Copyright © 2007-2008, Petroleum University of Technology.' + #13 +
+               '                                  All rights reserved.'+ #13 +
+               '-------------------------------------------------------------------------'+ #13 + #13 + #13 +
+               'Petrophysical Evaluation Program' + #13 + #13 +
+               'By:' + #13 + #13 +
+               '       Dr. M.K. Ghassem Alaskari   askari5027@yahoo.com' + #13 +
+               '       Mohsen Minaei                      mminaei@mines.edu';
+
+var
+  First_Form: TFirst_Form;
+
+implementation
+
+uses Main_Form2, LoadForm, WaitingForm;
+
+{$R *.dfm}
+
+procedure TFirst_Form.Exit1Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFirst_Form.Loading1Click(Sender: TObject);
+begin
+  LMDButton1Click(Self);
+end;
+
+procedure TFirst_Form.Well1Click(Sender: TObject);
+begin
+  LMDButton4Click(Self);
+end;
+
+procedure TFirst_Form.About2Click(Sender: TObject);
+begin
+MessageDlg(About_String, mtInformation, [mbOk], 0);
+end;
+
+procedure TFirst_Form.LMDButton1Click(Sender: TObject);
+begin
+  if not MainForm2_Created then
+    begin
+      MainForm2:=TMainForm2.Create(Self);
+      MainForm2_Created:=True;
+    end;
+  Load_Form.Show;
+end;
+
+procedure TFirst_Form.lmdButton2Click(Sender: TObject);
+begin
+  if not MainForm2_Created then
+    begin
+      MainForm2:=TMainForm2.Create(Self);
+      MainForm2_Created:=True;
+    end;
+  MainForm2.Show;
+end;
+
+procedure TFirst_Form.lmdButton3Click(Sender: TObject);
+begin
+{  if not IsRegistered then
+    begin
+      RegistrationForm:=TRegistrationForm.Create(Application);
+      RegistrationForm.btn_Cancel.Visible:=False;
+      RegistrationForm.ShowModal;
+      RegistrationForm.Free;
+    end
+  else
+    MessageDlg('The product is already registered!', mtInformation, [mbOk], 0);}
+end;
+
+procedure TFirst_Form.FormCreate(Sender: TObject);
+begin
+  MainForm_Created:=False;
+  MainForm2_Created:=False;
+  Top:=0;
+  Left:=0;
+end;
+
+procedure TFirst_Form.Registration1Click(Sender: TObject);
+begin
+  LMDButton6Click(Self);
+end;
+
+procedure TFirst_Form.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Load_Form.DeleteFiles;
+  Application.Terminate;
+end;
+
+end.

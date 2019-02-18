@@ -1,0 +1,125 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 362
+  ClientWidth = 504
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = MainMenu1
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 177
+    Width = 504
+    Height = 3
+    Cursor = crVSplit
+    Align = alBottom
+    ExplicitTop = 97
+    ExplicitWidth = 63
+  end
+  object Splitter2: TSplitter
+    Left = 0
+    Top = 113
+    Width = 504
+    Height = 3
+    Cursor = crVSplit
+    Align = alTop
+    ExplicitTop = 97
+    ExplicitWidth = 512
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 343
+    Width = 504
+    Height = 19
+    Panels = <
+      item
+        Width = 200
+      end
+      item
+        Width = 50
+      end>
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 504
+    Height = 113
+    Align = alTop
+    DataSource = DataSource1
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
+  object DBGrid2: TDBGrid
+    Left = 0
+    Top = 180
+    Width = 504
+    Height = 163
+    Align = alBottom
+    DataSource = DataSource2
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
+  object MainMenu1: TMainMenu
+    Left = 448
+    Top = 8
+    object File1: TMenuItem
+      Caption = 'File'
+      object Open1: TMenuItem
+        Caption = 'Open'
+        object LAS1: TMenuItem
+          Caption = 'LAS'
+          ShortCut = 16460
+          OnClick = LAS1Click
+        end
+        object ext1: TMenuItem
+          Caption = 'Text'
+          ShortCut = 16468
+        end
+      end
+      object Exit1: TMenuItem
+        Caption = 'Exit'
+        ShortCut = 16472
+        OnClick = Exit1Click
+      end
+    end
+    object Edit1: TMenuItem
+      Caption = 'Edit'
+    end
+    object View1: TMenuItem
+      Caption = 'View'
+    end
+    object About1: TMenuItem
+      Caption = 'About'
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
+    Left = 448
+    Top = 40
+  end
+  object DataSource1: TDataSource
+    Left = 448
+    Top = 72
+  end
+  object DataSource2: TDataSource
+    Left = 440
+    Top = 208
+  end
+end

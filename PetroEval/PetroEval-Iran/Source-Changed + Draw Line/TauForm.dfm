@@ -1,0 +1,158 @@
+object Tau_Form: TTau_Form
+  Left = 705
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Tortuosity (Tau)'
+  ClientHeight = 232
+  ClientWidth = 246
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  ScreenSnap = True
+  OnCloseQuery = FormCloseQuery
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 191
+    Width = 246
+    Height = 41
+    Align = alBottom
+    TabOrder = 0
+    object Button2: TButton
+      Left = 157
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Cancel'
+      TabOrder = 0
+      OnClick = Button2Click
+    end
+    object Button1: TButton
+      Left = 74
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Ok'
+      Default = True
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 120
+    Width = 246
+    Height = 71
+    Align = alBottom
+    Caption = 'Equations'
+    TabOrder = 1
+    object LabeledEdit1: TLabeledEdit
+      Left = 128
+      Top = 42
+      Width = 33
+      Height = 21
+      EditLabel.Width = 114
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Cementation Factor (m)'
+      LabelPosition = lpLeft
+      TabOrder = 0
+      Text = '2'
+    end
+    object ComboBox1: TComboBox
+      Left = 8
+      Top = 18
+      Width = 105
+      Height = 21
+      ItemHeight = 13
+      TabOrder = 1
+      Text = 'General Form'
+      OnChange = ComboBox1Change
+      Items.Strings = (
+        'General Form'
+        'Average Sands'
+        'Shaly Sands'
+        'Carbonates'
+        'Humble'
+        'Modified Humble')
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 246
+    Height = 120
+    Align = alClient
+    Caption = 'Porosity'
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 8
+      Top = 88
+      Width = 68
+      Height = 13
+      Caption = 'Selected Log: '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 112
+      Top = 88
+      Width = 28
+      Height = 13
+      Caption = 'NONE'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object RadioButton1: TRadioButton
+      Left = 8
+      Top = 58
+      Width = 97
+      Height = 17
+      Caption = 'Constant value:'
+      TabOrder = 1
+      OnClick = RadioButton1Click
+    end
+    object RadioButton2: TRadioButton
+      Left = 8
+      Top = 28
+      Width = 97
+      Height = 17
+      Caption = 'From logs:'
+      Checked = True
+      TabOrder = 0
+      TabStop = True
+      OnClick = RadioButton2Click
+    end
+    object Edit3: TEdit
+      Left = 112
+      Top = 56
+      Width = 121
+      Height = 21
+      Color = clBtnFace
+      Enabled = False
+      TabOrder = 2
+    end
+    object Button3: TButton
+      Left = 112
+      Top = 24
+      Width = 121
+      Height = 25
+      Caption = 'Select'
+      TabOrder = 3
+      OnClick = Button3Click
+    end
+  end
+end

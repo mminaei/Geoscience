@@ -1,0 +1,311 @@
+unit DTSelection;
+
+interface
+
+uses
+  Graphics, Dialogs, VrLabel, Controls, StdCtrls, Classes, Forms, SysUtils,
+  ExtCtrls, TeeProcs, TeeTree;
+
+type
+  TDT_Selection = class(TForm)
+    ScrollBox1: TScrollBox;
+    Label1: TLabel;
+    Label4: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    ComboBox1: TComboBox;
+    Label2: TLabel;
+    ScrollBox2: TScrollBox;
+    Label3: TLabel;
+    ComboBox2: TComboBox;
+    Label5: TLabel;
+    ComboBox3: TComboBox;
+    Label6: TLabel;
+    ComboBox4: TComboBox;
+    Label7: TLabel;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure ComboBox2Change(Sender: TObject);
+    procedure ComboBox3Change(Sender: TObject);
+    procedure ComboBox4Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DT_Selection  : TDT_Selection;
+  FileNames     :array of TVrLabel;
+  RadioButtons1 :array of TRadioButton;
+  RadioButtons2 :array of TRadioButton;
+  ForFree       :TLabel;
+
+implementation
+
+uses Main_Form;
+
+{$R *.dfm}
+
+procedure TDT_Selection.Button1Click(Sender: TObject);
+var
+i: Smallint;
+begin
+  with MainForm do
+    begin
+      for i:=0 to Length(RadioButtons1)-1 do
+        begin
+          if RadioButtons1[i].Checked then
+            begin
+              DTP_Track_Number:=RadioButtons1[i].Tag;
+            end;
+        end;
+      for i:=0 to Length(RadioButtons2)-1 do
+        begin
+          if RadioButtons2[i].Checked then
+            begin
+              DTS_Track_Number:=RadioButtons2[i].Tag;
+            end;
+        end;
+      Operation_Canceled:=False;
+    end;
+  Close;
+end;
+
+procedure TDT_Selection.FormCreate(Sender: TObject);
+var
+i,j,k: Smallint;
+//Child, Root: TTreeNodeShape;
+begin
+{  Tree1.GlobalFormat.Connection.ArrowTo.Style:=casCircle;
+  Tree2.GlobalFormat.Connection.ArrowTo.Style:=casCircle;
+  for i:=0 to MainForm.Tree1.Roots.Count-1 do
+    begin
+      Root:=Tree1.AddRoot(MainForm.Tree1.Roots[i].SimpleText);
+      with Root do
+        begin
+          Border.Visible:=False;
+          Transparent:=True;
+//          ImageIndex:=tiChecked;
+          Font.Name:='Tahoma';
+          Font.Color:=clGreen;
+          Font.Style:=[fsBold];
+        end;
+      Root:=Tree2.AddRoot(MainForm.Tree1.Roots[i].SimpleText);
+      with Root do
+        begin
+          Border.Visible:=False;
+          Transparent:=True;
+//          ImageIndex:=tiChecked;
+          Font.Name:='Tahoma';
+          Font.Color:=clGreen;
+          Font.Style:=[fsBold];
+        end;
+      for j:=0 to MainForm.Tree1.Roots[i].Childs.Count-1 do
+        begin
+          Child:=Tree1.Roots[i].AddChild(MainForm.Tree1.Roots[i].Childs[j].SimpleText);
+          with Child do
+            begin
+              Border.Visible:=False;
+              Transparent:=True;
+              ImageIndex:=tiRadioUnChecked;
+              Font.Name:='Tahoma';
+              Font.Color:=clNavy;
+              Font.Style:=[];
+            end;
+          Child:=Tree2.Roots[i].AddChild(MainForm.Tree1.Roots[i].Childs[j].SimpleText);
+          with Child do
+            begin
+              Border.Visible:=False;
+              Transparent:=True;
+              ImageIndex:=tiRadioUnChecked;
+              Font.Name:='Tahoma';
+              Font.Color:=clNavy;
+              Font.Style:=[];
+            end;
+        end;
+    end;}
+  ForFree:=TLabel.Create(Self);
+  k:=0;
+  for i:=0 to MainForm.Number_of_Headers-1 do
+    begin
+      SetLength(FileNames, Length(FileNames)+1);
+      FileNames[i]:=TVrLabel.Create(ForFree);
+      FileNames[i].Caption:=MainForm.Tree1.Roots[i].SimpleText;//MainForm.Headers[i].Caption;
+      FileNames[i].AutoSize:=True;
+      FileNames[i].Top:=15*k;
+      FileNames[i].Left:=0;
+      FileNames[i].Font.Style:=[fsBold];
+      FileNames[i].Font.Size:=9;
+      FileNames[i].Font.Name:='Tahoma';
+      FileNames[i].Font.Color:=clGreen;
+      FileNames[i].Transparent:=True;
+      FileNames[i].Style:=lsNone;
+      FileNames[i].Parent:=ScrollBox1;
+      for j:=0 to (MainForm.Number_of_Tracks[i]-1) do
+        begin
+          SetLength(RadioButtons1, Length(RadioButtons1)+1);
+          RadioButtons1[k-i]:=TRadioButton.Create(ForFree);
+          RadioButtons1[k-i].Top:=15*(k+1);
+          RadioButtons1[k-i].Left:=15;
+          RadioButtons1[k-i].Font.Color:=$00FF8000;
+          RadioButtons1[k-i].Font.Name:='Tahoma';
+          RadioButtons1[k-i].Font.Size:=8;
+          RadioButtons1[k-i].Width:=150;
+          RadioButtons1[k-i].Caption:=MainForm.Tree1.Roots[i].Childs[j].SimpleText;//MainForm.CheckBox[k-i].Caption;
+          RadioButtons1[k-i].Checked:=False;
+          RadioButtons1[k-i].Tag:=k-i;
+          RadioButtons1[k-i].Parent:=ScrollBox1;
+          k:=k+1;
+        end;
+      k:=k+1;
+    end;
+  k:=0;
+  for i:=0 to MainForm.Number_of_Headers-1 do
+    begin
+      SetLength(FileNames, Length(FileNames)+1);
+      FileNames[i]:=TVrLabel.Create(ForFree);
+      FileNames[i].Caption:=MainForm.Tree1.Roots[i].SimpleText;//MainForm.Headers[i].Caption;
+      FileNames[i].AutoSize:=True;
+      FileNames[i].Top:=15*k;
+      FileNames[i].Left:=0;
+      FileNames[i].Font.Style:=[fsBold];
+      FileNames[i].Font.Size:=9;
+      FileNames[i].Font.Name:='Tahoma';
+      FileNames[i].Font.Color:=clGreen;
+      FileNames[i].Transparent:=True;
+      FileNames[i].Style:=lsNone;
+      FileNames[i].Parent:=ScrollBox2;
+      for j:=0 to (MainForm.Number_of_Tracks[i]-1) do
+        begin
+          SetLength(RadioButtons2, Length(RadioButtons2)+1);
+          RadioButtons2[k-i]:=TRadioButton.Create(ForFree);
+          RadioButtons2[k-i].Top:=15*(k+1);
+          RadioButtons2[k-i].Left:=15;
+          RadioButtons2[k-i].Font.Color:=$00FF8000;
+          RadioButtons2[k-i].Font.Name:='Tahoma';
+          RadioButtons2[k-i].Font.Size:=8;
+          RadioButtons2[k-i].Width:=150;
+          RadioButtons2[k-i].Caption:=MainForm.Tree1.Roots[i].Childs[j].SimpleText;//MainForm.CheckBox[k-i].Caption;
+          RadioButtons2[k-i].Checked:=False;
+          RadioButtons2[k-i].Tag:=k-i;
+          RadioButtons2[k-i].Parent:=ScrollBox2;
+          k:=k+1;
+        end;
+      k:=k+1;
+    end;
+  with MainForm do
+    begin
+      DTP_Unit:=UpperCase(ComboBox1.Text);
+      DTS_Unit:=UpperCase(ComboBox2.Text);
+      VP_Unit:=UpperCase(ComboBox3.Text);
+      VS_Unit:=UpperCase(ComboBox4.Text);
+    end;
+end;
+
+procedure TDT_Selection.Button2Click(Sender: TObject);
+begin
+  MainForm.Operation_Canceled:=True;
+  Close;
+end;
+
+procedure TDT_Selection.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+var
+  DTS_Selected: Boolean;
+begin
+  CanClose:=True;
+  DTS_Selected:=False;
+  with MainForm do
+    begin
+      if (not(Operation_Canceled))and(DTP_Track_Number=-1) then
+        begin
+          CanClose:=False;
+          MessageDlg('Please select a track for DT of P-Wave.', mtWarning,[mbOk],0);
+          Exit;
+        end;
+      if (not(Operation_Canceled))and((ComboBox1.Text<>'US/FT')and(ComboBox1.Text<>'US/M')) then
+        begin
+          CanClose:=False;
+          MessageDlg('Please select a valid measurment unit for DT of P-Wave.', mtWarning,[mbOk],0);
+          Exit;
+        end;
+      if (not(Operation_Canceled))and(DTS_Track_Number=-1) then
+        begin
+          if MessageDlg('Are you sure there is no S-wave DT log?', mtWarning,[mbYes,mbNo],0)=mrYes then
+            begin
+              CanClose:=True;
+              DTS_Selected:=False;
+            end
+          else
+            begin
+              CanClose:=False;
+              Exit;
+            end;
+        end;
+      if (not(Operation_Canceled))and(DTS_Track_Number<>-1) then
+        DTS_Selected:=True;
+      if (not(Operation_Canceled))and(DTS_Selected)and(ComboBox2.Text<>'US/FT')and(ComboBox2.Text<>'US/M') then
+        begin
+          CanClose:=False;
+          MessageDlg('Please select a valid measurment unit for DT of S-Wave.', mtWarning,[mbOk],0);
+          Exit;
+        end;
+      if (not(Operation_Canceled))and(CanClose)and((ComboBox3.Text<>'FT/S')and(ComboBox3.Text<>'KM/S')) then
+        begin
+          CanClose:=False;
+          MessageDlg('Please select a valid measurment unit for Vp.', mtWarning,[mbOk],0);
+          Exit;
+        end;
+      if (not(Operation_Canceled))and(CanClose)and((ComboBox4.Text<>'FT/S')and(ComboBox4.Text<>'KM/S')) then
+        begin
+          CanClose:=False;
+          MessageDlg('Please select a valid measurment unit for Vs.', mtWarning,[mbOk],0);
+          Exit;
+        end;
+    end;
+  if CanClose then
+    begin
+      Finalize(FileNames);
+      Finalize(RadioButtons1);
+      Finalize(RadioButtons2);
+      ForFree.Free;
+    end;
+end;
+
+procedure TDT_Selection.ComboBox1Change(Sender: TObject);
+begin
+  with MainForm do
+    begin
+      DTP_Unit:=UpperCase(ComboBox1.Text);
+    end;
+end;
+
+procedure TDT_Selection.ComboBox2Change(Sender: TObject);
+begin
+  with MainForm do
+    begin
+      DTS_Unit:=UpperCase(ComboBox2.Text);
+    end;
+end;
+
+procedure TDT_Selection.ComboBox3Change(Sender: TObject);
+begin
+  with MainForm do
+    begin
+      VP_Unit:=UpperCase(ComboBox3.Text);
+    end;
+end;
+
+procedure TDT_Selection.ComboBox4Change(Sender: TObject);
+begin
+  with MainForm do
+    begin
+      VS_Unit:=UpperCase(ComboBox4.Text);
+    end;
+end;
+
+end.

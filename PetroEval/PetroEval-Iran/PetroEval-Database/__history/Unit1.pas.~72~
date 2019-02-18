@@ -1,0 +1,729 @@
+unit Unit1;
+
+interface
+
+uses
+  SysUtils, StrUtils, Classes, Forms, Windows, Math,
+  Dialogs, Menus, ComCtrls, StdCtrls, Controls, ToolWin, ExtCtrls, DB, DBTables,
+  Grids, DBGrids;
+
+type
+  TForm1 = class(TForm)
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    Edit1: TMenuItem;
+    View1: TMenuItem;
+    About1: TMenuItem;
+    StatusBar1: TStatusBar;
+    OpenDialog1: TOpenDialog;
+    Open1: TMenuItem;
+    DataSource1: TDataSource;
+    DBGrid1: TDBGrid;
+    DataSource2: TDataSource;
+    DBGrid2: TDBGrid;
+    Splitter1: TSplitter;
+    Splitter2: TSplitter;
+    procedure ReadLAS(File_Name: string);
+    procedure OpenTable1Click(Sender: TObject);
+    procedure ChangePath;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+
+
+  TLASFile = class(TObject)
+  private
+    { Private declarations }
+  public
+     FileName              :String ;
+     LASVersion            :ShortString ;
+     IsWrapped             :Boolean ;
+     DLMChar               :ShortString ;
+     StartValue            :Single ;
+     StopValue             :Single ;
+     StepValue             :Single ;
+     NullValue             :Single;
+     DepthUnit             :ShortString ;
+     NoTracks              :Smallint;
+     NoRecords             :Integer;
+     DataStartLineNo       :Integer;
+     Properties            :TTable;
+     TrackValue            :TTable;
+     NoLinesPerDepth       :Shortint;
+     Values                :TTable;
+{     TrackValue            :array of array of Single ;
+     TrackName             :array of String ;
+     TrackUnit             :array of String ;
+     MaxValue              :array of Single ;
+     MinValue              :array of Single ;}
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  Lines: TStringList;
+  TempFile: TextFile;
+  LasFiles: array of TLASFile;
+  File_Opened:Boolean;
+
+implementation
+
+
+{$R *.dfm}
+
+procedure TForm1.ReadLAS(File_Name: string);
+var
+i,j,k,m,n: integer;
+p1,p2,p3:Smallint;
+s1,s2,s3,s4:string;
+Depth_Value:Single;
+Log_Value:Single;
+OneChar: Char;
+Temp_Integer:integer;
+NVS, LGS: String;
+begin
+with LasFiles[Length(LasFiles)-1] do
+  begin
+    File_Opened:=False;
+  try
+(********* Get file name without its complete path *)
+    s1:=ReverseString(File_Name);
+    p1:=Pos('\',s1);
+    s1:=ReverseString(s1);
+    p2:=Length(s1)-p1+2;
+    s2:=Copy(s1,p2,p1);
+    FileName:=s2;
+
+(**********Load file into the memory*********)
+    Lines:=TStringList.Create;
+    Lines.LoadFromFile(File_Name);
+
+(**********To find version number *********)
+    for i:=0 to Lines.Count-1 do
+      begin
+        s1:=Lines[i];
+        p1:=Pos('VERS',s1);
+          if (p1<>0)then Break;
+      end;
+    j:=i;
+    s1:=Lines[j];
+    s1:=Trim(s1);
+    m:=Pos('.',s1);
+    n:=PosEx(':', s1, m);
+    s2:=Copy(s1,m+1,n-m-1);
+    s2:=Trim(UpperCase(s2));
+    LASVersion:=s2;
+
+(**********To find if it is wrapped *********)
+    for i:=j to Lines.Count-1 do
+      begin
+        s1:=Lines[i];
+        p1:=Pos('WRAP',s1);
+        if (p1<>0)then Break;
+      end;
+    j:=i;
+    s1:=Lines[j];
+    s1:=Trim(s1);
+    m:=Pos('.',s1);
+    n:=PosEx(':', s1, m);
+    s2:=Copy(s1,m+1,n-m-1);
+    s2:=Trim(UpperCase(s2));
+    if UpperCase(s2)='YES' then
+      IsWrapped:=True
+    else
+      IsWrapped:=False;
+
+  (********* To find DLM character *********************)
+    for i:=j to Lines.Count-1 do
+      begin
+          s1:=Lines[i];
+        p1:=Pos('DLM',s1);
+        p2:=Pos('~W',s1);
+        if (p1<>0)or(p2<>0) then Break;
+      end;
+    j:=i;
+    s1:=Lines[j];
+    s1:=Trim(s1);
+    m:=Pos('.',s1);
+    n:=PosEx(':', s1, m);
+    s2:=Copy(s1,m+1,n-m-1);
+    s2:=Trim(UpperCase(s2));
+    if s2='COMMA' then DLMChar:=','
+    else if s2='SPACE' then DLMChar:=' '
+    else if s2='TAB' then DLMChar:=' '
+    else DLMChar:=' ';
+
+(********* To find start value *********************)
+    for i:=j to Lines.Count-1 do
+        begin
+        s1:=Lines[i];
+        p1:=Pos('STRT',s1);
+          if p1<>0 then Break;
+        end;
+    j:=i;
+    s1:=Lines[j];
+    s1:=Trim(s1);
+
+//  To find depth units
+    m:=Pos('.',s1);
+    s2:=Copy(s1,m+1,1);
+    DepthUnit:=UpperCase(s2);
+    Values.FieldDefs.Add('DEPTH', ftFloat, 0, False);
+//
+    p3:=0;
+    p2:=0;
+    p1:=PosEx(' ',s1, m);
+    for k := p1 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+          begin
+            p2:=k;
+            Break;
+          end;
+      end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    StartValue:=StrToFloat(s2);
+
+(********* To find stop value *********************)
+    for i:=j to Lines.Count-1 do
+      begin
+          s1:=Lines[i];
+        p1:=Pos('STOP',s1);
+        if p1<>0 then Break;
+      end;
+    j:=i;
+    s1:=Lines[j];
+    s1:=Trim(s1);
+    p3:=0;
+    p2:=0;
+    m:=Pos('.',s1);
+    p1:=PosEx(' ',s1, m);
+    for k := p1 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+          begin
+            p2:=k;
+            Break;
+          end;
+      end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    StopValue:=StrToFloat(s2);
+
+(********* To find step value *********************)
+    for i:=j to Lines.Count-1 do
+      begin
+        s1:=Lines[i];
+        p1:=Pos('STEP',s1);
+        if p1<>0 then Break;
+      end;
+    j:=i;
+    s1:=Lines[j];
+    s1:=Trim(s1);
+    p3:=0;
+    p2:=0;
+    m:=Pos('.',s1);
+    p1:=PosEx(' ',s1, m);
+    for k := p1 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+       if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+         begin
+           p2:=k;
+           Break;
+         end;
+     end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    StepValue:=StrToFloat(s2);
+
+(********* To find number of records *********************)
+    NoRecords:=Trunc(ABS((StartValue-StopValue)/StepValue))+1;
+
+(********* To find null value *********************)
+    for i:=j to Lines.Count-1 do
+      begin
+        s1:=Lines[i];
+        p1:=Pos('NULL',s1);
+        if p1<>0 then Break;
+      end;
+    j:=i;
+    s1:=Lines[j];
+    s1:=Trim(s1);
+    p3:=0;
+    p2:=0;
+    p1:=PosEx('.',s1, p1);
+    for k := p1 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+          begin
+            p2:=k;
+            Break;
+          end;
+      end;
+    for k := p2 to Length(s1) do
+      begin
+        OneChar:=s1[k];
+        if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+          begin
+            p3:=k;
+            Break;
+          end;
+      end;
+
+    s2:=Copy(s1,p2,p3-p2);
+    s2:=Trim(s2);
+    NVS:=s2;
+    NullValue:=StrToFloat(s2);
+
+(*******************To find number of tracks ***********)
+    Temp_Integer:=-1;
+    for i:=j+1 to Lines.Count-1 do
+      begin
+        s1:=Lines[i];
+        p1:=Pos('~C',s1);
+        p2:=Pos('~LOG_DEFINITION', s1);
+        p3:=Pos('~LOG_DATA', s1);
+        if (p1<>0)or(p2<>0)or(p3<>0) then Break;
+      end;
+    k:=i;
+    for j := k+1 to Lines.Count - 1 do
+      begin
+        s1:=Lines[j];
+        if (s1<>' ')and(s1<>'') then
+          begin
+            s2:=s1[1];
+            if (s2<>'~')and(s2<>'#') then
+              begin
+                Inc(Temp_Integer);
+                s3:=Lines[j+1];
+                if (s3<>' ')and(s3<>'') then
+                  begin
+                    s4:=s3[1];
+                    if (s4='~')or(s4='#') then
+                      Break;
+                  end
+                else
+                  Break;
+              end;
+          end;
+      end;
+    NoTracks:=Temp_Integer;
+    if IsWrapped then
+      NoLinesPerDepth:=Trunc(NoTracks/6)+1
+    else
+      NoLinesPerDepth:=1;
+//    SetLength(TrackName, NoTracks+1);
+//    SetLength(TrackUnit, NoTracks+1);
+
+
+
+(*******************To find tracks names and units ***********)
+    j:=k+1;
+    repeat
+      s1:=Lines[j];
+      s2:=s1[1];
+      p1:=Pos('.', s1);
+      p2:=Pos('DEPT', s1);
+      p3:=Pos('TIME', s1);
+      Inc(j);
+    until (s1=' ')or(s1='')or(s2='#')or(s2='~')or(s2='')or(p2<>0)or(p3<>0)or(p1=0);
+    Properties.Edit;
+    k:=0;
+    repeat
+//    for k := 0 to NoTracks - 1 do
+//      begin
+(* To find track name *)
+        s1:=Lines[j];
+        p1:=Pos('.', s1);
+        if p1=0 then
+          begin
+            Inc(j);
+            Continue;
+          end;
+        p1:=Pos('DEPT', s1);
+        if p1<>0 then
+          begin
+            Inc(j);
+            Continue;
+          end;
+        p1:=Pos('TIME', s1);
+        if p1<>0 then
+          begin
+            Inc(j);
+            Continue;
+          end;
+
+        p1:=Pos('.', s1);
+        s2:='';
+        s2:= Copy( s1, 1, p1-1);
+//        TrackName[k]:=Trim(s2);
+        Properties.Append;
+        Properties.Fields[0].Value:=Trim(s2);
+        Values.FieldDefs.Add(Trim(s2), ftFloat, 0, False);
+
+(* to find track unit  *)
+        p1:=Pos('.', s1);
+        p2:=PosEx(' ', s1, p1);
+        s2:= Copy( s1, p1+1, p2-p1);
+//        TrackUnit[k]:=Trim(s2);
+        Properties.Fields[1].Value:=Trim(s2);
+        Properties.Fields[2].Value:=-99999999;
+        Properties.Fields[3].Value:=99999999;
+        Inc(j);
+        Inc(k);
+    until k=NoTracks-1;
+//      end;
+
+    Values.CreateTable;
+    Values.Open;
+    Values.FieldByName('DEPTH').DisplayLabel:='DEPTH.'+DepthUnit;
+    Properties.First;
+    for n := 1 to NoTracks do
+      begin
+        s1:=Properties.FieldByName('TRACK_NAME').AsString+'.'+Properties.FieldByName('TRACK_UNIT').AsString;
+        Values.FieldByName(Properties.FieldValues['TRACK_NAME']).DisplayLabel:=s1;
+        Properties.Next;
+      end;
+    Values.Open;
+(**************** Reading file data ************************)
+    for k:=j-1 to Lines.Count-1 do
+      begin
+        s1:=Lines[k];
+        p1:=Pos('~A',s1);
+        p2:=Pos('~LOG_DATA',s1);
+        if (p1<>0)or(p2<>0) then
+          begin
+            DataStartLineNo:=k+1;
+            Break;
+          end;
+      end;
+
+//   SetLength(DepthValue, NoRecords+1);
+//   SetLength(TrackValue, NoTracks+1, NoRecords+1);
+//   SetLength(MaxValue, NoTracks+1);
+//   SetLength(MinValue, NoTracks+1);
+{   for i := 0 to NoTracks - 1 do
+     begin
+       MaxValue[i]:=-999999999;
+       MinValue[i]:=999999999;
+     end;}
+   n:=0;
+   if not IsWrapped then
+     begin
+           for i := 0 to NoRecords-1 do
+             begin
+               s1:=Lines[DataStartLineNo+i];
+               for k := 0 to Length(s1) do
+                 begin
+                   OneChar:=s1[k];
+                   if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                     begin
+                       p2:=k;
+                       Break;
+                     end;
+                 end;
+               for k := p2 to Length(s1) do
+                 begin
+                   OneChar:=s1[k];
+                   if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                     begin
+                       p3:=k;
+                       Break;
+                     end;
+                 end;
+               if p2>p3 then
+                 p3:=Length(s1);
+               s2:=Copy(s1,p2,p3-p2+1);
+               s2:=Trim(s2);
+               Values.Edit;
+               Values.Append;
+               Values.FieldByName('DEPTH').AsString:=s2;
+//               DepthValue[i]:=StrToFloat(Trim(s2));
+
+               Properties.First;
+               for j:=0 to NoTracks-1 do
+                 begin
+                   for k := p3 to Length(s1) do
+                     begin
+                       OneChar:=s1[k];
+                       if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                         begin
+                           p2:=k;
+                           Break;
+                         end;
+                     end;
+                   for k := p2 to Length(s1) do
+                     begin
+                       OneChar:=s1[k];
+                       if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                         begin
+                           p3:=k;
+                           Break;
+                         end;
+                     end;
+                   if p2>p3 then
+                     p3:=Length(s1);
+                   s2:=Copy(s1,p2,p3-p2+1);
+                   s2:=Trim(s2);
+                   LGS:=s2;
+                   Log_Value:=StrToFloat(Trim(s2));
+                   Values.Edit;
+                   Values.Fields[j+1].AsString:=Trim(s2);
+//                   TrackValue[j,i]:=Log_Value;
+
+                   Properties.Edit;
+                   if LGS<>NVS then
+                     begin
+                       if Log_Value>Properties.Fields[2].AsFloat then
+                         Properties.Fields[2].AsFloat:=RoundTo(Log_Value, -4);
+                       if Log_Value<Properties.Fields[3].AsFloat then
+                         Properties.Fields[3].AsFloat:=RoundTo(Log_Value, -4);
+{                       if Log_Value>MaxValue[j] then
+                         MaxValue[j]:=Log_Value;
+                       if Log_Value<MinValue[j] then
+                         MinValue[j]:=Log_Value;}
+                     end;
+                   Properties.Next;
+                 end;
+             end;
+     end
+// if it is wrapped
+   else
+     begin
+           for i := 0 to NoRecords-1 do
+             begin
+               s1:=Lines[DataStartLineNo+n];
+               Inc(n);
+               for k := 0 to Length(s1) do
+                 begin
+                   OneChar:=s1[k];
+                   if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                     begin
+                       p2:=k;
+                       Break;
+                     end;
+                 end;
+               for k := p2 to Length(s1) do
+                 begin
+                   OneChar:=s1[k];
+                   if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                     begin
+                       p3:=k;
+                       Break;
+                     end;
+                 end;
+               if p2>p3 then
+                 p3:=Length(s1);
+               s2:=Copy(s1,p2,p3-p2+1);
+               s2:=Trim(s2);
+               Values.Edit;
+               Values.Append;
+               Values.FieldByName('DEPTH').AsString:=s2;
+//               DepthValue[i]:=StrToFloat(Trim(s2));
+
+               Properties.First;
+               for m := 1 to NoLinesPerDepth-1 do
+                 begin
+                   s1:=Lines[DataStartLineNo+n];
+                   Inc(n);
+                   for j:=1 to 6 do
+                     begin
+                       for k := p3 to Length(s1) do
+                         begin
+                           OneChar:=s1[k];
+                           if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                             begin
+                               p2:=k;
+                               Break;
+                             end;
+                         end;
+                       for k := p2 to Length(s1) do
+                         begin
+                           OneChar:=s1[k];
+                           if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                             begin
+                               p3:=k;
+                               Break;
+                             end;
+                         end;
+                       if p2>p3 then
+                         p3:=Length(s1);
+                       s2:=Copy(s1,p2,p3-p2+1);
+                       s2:=Trim(s2);
+                       LGS:=s2;
+                       Log_Value:=StrToFloat(Trim(s2));
+                       Values.Fields[(m-1)*6+j].AsString:=s2;
+    //                   TrackValue[j,i]:=Log_Value;
+
+                       Properties.Edit;
+                       if LGS<>NVS then
+                         begin
+                           if Log_Value>Properties.Fields[2].AsFloat then
+                             Properties.Fields[2].AsFloat:=RoundTo(Log_Value, -4);
+                           if Log_Value<Properties.Fields[3].AsFloat then
+                             Properties.Fields[3].AsFloat:=RoundTo(Log_Value, -4);
+                         end;
+                       Properties.Next;
+                     end;
+                 end;
+// Last Line
+               s1:=Lines[DataStartLineNo+n];
+               Inc(n);
+                 for j:=1 to (NoTracks mod 6) do
+                   begin
+                     for k := 0 to Length(s1) do
+                       begin
+                         OneChar:=s1[k];
+                         if OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+'] then
+                           begin
+                             p2:=k;
+                             Break;
+                           end;
+                       end;
+                     for k := p2 to Length(s1) do
+                       begin
+                         OneChar:=s1[k];
+                         if not(OneChar in ['0','1','2','3','4','5','6','7','8','9','.','-','+']) then
+                           begin
+                             p3:=k;
+                             Break;
+                           end;
+                       end;
+                     if p2>p3 then
+                       p3:=Length(s1);
+                     s2:=Copy(s1,p2,p3-p2+1);
+                     s2:=Trim(s2);
+                     LGS:=s2;
+                     Log_Value:=StrToFloat(Trim(s2));
+                     Values.Fields[(NoLinesPerDepth-1)*6+j].AsString:=s2;
+  //                   TrackValue[j,i]:=Log_Value;
+                      Properties.Edit;
+                     if LGS<>NVS then
+                       begin
+                         if Log_Value>Properties.Fields[2].AsFloat then
+                           Properties.Fields[2].AsFloat:=RoundTo(Log_Value, -4);
+                         if Log_Value<Properties.Fields[3].AsFloat then
+                           Properties.Fields[3].AsFloat:=RoundTo(Log_Value, -4);
+                       end;
+                     Properties.Next;
+                   end;
+             end;
+     end;
+
+(***********************************************************)
+    if File_Opened then
+      CloseFile(TempFile);
+    Lines.Free;
+    DataSource1.DataSet:=Properties;
+    DataSource2.DataSet:=Values;
+
+  except
+    if File_Opened then
+      CloseFile(TempFile);
+    Lines.Free;
+  end;
+  end;
+end;
+
+procedure TForm1.OpenTable1Click(Sender: TObject);
+var
+i: Smallint;
+begin
+try
+  with OpenDialog1 do
+    begin
+      DefaultExt:='LAS';
+      Filter:='LAS files|*.LAS';
+      Title:='Open LAS files';
+    end;
+  if OpenDialog1.Execute then
+    begin
+      for i:=0 to OpenDialog1.Files.Count-1 do
+        begin
+          StatusBar1.Panels[0].Text:='Reading file(s) data. Please wait ...';
+          Repaint;
+          try
+            SetLength(LASFiles, Length(LASFiles)+1);
+            LASFiles[Length(LASFiles)-1]:=TLASFile.Create;
+            ChangePath;
+            with LasFiles[Length(LASFiles)-1] do
+              begin
+                Properties:=TTable.Create(Self);
+                Properties.TableName:='PROPERTIES_FILE_'+IntToStr(Length(LASFiles))+'.DB';
+                Properties.FieldDefs.Add('TRACK_NAME', ftString, 10, False);
+                Properties.FieldDefs.Add('TRACK_UNIT', ftString, 7, False);
+                Properties.FieldDefs.Add('MAX_VALUE', ftFloat, 0, False);
+                Properties.FieldDefs.Add('MIN_VALUE', ftFloat, 0, False);
+                Properties.CreateTable;
+                Properties.Open;
+
+                Values:=TTable.Create(Self);
+                Values.TableName:='VALUES_FILE_'+IntToStr(Length(LASFiles))+'.DB';
+              end;
+//            Table.FieldValues['LASFILE']:=LASFiles[i];
+            ReadLAS(OpenDialog1.Files[i]);
+          except
+            Continue;
+          end;
+        end;
+      StatusBar1.Panels[0].Text:='Ready';
+    end;
+finally
+  StatusBar1.Panels[0].Text:='Ready.';
+end;
+end;
+
+procedure TForm1.ChangePath;
+var
+Pat, Path:String;
+P:integer;
+begin
+  Pat:=Application.ExeName;
+  P:=Pos('Project1.exe',Pat);
+  if P=0 then
+    P:=Pos('PROJECT1.EXE',Pat);
+  Path := Copy(Pat, 1, P - 1);
+  ChDir(Path);
+  if IOResult <> 0 then
+    MessageDlg('Cannot find directory', mtWarning, [mbOk], 0);
+end;
+
+end.

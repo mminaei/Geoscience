@@ -1,0 +1,27 @@
+program RockLog;
+
+uses
+  Forms,
+  Main_Form in 'Main_Form.pas' {MainForm},
+  CorrelationCoefficient in 'CorrelationCoefficient.pas' {Correlation_Coefficient},
+  CompositeLog in 'CompositeLog.pas' {Composite_Log},
+  CrossPlot in 'CrossPlot.pas' {Cross_Plot},
+  CrossPlotTracks in 'CrossPlotTracks.pas' {Cross_Plot_Tracks},
+  DTPSelection in 'DTPSelection.pas' {Vp_Selection},
+  DTSelection in 'DTSelection.pas' {DT_Selection},
+  PagingPage in 'PagingPage.pas' {paging},
+  TrackSelection in 'TrackSelection.pas' {Track_Selection},
+  ZoomedChart in 'ZoomedChart.pas' {ZoomChart},
+  HanModel in 'HanModel.pas' {Han_Model},
+  PoissonPage in 'PoissonPage.pas' {Poisson_Page},
+  KriefPage in 'KriefPage.pas' {Krief_Page},
+  LithoLog in 'LithoLog.pas' {Litho_Log};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.Title := 'P.U.T RockLog';
+  Application.CreateForm(TMainForm, MainForm);
+  Application.Run;
+end.

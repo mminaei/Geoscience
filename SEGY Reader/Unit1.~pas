@@ -1,0 +1,280 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, TeEngine, Series, ExtCtrls, TeeProcs, Chart, TeeEdit,
+  StrUtils, TeeSurfa, TeeLighting, ComCtrls, XPMan;
+
+type
+  TForm1 = class(TForm)
+    Chart1: TChart;
+    ChartTool1: TLightTool;
+    ProgressBar1: TProgressBar;
+    Panel1: TPanel;
+    Button1: TButton;
+    LabeledEdit1: TLabeledEdit;
+    LabeledEdit2: TLabeledEdit;
+    LabeledEdit3: TLabeledEdit;
+    Button2: TButton;
+    LabeledEdit4: TLabeledEdit;
+    Button3: TButton;
+    LabeledEdit5: TLabeledEdit;
+    LabeledEdit6: TLabeledEdit;
+    OpenDialog1: TOpenDialog;
+    ChartEditor1: TChartEditor;
+    XPManifest1: TXPManifest;
+    CheckBox1: TCheckBox;
+    ComboBox1: TComboBox;
+    Label1: TLabel;
+    Memo1: TMemo;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+//    procedure Swapper(valin: pointer; size: integer);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  Read_File: TFileStream;
+  Read_Buffer: word;
+  Read_Value: Single;
+  Sampling_Interval:integer;
+  No_Samples_Trace:integer;
+  No_Traces:integer;
+  ReadFile1: File of Byte;
+  Value_String: string;
+  Value_Single: Single;
+  Value_Double: Double;
+  Value_Integer: Cardinal;
+  ForFree:TLabel;
+  ColorSeries: TColorGridSeries;
+
+implementation
+
+type
+  TData8=Double;
+  TData4=Single;
+
+function Swap2(a:cardinal):word;
+asm
+  bswap eax
+  shr eax,16
+end;
+
+function Swap4(a:cardinal):cardinal;
+asm
+  bswap eax
+end;
+
+function Swap4Signed(a:cardinal):longint;
+asm
+  bswap eax
+end;
+
+procedure SwapDoubleTo8(const a:double; var b:TData8);
+asm
+  mov edx,dword ptr[a]
+  mov ecx,dword ptr[a+4]
+  bswap edx
+  bswap ecx
+  mov dword ptr [eax],ecx
+  mov dword ptr [eax+4],edx
+end;
+
+function Swap8ToDouble(var a:TData8):double;
+var
+  hold:double;
+asm
+  mov edx,dword ptr[eax]
+  mov ecx,dword ptr[eax+4]
+  bswap edx
+  bswap ecx
+  mov dword ptr [hold],ecx
+  mov dword ptr [hold+4],edx
+  fld hold;
+end;
+
+function Swap4ToSingle(var a:TData4):Single;
+var
+  hold:double;
+asm
+  mov edx,dword ptr[eax]
+  mov ecx,dword ptr[eax+2]
+  bswap edx
+  bswap ecx
+  mov dword ptr [hold],ecx
+  mov dword ptr [hold+4],edx
+  fld hold;
+end;
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+i,j,k:smallint;
+max_value, min_value: real;
+value: Single;
+block: array[0..3] of byte absolute value;
+temp:  byte;
+File_Size: Integer;
+t,t1:integer;
+begin
+  if OpenDialog1.Execute then
+    begin
+      Cursor:=crHourGlass;
+      t1:=GetTickCount;
+      ForFree:=TLabel.Create(Self);
+      AssignFile(ReadFile1, OpenDialog1.FileName);
+      Reset(ReadFile1);
+      File_Size:=FileSize(ReadFile1);
+      CloseFile(ReadFile1);
+      Read_File:=TFileStream.Create(OpenDialog1.FileName, fmOpenRead);
+      LabeledEdit5.Text:=IntToStr(File_Size);
+{      Read_File.Seek(3212, soFromBeginning);
+      Read_file.Read(Read_Buffer, 2);
+      Read_Buffer:= Read_Buffer shr 8 + Read_Buffer shl 8;
+//      Read_Buffer:=Swap(Read_Buffer);
+      No_Traces:=Read_Buffer;
+      LabeledEdit4.Text:=IntToStr(No_Traces);
+}
+      Read_File.Seek(3216, soFromBeginning);
+      Read_file.Read(Read_Buffer, 2);
+      Read_Buffer:= Read_Buffer shr 8 + Read_Buffer shl 8;
+//      Read_Buffer:=Swap(Read_Buffer);
+      Sampling_Interval:=Read_Buffer;
+      LabeledEdit1.Text:=IntToStr(Sampling_Interval);
+//      Read_Buffer1:= Read_Buffer shr 8;
+//      Read_Buffer2:= Read_Buffer shl 8;
+//      Read_Value_16:= Read_Buffer1 + Read_Buffer2;
+//      LabeledEdit2.Text:=IntToStr(Read_file.Read(Read_Buffer, 2));
+
+      Read_File.Seek(3220, soFromBeginning);
+      Read_file.Read(Read_Buffer, 2);
+      Read_Buffer:= Read_Buffer shr 8 + Read_Buffer shl 8;
+//      Read_Buffer:=Swap(Read_Buffer);
+      No_Samples_Trace:=Read_Buffer;
+      LabeledEdit2.Text:=IntToStr(No_Samples_Trace);
+
+      Read_File.Seek(3224, soFromBeginning);
+      Read_file.Read(Read_Buffer, 2);
+      Read_Buffer:= Read_Buffer shr 8 + Read_Buffer shl 8;
+//      Read_Buffer:=Swap(Read_Buffer);
+      LabeledEdit3.Text:=IntToStr(Read_Buffer);
+
+      Read_File.Seek(3840, soFromBeginning);
+      Value_String:='';
+      No_Traces:=(File_Size - 3600) div (No_Samples_Trace*4 + 240);
+      LabeledEdit4.Text:=IntToStr(No_Traces);
+      ProgressBar1.Min:=0;
+      ProgressBar1.Max:=No_Traces;
+      ProgressBar1.Position:=0;
+      ProgressBar1.Visible:=True;
+      max_value:=-9999999999;
+      min_value:=9999999999;
+      Repaint;
+      Chart1.SeriesGroups.Add;
+      Chart1.SeriesGroups[0].Name:='Lines';
+      Chart1.SeriesGroups.Add;
+      Chart1.SeriesGroups[1].Name:='Color Map';
+      ColorSeries:=TColorGridSeries.Create(ForFree);
+      ColorSeries.Pen.Visible:=False;
+      ColorSeries.NumXValues:=No_Traces;
+      ColorSeries.NumZValues:=No_Samples_Trace;
+      ColorSeries.HorizAxis:=aTopAxis;
+      ColorSeries.PaletteStyle:=psGrayScale;
+      ColorSeries.UsePalette:=True;
+      ColorSeries.UseColorRange:=False;
+      ColorSeries.ParentChart:=Chart1;
+      Chart1.SeriesGroups[1].Add(ColorSeries);
+      ComboBox1.Enabled:=True;
+      for j:=0 to No_Traces-1 do
+        begin
+          Chart1.AddSeries(THorizLineSeries.Create(ForFree));
+          Chart1.Series[j+1].Color:=clBlack;
+          Chart1.Series[j+1].HorizAxis:=aTopAxis;
+          Chart1.Axes.Left.Inverted:=True;
+          Chart1.SeriesGroups[0].Add(Chart1.Series[j+1]);
+          for i:=0 to No_Samples_Trace-1 do
+            begin
+              Read_file.Read(Value, 4);
+              for k := 0 to 1 do
+                begin
+                  temp := block[k];
+                  block[k] := block[3-k];
+                  block[3-k] := temp;
+                end;
+              if Value>Max_Value then
+                max_Value:=value;
+              if Value<Min_Value then
+                min_Value:=value;
+              ColorSeries.Value[j,i]:=Value;
+              Chart1.Series[j+1]. AddXY(Max_Value + Value, i*Sampling_Interval/1000000);
+            end;
+          Max_Value:=Chart1.Series[j+1].MaxXValue;
+          Read_File.Seek(3840+(No_Samples_Trace*4+240)*(j+1), soFromBeginning);
+          ProgressBar1.Position:=j+1;
+{          T:=GetTickCount - T1;
+          LabeledEdit6.Text:= IntToStr(T);
+          LabeledEdit6.Repaint;}
+        end;
+      CheckBox1.Enabled:=True;
+      Read_File.Free;
+      Memo1.Lines.Clear;
+      Memo1.Lines.Append('Maximum: ' + FloatToStr(Max_Value));
+      Memo1.Lines.Append('Minimum: ' + FloatToStr(Min_Value));
+      ProgressBar1.Visible:=False;
+      Chart1.SeriesGroups[0].Hide;
+      T:=GetTickCount - T1;
+      LabeledEdit6.Text:= IntToStr(T);
+      Cursor:=crDefault;
+    end;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  ChartEditor1.Execute;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+  ForFree.Free;
+  Chart1.SeriesGroups.Clear;
+  CheckBox1.Checked:=False;
+  CheckBox1.Enabled:=False;
+  ComboBox1.Enabled:=False;
+end;
+
+procedure TForm1.CheckBox1Click(Sender: TObject);
+begin
+  if CheckBox1.Checked then
+    begin
+      Chart1.SeriesGroups[0].Show;
+      Chart1.Series[0].Visible:=False;
+    end
+  else
+    begin
+      Chart1.Series[0].Visible:=True;
+      Chart1.SeriesGroups[0].Hide;
+    end;
+end;
+
+procedure TForm1.ComboBox1Change(Sender: TObject);
+begin
+  Case ComboBox1.ItemIndex of
+    0:ColorSeries.PaletteStyle:=psPale;
+    1:ColorSeries.PaletteStyle:=psStrong;
+    2:ColorSeries.PaletteStyle:=psGrayScale;
+    3:ColorSeries.PaletteStyle:=psInvGray;
+    4:ColorSeries.PaletteStyle:=psRainbow;
+  end;
+end;
+
+end.

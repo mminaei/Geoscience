@@ -1,0 +1,333 @@
+object Properties_Form: TProperties_Form
+  Left = 423
+  Top = 164
+  BorderIcons = []
+  BorderStyle = bsDialog
+  Caption = 'Lithology Properties'
+  ClientHeight = 406
+  ClientWidth = 422
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  ScreenSnap = True
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 365
+    Width = 422
+    Height = 41
+    Align = alBottom
+    TabOrder = 0
+    object Button1: TButton
+      Left = 250
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Ok'
+      Default = True
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 333
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Cancel'
+      TabOrder = 1
+      OnClick = Button2Click
+    end
+    object Button3: TButton
+      Left = 16
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Defaults'
+      TabOrder = 2
+      OnClick = Button3Click
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 125
+    Width = 422
+    Height = 120
+    Align = alTop
+    TabOrder = 1
+    object GroupBox3: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 210
+      Height = 118
+      Align = alLeft
+      Caption = 'Gamma Ray (API)'
+      TabOrder = 0
+      object LabeledEdit7: TLabeledEdit
+        Left = 128
+        Top = 24
+        Width = 65
+        Height = 21
+        EditLabel.Width = 114
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Minimum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 0
+      end
+      object LabeledEdit8: TLabeledEdit
+        Left = 128
+        Top = 56
+        Width = 65
+        Height = 21
+        EditLabel.Width = 79
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Reference Value'
+        LabelPosition = lpLeft
+        TabOrder = 1
+      end
+      object LabeledEdit9: TLabeledEdit
+        Left = 128
+        Top = 88
+        Width = 65
+        Height = 21
+        EditLabel.Width = 118
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Maximum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 2
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 211
+      Top = 1
+      Width = 210
+      Height = 118
+      Align = alClient
+      Caption = 'PEF'
+      TabOrder = 1
+      object LabeledEdit10: TLabeledEdit
+        Left = 128
+        Top = 24
+        Width = 65
+        Height = 21
+        EditLabel.Width = 114
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Minimum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 0
+      end
+      object LabeledEdit11: TLabeledEdit
+        Left = 128
+        Top = 56
+        Width = 65
+        Height = 21
+        EditLabel.Width = 79
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Reference Value'
+        LabelPosition = lpLeft
+        TabOrder = 1
+      end
+      object LabeledEdit12: TLabeledEdit
+        Left = 128
+        Top = 88
+        Width = 65
+        Height = 21
+        EditLabel.Width = 118
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Maximum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 2
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 0
+    Width = 422
+    Height = 125
+    Align = alTop
+    TabOrder = 2
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 210
+      Height = 123
+      Align = alLeft
+      Caption = 'DT(us/ft)'
+      TabOrder = 0
+      object LabeledEdit1: TLabeledEdit
+        Left = 128
+        Top = 24
+        Width = 65
+        Height = 21
+        EditLabel.Width = 114
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Minimum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 0
+      end
+      object LabeledEdit2: TLabeledEdit
+        Left = 128
+        Top = 56
+        Width = 65
+        Height = 21
+        EditLabel.Width = 79
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Reference Value'
+        LabelPosition = lpLeft
+        TabOrder = 1
+      end
+      object LabeledEdit3: TLabeledEdit
+        Left = 128
+        Top = 88
+        Width = 65
+        Height = 21
+        EditLabel.Width = 118
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Maximum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 2
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 211
+      Top = 1
+      Width = 210
+      Height = 123
+      Align = alClient
+      Caption = 'RHOB(g/cm3)'
+      TabOrder = 1
+      object LabeledEdit4: TLabeledEdit
+        Left = 128
+        Top = 24
+        Width = 65
+        Height = 21
+        EditLabel.Width = 114
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Minimum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 0
+      end
+      object LabeledEdit5: TLabeledEdit
+        Left = 128
+        Top = 56
+        Width = 65
+        Height = 21
+        EditLabel.Width = 79
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Reference Value'
+        LabelPosition = lpLeft
+        TabOrder = 1
+      end
+      object LabeledEdit6: TLabeledEdit
+        Left = 128
+        Top = 88
+        Width = 65
+        Height = 21
+        EditLabel.Width = 118
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Maximum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 2
+      end
+    end
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 245
+    Width = 422
+    Height = 120
+    Align = alClient
+    TabOrder = 3
+    object GroupBox5: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 210
+      Height = 118
+      Align = alLeft
+      Caption = 'Resistivity(ohmm)'
+      TabOrder = 0
+      object LabeledEdit13: TLabeledEdit
+        Left = 128
+        Top = 24
+        Width = 65
+        Height = 21
+        EditLabel.Width = 114
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Minimum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 0
+      end
+      object LabeledEdit14: TLabeledEdit
+        Left = 128
+        Top = 56
+        Width = 65
+        Height = 21
+        EditLabel.Width = 79
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Reference Value'
+        LabelPosition = lpLeft
+        TabOrder = 1
+      end
+      object LabeledEdit15: TLabeledEdit
+        Left = 128
+        Top = 88
+        Width = 65
+        Height = 21
+        EditLabel.Width = 118
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Maximum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 2
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 211
+      Top = 1
+      Width = 210
+      Height = 118
+      Align = alClient
+      Caption = 'NPHI'
+      TabOrder = 1
+      object LabeledEdit16: TLabeledEdit
+        Left = 128
+        Top = 24
+        Width = 65
+        Height = 21
+        EditLabel.Width = 114
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Minimum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 0
+      end
+      object LabeledEdit17: TLabeledEdit
+        Left = 128
+        Top = 56
+        Width = 65
+        Height = 21
+        EditLabel.Width = 79
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Reference Value'
+        LabelPosition = lpLeft
+        TabOrder = 1
+      end
+      object LabeledEdit18: TLabeledEdit
+        Left = 128
+        Top = 88
+        Width = 65
+        Height = 21
+        EditLabel.Width = 118
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Maximum Extinction Limit'
+        LabelPosition = lpLeft
+        TabOrder = 2
+      end
+    end
+  end
+end
