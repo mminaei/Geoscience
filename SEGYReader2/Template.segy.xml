@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_16" class="java.beans.XMLDecoder"> 
+ <object class="com.x4m.segy.TraceHeaderTemplate"> 
+  <object class="java.util.LinkedHashMap"> 
+   <void method="put"> 
+    <string>Inline</string> 
+    <object class="com.x4m.segy.SEGYFieldInfo"> 
+     <string>Inline</string> 
+     <object id="ByteType$20" class="com.x4m.segy.ByteType$2" method="valueOf"> 
+      <string>FP_2BYTE</string> 
+     </object> 
+     <int>3</int> 
+     <boolean>true</boolean> 
+     <boolean>true</boolean> 
+    </object> 
+   </void> 
+   <void method="put"> 
+    <string>Crossline</string> 
+    <object class="com.x4m.segy.SEGYFieldInfo"> 
+     <string>Crossline</string> 
+     <object idref="ByteType$20"/> 
+     <int>21</int> 
+     <boolean>true</boolean> 
+     <boolean>true</boolean> 
+    </object> 
+   </void> 
+   <void method="put"> 
+    <string>X Location</string> 
+    <object class="com.x4m.segy.SEGYFieldInfo"> 
+     <string>X Location</string> 
+     <object id="ByteType$30" class="com.x4m.segy.ByteType$3" method="valueOf"> 
+      <string>FP_4BYTE</string> 
+     </object> 
+     <int>181</int> 
+     <boolean>false</boolean> 
+     <boolean>false</boolean> 
+    </object> 
+   </void> 
+   <void method="put"> 
+    <string>Y Location</string> 
+    <object class="com.x4m.segy.SEGYFieldInfo"> 
+     <string>Y Location</string> 
+     <object idref="ByteType$30"/> 
+     <int>185</int> 
+     <boolean>false</boolean> 
+     <boolean>false</boolean> 
+    </object> 
+   </void> 
+   <void method="put"> 
+    <string>Coord Scalar</string> 
+    <object class="com.x4m.segy.SEGYFieldInfo"> 
+     <string>Coord Scalar</string> 
+     <object idref="ByteType$20"/> 
+     <int>71</int> 
+     <boolean>false</boolean> 
+     <boolean>false</boolean> 
+    </object> 
+   </void> 
+   <void method="put"> 
+    <string>Trace Scalar</string> 
+    <object class="com.x4m.segy.SEGYFieldInfo"> 
+     <string>Trace Scalar</string> 
+     <object idref="ByteType$20"/> 
+     <int>169</int> 
+     <boolean>false</boolean> 
+     <boolean>false</boolean> 
+    </object> 
+   </void> 
+   <void method="put"> 
+    <string>Trace ID Code</string> 
+    <object class="com.x4m.segy.SEGYFieldInfo"> 
+     <string>Trace ID Code</string> 
+     <object idref="ByteType$20"/> 
+     <int>29</int> 
+     <boolean>false</boolean> 
+     <boolean>false</boolean> 
+    </object> 
+   </void> 
+  </object> 
+  <boolean>false</boolean> 
+  <float>1.0</float> 
+  <boolean>false</boolean> 
+  <float>1.0</float> 
+  <boolean>false</boolean> 
+  <float>1.0</float> 
+  <boolean>false</boolean> 
+ </object> 
+</java> 

@@ -1,0 +1,11 @@
+F:\WEP Managers\LCC\bin\Release\LCC.exe.config
+F:\WEP Managers\LCC\obj\Release\WEPManager.csproj.ResolveComReference.cache
+F:\WEP Managers\LCC\obj\Release\LCC.exe
+F:\WEP Managers\LCC\obj\Release\LCC.pdb
+F:\WEP Managers\LCC\bin\Release\LCC.exe
+F:\WEP Managers\LCC\bin\Release\LCC.pdb
+F:\WEP Managers\LCC\bin\Release\DocumentFormat.OpenXml.dll
+F:\WEP Managers\LCC\bin\Release\DocumentFormat.OpenXml.xml
+F:\WEP Managers\LCC\obj\Release\LCC.MainForm.resources
+F:\WEP Managers\LCC\obj\Release\LCC.Properties.Resources.resources
+F:\WEP Managers\LCC\obj\Release\WEPManager.csproj.GenerateResource.Cache

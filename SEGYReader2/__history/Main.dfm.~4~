@@ -1,0 +1,256 @@
+object Form1: TForm1
+  Left = 390
+  Top = 110
+  Caption = 'SEGY Reader'
+  ClientHeight = 656
+  ClientWidth = 720
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -14
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  PixelsPerInch = 120
+  TextHeight = 16
+  object ProgressBar1: TProgressBar
+    Left = 0
+    Top = 635
+    Width = 720
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Align = alBottom
+    Smooth = True
+    TabOrder = 0
+    Visible = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 720
+    Height = 635
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Align = alLeft
+    BevelInner = bvLowered
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 336
+      Top = 354
+      Width = 41
+      Height = 16
+      Caption = 'Label1'
+    end
+    object Button1: TButton
+      Left = 20
+      Top = 20
+      Width = 92
+      Height = 30
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'Open'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object LabeledEdit1: TLabeledEdit
+      Left = 197
+      Top = 98
+      Width = 123
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      EditLabel.Width = 163
+      EditLabel.Height = 16
+      EditLabel.Margins.Left = 4
+      EditLabel.Margins.Top = 4
+      EditLabel.Margins.Right = 4
+      EditLabel.Margins.Bottom = 4
+      EditLabel.Caption = 'Sampling interval                    '
+      LabelPosition = lpLeft
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object LabeledEdit2: TLabeledEdit
+      Left = 197
+      Top = 128
+      Width = 123
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      EditLabel.Width = 181
+      EditLabel.Height = 16
+      EditLabel.Margins.Left = 4
+      EditLabel.Margins.Top = 4
+      EditLabel.Margins.Right = 4
+      EditLabel.Margins.Bottom = 4
+      EditLabel.Caption = 'Number of Samples per Trace'
+      LabelPosition = lpLeft
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object LabeledEdit3: TLabeledEdit
+      Left = 197
+      Top = 158
+      Width = 123
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      EditLabel.Width = 178
+      EditLabel.Height = 16
+      EditLabel.Margins.Left = 4
+      EditLabel.Margins.Top = 4
+      EditLabel.Margins.Right = 4
+      EditLabel.Margins.Bottom = 4
+      EditLabel.Caption = 'Data Sample Format Code      '
+      LabelPosition = lpLeft
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object Button2: TButton
+      Left = 218
+      Top = 20
+      Width = 92
+      Height = 30
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'SSD'
+      TabOrder = 4
+      OnClick = Button2Click
+    end
+    object LabeledEdit4: TLabeledEdit
+      Left = 197
+      Top = 187
+      Width = 123
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      EditLabel.Width = 165
+      EditLabel.Height = 16
+      EditLabel.Margins.Left = 4
+      EditLabel.Margins.Top = 4
+      EditLabel.Margins.Right = 4
+      EditLabel.Margins.Bottom = 4
+      EditLabel.Caption = 'Number of Traces                   '
+      LabelPosition = lpLeft
+      ReadOnly = True
+      TabOrder = 5
+    end
+    object Button3: TButton
+      Left = 118
+      Top = 20
+      Width = 92
+      Height = 30
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'Clear'
+      TabOrder = 6
+      OnClick = Button3Click
+    end
+    object LabeledEdit5: TLabeledEdit
+      Left = 197
+      Top = 69
+      Width = 123
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      EditLabel.Width = 162
+      EditLabel.Height = 16
+      EditLabel.Margins.Left = 4
+      EditLabel.Margins.Top = 4
+      EditLabel.Margins.Right = 4
+      EditLabel.Margins.Bottom = 4
+      EditLabel.Caption = 'File Size (Bytes)                      '
+      LabelPosition = lpLeft
+      ReadOnly = True
+      TabOrder = 7
+    end
+    object LabeledEdit6: TLabeledEdit
+      Left = 197
+      Top = 217
+      Width = 123
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      EditLabel.Width = 164
+      EditLabel.Height = 16
+      EditLabel.Margins.Left = 4
+      EditLabel.Margins.Top = 4
+      EditLabel.Margins.Right = 4
+      EditLabel.Margins.Bottom = 4
+      EditLabel.Caption = 'Time Spent (ms)                      '
+      LabelPosition = lpLeft
+      ReadOnly = True
+      TabOrder = 8
+    end
+    object Memo1: TMemo
+      Left = 20
+      Top = 249
+      Width = 267
+      Height = 88
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ScrollBars = ssBoth
+      TabOrder = 9
+    end
+    object Memo2: TMemo
+      Left = 20
+      Top = 377
+      Width = 267
+      Height = 224
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      ScrollBars = ssBoth
+      TabOrder = 10
+    end
+    object Memo3: TMemo
+      Left = 324
+      Top = 377
+      Width = 267
+      Height = 224
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      TabOrder = 11
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    DefaultExt = 'sgy'
+    Filter = 'SGY files|*.sgy|SEGY files|*.segy'
+    FilterIndex = 0
+    Left = 336
+    Top = 184
+  end
+  object XPManifest1: TXPManifest
+    Left = 336
+    Top = 120
+  end
+end

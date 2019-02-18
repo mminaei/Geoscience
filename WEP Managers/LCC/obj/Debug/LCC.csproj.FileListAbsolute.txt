@@ -1,0 +1,30 @@
+c:\users\mminaei.corp\documents\visual studio 2015\Projects\LCC\LCC\bin\Debug\LCC.exe.config
+c:\users\mminaei.corp\documents\visual studio 2015\Projects\LCC\LCC\bin\Debug\LCC.exe
+c:\users\mminaei.corp\documents\visual studio 2015\Projects\LCC\LCC\bin\Debug\LCC.pdb
+c:\users\mminaei.corp\documents\visual studio 2015\Projects\LCC\LCC\obj\Debug\LCC.csprojResolveAssemblyReference.cache
+c:\users\mminaei.corp\documents\visual studio 2015\Projects\LCC\LCC\obj\Debug\LCC.Properties.Resources.resources
+c:\users\mminaei.corp\documents\visual studio 2015\Projects\LCC\LCC\obj\Debug\LCC.csproj.GenerateResource.Cache
+c:\users\mminaei.corp\documents\visual studio 2015\Projects\LCC\LCC\obj\Debug\LCC.exe
+c:\users\mminaei.corp\documents\visual studio 2015\Projects\LCC\LCC\obj\Debug\LCC.pdb
+C:\Users\mminaei.CORP\documents\visual studio 2015\Projects\LCC\LCC\obj\Debug\LCC.MainForm.resources
+H:\LCC\LCC\bin\Debug\LCC.exe.config
+H:\LCC\LCC\obj\Debug\LCC.exe
+H:\LCC\LCC\obj\Debug\LCC.pdb
+H:\LCC\LCC\bin\Debug\LCC.exe
+H:\LCC\LCC\bin\Debug\LCC.pdb
+H:\LCC\LCC\obj\Debug\LCC.csprojResolveAssemblyReference.cache
+H:\LCC\LCC\obj\Debug\LCC.Properties.Resources.resources
+H:\LCC\LCC\obj\Debug\LCC.csproj.GenerateResource.Cache
+H:\LCC\LCC\obj\Debug\LCC.MainForm.resources
+F:\LCC\LCC\bin\Debug\LCC.exe.config
+F:\LCC\LCC\obj\Debug\LCC.exe
+F:\LCC\LCC\obj\Debug\LCC.pdb
+F:\LCC\LCC\bin\Debug\LCC.exe
+F:\LCC\LCC\bin\Debug\LCC.pdb
+F:\LCC\LCC\obj\Debug\LCC.csprojResolveAssemblyReference.cache
+F:\LCC\LCC\obj\Debug\LCC.MainForm.resources
+F:\LCC\LCC\obj\Debug\LCC.Properties.Resources.resources
+F:\LCC\LCC\obj\Debug\LCC.csproj.GenerateResource.Cache
+F:\WEP Managers\LCC\bin\Debug\LCC.exe.config
+F:\WEP Managers\LCC\obj\Debug\LCC.exe
+F:\WEP Managers\LCC\obj\Debug\LCC.pdb
